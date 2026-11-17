@@ -1544,7 +1544,7 @@ const dailyable=g=>!g.versus&&g.id!=='bj'&&unlocked(g);
 function drDone(){if(S.dr.day!==today())S.dr={day:today(),done:{}};return S.dr.done}
 function renderDaily(){const box=$('#dailych'),done=drDone(),list=SOLO.filter(dailyable),left=list.filter(g=>done[g.id]==null);
  box.innerHTML=`<h4>📅 Daily challenge</h4><small class="dim">One run per game per day, with the same layout for everyone and <b>2× coins</b>. ${list.length-left.length}/${list.length} done today.</small>`;
- const ch=el('div','dchips',box);list.forEach(g=>{const b=el('button','dchip'+(done[g.id]!=null?' done':''),ch);b.innerHTML=`${g.icon}<small>${done[g.id]!=null?done[g.id]:'2×'}</small>`;b.title=g.name;b.addEventListener('click',()=>open(g,{daily:done[g.id]==null}))})}
+ const ch=el('div','dchips',box);list.forEach(g=>{const b=el('button','dchip'+(done[g.id]!=null?' done':''),ch);b.innerHTML=`${g.icon}<small>${done[g.id]!=null?done[g.id]:'2×'}</small>`;b.title=g.name;b.addEventListener('click',()=>openGame(g,{daily:done[g.id]==null}))})}
 
 /* ---------- events: tournament & boss rush ---------- */
 const CPUN=['Ace','Blaze','Pixel','Nova','Turbo','Echo','Zap','Rook','Byte','Luna','Jinx','Comet','Bolt','Vex'];
@@ -1557,7 +1557,7 @@ function renderEvents(){const box=$('#events');box.innerHTML='';
  ev('🎰','Casino',`Blackjack and Hold’em played with your real coins.`,3,openCasino,'#2fc9a5')}
 function openCasino(){const m=modal('🎰 Casino tables');el('p','',m).innerHTML='Bet your <b>real coins</b>. Winnings go straight to your wallet, and so do losses. Play smart!';
  [[blackjack,'Bet 25–250 coins a hand.'],[holdem,'Buy in for 300 coins and take the CPU’s 300.']].forEach(([g,d])=>{const b=el('button','btn',m);b.innerHTML=`${g.icon} ${g.name}`;el('small','dim',m).textContent=d;
-  b.addEventListener('click',()=>{closeModal();S.mode[g.id]='casino';save();open(g)})})}
+  b.addEventListener('click',()=>{closeModal();S.mode[g.id]='casino';save();openGame(g)})})}
 function openTourMenu(){const m=modal('🏟️ Tournament');el('p','',m).innerHTML='Each match is a random vs-CPU game. Win every match to take the trophy. Lose once and you’re out (finalists still get a share).';
  [[4,40,220],[8,90,600]].forEach(([n,fee,prize])=>{const b=el('button','btn'+(n===8?' alt':''),m);b.innerHTML=`${n} players · entry ${fee} 🪙 · prize ${prize} 🪙`;b.disabled=S.coins<fee;
   b.addEventListener('click',()=>{if(S.coins<fee)return toast('Not enough coins');closeModal();startTour(n,fee,prize)})});
@@ -1675,7 +1675,7 @@ function startOv(opt={}){const g=cur;stage.innerHTML='';api.score(g.versus?pot:0
  const btns=[{t:'Play',fn:()=>startGame()}];if(dOK)btns.push({t:'📅 Daily run · 2× coins',cls:'alt',fn:()=>startGame({daily:true})});
  overlay({start:true,big:g.icon,h:g.name,p:how+(g.versus&&!(sel&&sel.id==='casino')?' <br><b>Each win adds coins to a pot.</b> Cash out any time, or risk it for more.':''),extra:ex,btns});
  if(opt.daily&&dOK){stage.innerHTML='';startGame({daily:true})}}
-function open(g,opt={}){if(!unlocked(g))return openShop('games');if(cur)leave();RUN=null;cur=g;streak=0;pot=0;pend=0;show('game');$('#title').textContent=g.name;startOv(opt)}
+function openGame(g,opt={}){if(!unlocked(g))return openShop('games');if(cur)leave();RUN=null;cur=g;streak=0;pot=0;pend=0;show('game');$('#title').textContent=g.name;startOv(opt)}
 function leave(){unseed();DAILY=false;if(!cur)return;cur.stop();if(RUN){if(RUN.type==='boss'&&RUN.earned>0)bank(RUN.earned);RUN=null}if(cur.versus&&pot>0)cashPot();bankPend();cur=null;stage.innerHTML=''}
 function back(){leave();show('menu');renderMenu()}
 function renderMenu(){wallet();lvlBar();const d=$('#daily'),td=today();d.innerHTML='';
@@ -1684,7 +1684,7 @@ function renderMenu(){wallet();lvlBar();const d=$('#daily'),td=today();d.innerHT
  renderMissions();renderDaily();renderEvents();
  const card=(g,box)=>{const lk=!unlocked(g),c=el('button','card'+(lk?' locked':''),box),b=getBest(g,true);c.style.setProperty('--accent',g.accent);
   const bt=lk?(lvlOK(g)?`🔒 ${g.price} 🪙 · ${g.versus?'vs CPU':'Solo'}`:`🔒 Level ${g.lvl} · ${g.price} 🪙`):b==null?'Not played yet':g.versus?`Best streak: ${b}`:`Best: ${fmt(b)}${g.low?(g.label==='Time'?'s':g.label==='Strokes'?' strokes':' moves'):''}`;
-  c.innerHTML=`<div class="ic">${g.icon}</div><b>${g.name}</b><small>${g.desc}</small><div class="best">${bt}</div>`;c.addEventListener('click',()=>open(g))};
+  c.innerHTML=`<div class="ic">${g.icon}</div><b>${g.name}</b><small>${g.desc}</small><div class="best">${bt}</div>`;c.addEventListener('click',()=>openGame(g))};
  const lockedList=ALL.filter(g=>!unlocked(g));
  [['#cards-solo',SOLO.filter(unlocked)],['#cards-vs',VS.filter(unlocked)],['#cards-locked',lockedList]].forEach(([s,l])=>{const box=$(s);box.innerHTML='';l.forEach(g=>card(g,box))});
  $('#locked-h').style.display=$('#cards-locked').style.display=lockedList.length?'':'none'}
@@ -1698,7 +1698,7 @@ function renderShop(){wallet();const T=[['games','🎮 Games'],['modes','🎛️
  const lockL=x=>`🔒 Level ${x.lvl}`;
  const intro=el('p','shopnote',L);
  if(shopTab==='games'){intro.textContent='New games to unlock for good. Some need a higher level first.';
-  ALL.filter(g=>g.price).forEach(g=>{const o=unlocked(g),lv=lvlOK(g);item(g.icon,g.name,(g.versus?'vs CPU · ':'Solo · ')+g.desc,o?'Play ▸':lv?`${g.price} 🪙`:lockL(g),o?'eq':lv?'':'own',o?()=>open(g):buy(g.price,()=>{S.owned['game:'+g.id]=true;toast(`${g.icon} ${g.name} unlocked!`)}),!o&&(!lv||S.coins<g.price))})}
+  ALL.filter(g=>g.price).forEach(g=>{const o=unlocked(g),lv=lvlOK(g);item(g.icon,g.name,(g.versus?'vs CPU · ':'Solo · ')+g.desc,o?'Play ▸':lv?`${g.price} 🪙`:lockL(g),o?'eq':lv?'':'own',o?()=>openGame(g):buy(g.price,()=>{S.owned['game:'+g.id]=true;toast(`${g.icon} ${g.name} unlocked!`)}),!o&&(!lv||S.coins<g.price))})}
  if(shopTab==='modes'){intro.textContent='Permanent new ways to play. Pick a mode on the game’s start screen.';
   ALL.filter(g=>g.modes).forEach(g=>{el('div','grp',L).textContent=g.icon+' '+g.name;
    g.modes.forEach(m=>{const k=`mode:${g.id}:${m.id}`,o=modeOK(g,m),sel=S.mode[g.id]===m.id;
