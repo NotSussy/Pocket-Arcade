@@ -533,7 +533,8 @@ return{id:'hop',name:'Sky Hop',icon:'🐤',accent:'#6aa8ff',desc:'Tap to flap th
 /* ================= AIR HOCKEY (vs CPU) ================= */
 const hockey=(()=>{let A,ctx,W,H,p,me,cpu,tgt,goalW,rP,rM,sc,raf,last,alive,pause,stall,flash,ghost=null,MAXS=1.75,FR=.6;
 let WIN=5;
-function reset(towardMe){p={x:W/2,y:towardMe?H*.62:H*.38,vx:0,vy:0};pause=.7;stall=0;ghost=null}
+let cErr=0;function reset(towardMe){p={x:W/2,y:towardMe?H*.62:H*.38,vx:0,vy:0};pause=.7;stall=0;ghost=null;newCErr()}
+function newCErr(){const l=Math.min(Math.max(A.level(),-3),8);cErr=(Math.random()-.5)*rP*Math.max(3,8-l*.5)}
 function hitM(m){if(ghost&&ghost.m===m&&ghost.t>0)return;
  let dx=p.x-m.x,dy=p.y-m.y,d=Math.hypot(dx,dy);const R=rP+rM;if(d>=R)return;if(d<.01){dx=0;dy=m===me?-1:1;d=1}
  let nx=dx/d,ny=dy/d;const mouth=Math.abs(p.x-W/2)<goalW/2-rP*.3,e=3;
@@ -566,9 +567,9 @@ function loop(now){if(!alive)return;const dt=clamp((now-last)/1000,.001,.033);la
  let tx=clamp(tgt.x,rM,W-rM),ty=clamp(tgt.y,H/2+rM,H-rM),dx=tx-me.x,dy=ty-me.y,d=Math.hypot(dx,dy),mx=W*4*dt;
  if(d>mx){dx*=mx/d;dy*=mx/d}me.x+=dx;me.y+=dy;me.vx=dx/dt;me.vy=dy/dt;
  // CPU
- const lvl=Math.min(A.level(),8),spd=W*(.9+lvl*.08);let cx,cy;
- if(p.y<H/2+rP){const slow=Math.hypot(p.vx,p.vy)<W*.25;cx=p.x+(slow?0:p.vx*.05);cy=slow?p.y-rP*.6:p.y-rP*1.3}
- else{cx=W/2+(p.x-W/2)*.55;cy=H*.12}
+ const lvl=Math.min(A.level(),8),spd=W*(.38+lvl*.035);let cx,cy;
+ if(p.y<H/2+rP){const slow=Math.hypot(p.vx,p.vy)<W*.25;cx=p.x+cErr+(slow?0:p.vx*.02);cy=slow?p.y-rP*.6:p.y-rP*1.3}
+ else{cx=W/2+(p.x-W/2)*.35;cy=H*.12}
  cx=clamp(cx,rM,W-rM);cy=clamp(cy,rM,H/2-rM);let ex=cx-cpu.x,ey=cy-cpu.y,ed=Math.hypot(ex,ey),cm=spd*dt;
  if(ed>cm){ex*=cm/ed;ey*=cm/ed}cpu.x+=ex;cpu.y+=ey;cpu.vx=ex/dt;cpu.vy=ey/dt;
  if(pause>0){pause-=dt}else{
@@ -952,7 +953,7 @@ const WORDS_VALID='aaaahaadmiaahedaaliiaamiraarghaaronaartiababaabacaabaciabacka
 /* ================= PONG (vs CPU) ================= */
 const pong=(()=>{let A,ctx,W,H,b,me,cpu,sc,alive,raf,last,pause,pw,ph,err,flash,WIN=5;
 function serve(toMe){const s=H*.5;b={x:W/2,y:H/2,vx:(Math.random()-.5)*W*.7,vy:(toMe?1:-1)*s,r:Math.max(6,W*.024)};pause=.8;newErr()}
-function newErr(){const l=clamp(A.level(),-3,8);err=(Math.random()-.5)*pw*Math.max(.15,1.1-l*.12)}
+function newErr(){const l=clamp(A.level(),-3,8);err=(Math.random()-.5)*pw*Math.max(.9,2.6-l*.12)}
 function draw(){ctx.fillStyle='#15172b';ctx.fillRect(0,0,W,H);ctx.strokeStyle='rgba(255,255,255,.14)';ctx.setLineDash([10,12]);ctx.lineWidth=3;ctx.beginPath();ctx.moveTo(0,H/2);ctx.lineTo(W,H/2);ctx.stroke();ctx.setLineDash([]);
  ctx.textAlign='center';ctx.textBaseline='middle';ctx.font=`900 ${W*.18}px system-ui`;ctx.fillStyle='rgba(255,93,143,.16)';ctx.fillText(sc.cpu,W/2,H*.27);ctx.fillStyle='rgba(78,227,193,.16)';ctx.fillText(sc.me,W/2,H*.73);
  ctx.fillStyle='#ff5d8f';rr(ctx,cpu.x-pw/2,cpu.y-ph/2,pw,ph,ph/2);ctx.fillStyle='#4ee3c1';rr(ctx,me.x-pw/2,me.y-ph/2,pw,ph,ph/2);
@@ -967,7 +968,7 @@ function point(mine){if(mine)sc.me++;else sc.cpu++;flash={t:.8,mine};buzz(mine?4
  if(sc.me>=WIN||sc.cpu>=WIN){alive=false;draw();const w=sc.me>=WIN;setTimeout(()=>A.result(w?'win':'lose',`Final score ${sc.me}–${sc.cpu}`),700);return true}
  serve(!mine);return false}
 function loop(now){if(!alive)return;const dt=clamp((now-last)/1000,.001,.033);last=now;if(flash&&(flash.t-=dt)<=0)flash=null;
- const l=clamp(A.level(),-3,8),cs=W*(.62+l*.09),tx=clamp(predict()+err,pw/2,W-pw/2),d=tx-cpu.x;cpu.x+=clamp(d,-cs*dt,cs*dt);
+ const l=clamp(A.level(),-3,8),cs=W*(.26+l*.03),tx=clamp(predict()+err,pw/2,W-pw/2),d=tx-cpu.x;cpu.x+=clamp(d,-cs*dt,cs*dt);
  if(pause>0)pause-=dt;else{const n=Math.ceil(Math.hypot(b.vx,b.vy)*dt/(b.r*.8))||1;
   for(let i=0;i<n;i++){b.x+=b.vx*dt/n;b.y+=b.vy*dt/n;if(b.x<b.r){b.x=b.r;b.vx=Math.abs(b.vx)}if(b.x>W-b.r){b.x=W-b.r;b.vx=-Math.abs(b.vx)}
    hitP(me,-1);hitP(cpu,1);if(b.y<-b.r){if(point(true))return;break}if(b.y>H+b.r){if(point(false))return;break}}}
