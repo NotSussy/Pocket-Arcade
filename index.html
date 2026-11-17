@@ -1445,13 +1445,13 @@ async function onUser(u){fbUser=u;cloudReady=false;cloudRef=null;
 async function initCloud(){setSync('connecting');
  if(!(await loadFirebase())){return setSync('device')}
  fbAuth.onAuthStateChanged(onUser,()=>setSync('device'));
- fbAuth.getRedirectResult().catch(()=>{})}
+}
 addEventListener('visibilitychange',()=>{if(document.visibilityState==='hidden'){saveLocal();if(dirty)pushCloud()}});
 addEventListener('pagehide',()=>{saveLocal();if(dirty)pushCloud()});
 function authMsg(e){const c=(e&&e.code)||'';
  return({'auth/invalid-credential':'Wrong email or password.','auth/wrong-password':'Wrong email or password.','auth/user-not-found':'No account with that email. Tap “Create account”.','auth/email-already-in-use':'That email already has an account. Tap “Sign in” instead.',
  'auth/weak-password':'Password needs at least 6 characters.','auth/invalid-email':'That email doesn’t look right.','auth/missing-password':'Type a password first.','auth/too-many-requests':'Too many tries. Wait a minute and try again.',
- 'auth/network-request-failed':'Couldn’t connect. Check your internet.','auth/popup-closed-by-user':'Sign-in was cancelled.','auth/cancelled-popup-request':'Sign-in was cancelled.','auth/popup-blocked':'The sign-in window was blocked. Allow pop-ups or use email.',
+ 'auth/network-request-failed':'Couldn’t connect. Check your internet.','auth/popup-closed-by-user':'The Google window was closed before sign-in finished. Try again, or use email below.','auth/cancelled-popup-request':'Sign-in was cancelled.','auth/popup-blocked':'Your browser blocked the Google sign-in window. Click the pop-up icon at the right end of the address bar, choose “Always allow”, then try again. Or use email below.',
  'auth/unauthorized-domain':'This website isn’t allowed to sign in yet.','auth/operation-not-supported-in-this-environment':'Google sign-in doesn’t work in this app. Use email and password instead.','auth/web-storage-unsupported':'This browser blocks sign-in storage.'})[c]||'Something went wrong. Try again.'}
 function authUI(box,modalEl){const w=el('div','authbox',box);
  if(!fbAuth){w.innerHTML='<small class="dim">Sign-in isn’t available right now (couldn’t reach Google). Your progress is still saved on this device.</small>';return}
@@ -1459,7 +1459,7 @@ function authUI(box,modalEl){const w=el('div','authbox',box);
   const so=el('button','btn ghost',w);so.textContent='Sign out';so.addEventListener('click',async()=>{try{await pushCloud()}catch(e){}await fbAuth.signOut();toast('Signed out. Your progress is still on this device.');modalEl.remove()});return}
  const g=el('button','btn gbtn',w);g.innerHTML='<b style="font-size:18px">G</b> Sign in with Google';
  const msg=el('div','amsg',w);const err=e=>{msg.textContent=authMsg(e)};
- g.addEventListener('click',async()=>{msg.textContent='';try{await fbAuth.signInWithPopup(new firebase.auth.GoogleAuthProvider());modalEl.remove()}catch(e){if(e&&e.code==='auth/popup-blocked'){try{await fbAuth.signInWithRedirect(new firebase.auth.GoogleAuthProvider());return}catch(e2){}}err(e)}});
+ g.addEventListener('click',()=>{msg.textContent='';fbAuth.signInWithPopup(new firebase.auth.GoogleAuthProvider()).then(()=>modalEl.remove()).catch(err)});
  el('div','or',w).textContent='or use email';
  const em=el('input','field',w);em.type='email';em.placeholder='Email';em.autocomplete='email';em.autocapitalize='off';
  const pw=el('input','field',w);pw.type='password';pw.placeholder='Password (6+ characters)';pw.autocomplete='current-password';
