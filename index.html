@@ -345,10 +345,10 @@ canvas{display:block;border-radius:14px;background:#15172b}
 <section id="menu" class="view on">
   <div class="top"><h1>Pocket <span>Arcade</span></h1><div class="topr"><button class="syncbtn syncchip" id="syncbtn">⏳ Connecting…</button><div class="wallet">🪙 <span class="wal">0</span></div><button class="shopbtn" id="shopbtn">🛒 Shop</button></div></div>
   <div class="panel getapp" id="getapp"><h4>📲 Get the app</h4>
-   <div class="dlrow"><span>🪟 Download the app for <b>Windows</b> here:</span><a class="dl" href="https://notsussy.github.io/Pocket-Arcade/downloads/Pocket-Arcade-Setup.exe" target="_blank" rel="noopener">⬇ Download</a></div>
-   <div class="dlrow"><span>🍎 Download the app for <b>Mac</b> here:</span><span class="dls"><a class="dl" href="https://notsussy.github.io/Pocket-Arcade/downloads/Pocket-Arcade-Mac-AppleSilicon.zip" target="_blank" rel="noopener">⬇ Apple chip (M1–M4)</a><a class="dl alt2" href="https://notsussy.github.io/Pocket-Arcade/downloads/Pocket-Arcade-Mac-Intel.zip" target="_blank" rel="noopener">⬇ Intel</a></span></div>
-   <div class="dlrow"><span>🤖 Download the app for <b>Android</b> here:</span><a class="dl" href="https://notsussy.github.io/Pocket-Arcade/downloads/Pocket-Arcade-Android.apk" target="_blank" rel="noopener">⬇ Download</a></div>
-   <div class="dlrow"><span>📱 Download the app for <b>Google Pixel</b> here:</span><a class="dl" href="https://notsussy.github.io/Pocket-Arcade/downloads/Pocket-Arcade-Android.apk" target="_blank" rel="noopener">⬇ Download</a></div>
+   <div class="dlrow"><span>🪟 Download the app for <b>Windows</b> here:</span><a class="dl" href="https://raw.githubusercontent.com/NotSussy/Pocket-Arcade/main/downloads/Pocket-Arcade-Setup.exe" download>⬇ Download</a></div>
+   <div class="dlrow"><span>🍎 Download the app for <b>Mac</b> here:</span><span class="dls"><a class="dl" href="https://raw.githubusercontent.com/NotSussy/Pocket-Arcade/main/downloads/Pocket-Arcade-Mac-AppleSilicon.zip" download>⬇ Apple chip (M1–M4)</a><a class="dl alt2" href="https://raw.githubusercontent.com/NotSussy/Pocket-Arcade/main/downloads/Pocket-Arcade-Mac-Intel.zip" download>⬇ Intel</a></span></div>
+   <div class="dlrow"><span>🤖 Download the app for <b>Android</b> here:</span><a class="dl" href="https://raw.githubusercontent.com/NotSussy/Pocket-Arcade/main/downloads/Pocket-Arcade-Android.apk" download>⬇ Download</a></div>
+   <div class="dlrow"><span>📱 Download the app for <b>Google Pixel</b> here:</span><a class="dl" href="https://raw.githubusercontent.com/NotSussy/Pocket-Arcade/main/downloads/Pocket-Arcade-Android.apk" download>⬇ Download</a></div>
    <details class="dlhelp"><summary>Help installing</summary>
     <p><b>Windows:</b> open the file. If it says “Windows protected your PC,” click <b>More info</b>, then <b>Run anyway</b>.</p>
     <p><b>Mac:</b> unzip it, drag <b>Pocket Arcade</b> to Applications, then <b>right-click → Open</b> the first time. If it says it’s damaged, open Terminal and run <code>xattr -cr "/Applications/Pocket Arcade.app"</code>.</p>
@@ -1741,6 +1741,7 @@ addEventListener('keydown',e=>{if(!cur||!cur.key||document.querySelector('.modal
 $('#syncbtn').addEventListener('click',openSavePanel);
 let rzT;addEventListener('resize',()=>{clearTimeout(rzT);rzT=setTimeout(()=>{if(cur&&!RUN&&stage.querySelector('.ov.startov'))startOv()},200)});
 if(/PocketArcadeApp/.test(navigator.userAgent)){const g=$('#getapp');g&&g.remove()}
+if(!/github\.io$/.test(location.hostname))document.querySelectorAll('#getapp a.dl').forEach(a=>{a.target='_blank';a.rel='noopener'});
 applyTheme();if(!S.mis||S.mis.day!==today())genMissions();renderMenu();initCloud();
 </script>
 
