@@ -186,7 +186,7 @@ canvas{display:block;border-radius:14px;background:#15172b}
 .getapp{margin:4px 0 12px}.dlrow{display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap;font-size:14px}.dls{display:flex;gap:6px;flex-wrap:wrap}
 .dl{background:var(--a);color:#1a1300;text-decoration:none;font-weight:800;font-size:13px;padding:8px 12px;border-radius:10px;white-space:nowrap}.dl.alt2{background:var(--b);color:#06231c}
 .dlhelp{font-size:13px;color:var(--dim)}.dlhelp summary{cursor:pointer;font-weight:700;color:var(--ink)}.dlhelp p{margin:8px 0 0;line-height:1.45}.dlhelp code{background:#0f1020;padding:2px 5px;border-radius:5px;font-size:12px;word-break:break-all}
-.authbox{display:flex;flex-direction:column;gap:8px;background:var(--panel);border-radius:14px;padding:12px;margin:8px 0}.authbox .who{font-size:14px}.authbox .field{background:#0f1020;color:var(--ink);border:2px solid #3a3d6a;border-radius:10px;padding:11px;font:inherit;font-size:16px;width:100%;box-sizing:border-box}.authbox .or{text-align:center;color:var(--dim);font-size:12px}.authbox .amsg{color:#ff8fb1;font-size:13px;min-height:0}.gbtn{background:#fff!important;color:#1f1f1f!important;display:flex;align-items:center;justify-content:center;gap:10px}.authbox .btn small{font-weight:600;opacity:.8}
+.authbox{display:flex;flex-direction:column;gap:8px;background:var(--panel);border-radius:14px;padding:12px;margin:8px 0}.authbox .who{font-size:14px}.authbox .field{background:#0f1020;color:var(--ink);border:2px solid #3a3d6a;border-radius:10px;padding:11px;font:inherit;font-size:16px;width:100%;box-sizing:border-box}.authbox .or{text-align:center;color:var(--dim);font-size:12px}.authbox .amsg{color:#ff8fb1;font-size:13px;min-height:0}.gbtn{background:#fff!important;color:#1f1f1f!important;display:flex;align-items:center;justify-content:center;gap:10px}.authbox .btn small{font-weight:600;opacity:.8}.namewarn{background:#3a1f12;border:2px solid #ff9d2e;color:#ffd9b0;border-radius:12px;padding:10px 12px;font-size:14px;line-height:1.4}
 .syncbtn{background:var(--panel);border:none;color:var(--ink);border-radius:12px;padding:9px 11px;font:inherit;font-weight:800;font-size:13px;cursor:pointer;white-space:nowrap}
 .modal{position:fixed;inset:0;background:rgba(5,5,15,.75);display:flex;align-items:center;justify-content:center;z-index:40;padding:20px;animation:fade .15s}
 .mbox{background:var(--bg);border:1px solid #3a3d6a;border-radius:20px;padding:20px;width:100%;max-width:380px;display:flex;flex-direction:column;gap:10px}
@@ -1445,7 +1445,7 @@ function normalize(v){const d=JSON.parse(JSON.stringify(DEF));v=v&&typeof v==='o
 let S=(()=>{let v=null;try{v=JSON.parse(localStorage.getItem('pa_save'))}catch(e){}const s=normalize(v);
  try{for(let i=0;i<localStorage.length;i++){const k=localStorage.key(i);if(k&&k.startsWith('pa_')&&k!=='pa_save'&&s.best[k]==null){const n=+localStorage.getItem(k);if(!isNaN(n))s.best[k]=n}}}catch(e){}return s})();
 function saveLocal(){try{localStorage.setItem('pa_save',JSON.stringify(S))}catch(e){}}
-function save(){S.t=Date.now();saveLocal();queueCloud()}
+function save(){if(!window.holdT)S.t=Date.now();saveLocal();queueCloud()}
 
 /* ---------- sound ---------- */
 const SND={ctx:null};
@@ -1460,8 +1460,8 @@ addEventListener('pointerdown',()=>{if(S.set.sound)actx()},true);
 
 /* ---------- cloud save (Google / email sign-in via Firebase) ---------- */
 const FB_CONFIG={apiKey:"AIzaSyBBFxy_F8tK5E1KF1snis87Kvg5HvyTwIY",authDomain:"pocket-arcade-2b6f7.firebaseapp.com",projectId:"pocket-arcade-2b6f7",storageBucket:"pocket-arcade-2b6f7.firebasestorage.app",messagingSenderId:"1007760177262",appId:"1:1007760177262:web:0e6d82ec0fe465fc4a4e7f"};
-const FB_V='10.12.2';window.FB_ON=true;
-let cloudRef=null,cloudReady=false,writing=false,dirty=false,syncT=null,syncState='connecting',fbAuth=null,fbDb=null,fbUser=null,fbLoading=null;
+const FB_V='10.12.2';window.FB_ON=true;window.holdT=true;window.myName=null;
+let unsub=null,pendingRemote=null,lastSync=0,cloudRef=null,cloudReady=false,writing=false,dirty=false,syncT=null,syncState='connecting',fbAuth=null,fbDb=null,fbUser=null,fbLoading=null;
 const SYNC={connecting:['⏳','Connecting…','Checking your account…'],
  out:['👤','Sign in','You’re not signed in. Sign in below to save your progress to the cloud and use it on any device.'],
  cloud:['☁️','Saved','Progress saves automatically to your account, so it follows you to any device where you sign in.'],
@@ -1469,63 +1469,98 @@ const SYNC={connecting:['⏳','Connecting…','Checking your account…'],
  retry:['⚠️','Retrying','Couldn’t reach the cloud just now. Your progress is safe on this device and will upload when the connection is back.'],
  offline:['📱','This device','Cloud save couldn’t be reached, so progress is saving on this device only. Use a save code below as a backup.'],
  device:['📱','This device','Cloud save isn’t available here, so progress saves on this device only. Use a save code below to back it up.']};
-function setSync(st){syncState=st;const[i,short,long]=SYNC[st]||SYNC.device;document.querySelectorAll('.syncchip').forEach(e=>e.textContent=i+' '+short);const l=document.querySelector('#synclong');if(l)l.textContent=long+(fbUser&&(st==='cloud'||st==='saving')&&fbUser.email?` (${fbUser.email})`:'')}
+function setSync(st){syncState=st;const[i,short,long]=SYNC[st]||SYNC.device;document.querySelectorAll('.syncchip').forEach(e=>e.textContent=i+' '+short);const l=document.querySelector('#synclong');if(l)l.textContent=long+(fbUser&&(st==='cloud'||st==='saving')&&myName?` (signed in as ${myName})`:'')}
 function queueCloud(){if(!cloudRef||!cloudReady)return;dirty=true;clearTimeout(syncT);syncT=setTimeout(pushCloud,1200)}
 async function pushCloud(){clearTimeout(syncT);if(!cloudRef||!cloudReady||writing||!dirty)return;writing=true;dirty=false;setSync('saving');
- try{await cloudRef.set({save:JSON.stringify(S),t:S.t||Date.now(),v:1});setSync('cloud')}
+ try{const t=S.t||Date.now();await cloudRef.set({save:JSON.stringify(S),t,v:2,dev:DEV},{merge:true});setLast(t);setSync('cloud')}
  catch(e){const c=e&&e.code;if(c==='permission-denied'||c==='invalid-argument'){cloudRef=null;setSync('offline')}else{dirty=true;setSync('retry');syncT=setTimeout(pushCloud,4000+Math.random()*2000)}}
  writing=false;if(dirty&&cloudRef&&syncState!=='retry')pushCloud()}
 function refreshView(){wallet();lvlBar&&lvlBar();if($('#menu').classList.contains('on'))renderMenu();else if($('#shop').classList.contains('on'))renderShop()}
 function loadScript(src){return new Promise((res,rej)=>{const s=document.createElement('script');s.src=src;s.onload=res;s.onerror=rej;document.head.appendChild(s)})}
 function loadFirebase(){if(fbLoading)return fbLoading;const b=`https://www.gstatic.com/firebasejs/${FB_V}/firebase-`;
  fbLoading=loadScript(b+'app-compat.js').then(()=>Promise.all([loadScript(b+'auth-compat.js'),loadScript(b+'firestore-compat.js')])).then(()=>{firebase.initializeApp(FB_CONFIG);fbAuth=firebase.auth();fbDb=firebase.firestore();return true}).catch(()=>{fbLoading=null;return false});return fbLoading}
+const DEV=(()=>{try{let d=localStorage.getItem('pa_dev');if(!d){d=Math.random().toString(36).slice(2,10);localStorage.setItem('pa_dev',d)}return d}catch(e){return 'x'+Math.random()}})();
 const progressOf=s=>(s.coins||0)+(s.lvl||1)*200+Object.keys(s.owned||{}).length*100;
-async function onUser(u){fbUser=u;cloudReady=false;cloudRef=null;
- if(!u){setSync('out');return}
- cloudRef=fbDb.collection('saves').doc(u.uid);let done=false;const to=setTimeout(()=>{if(!done)setSync('offline')},12000);
- try{const snap=await cloudRef.get();done=true;clearTimeout(to);
-  let remote=null;try{const d=snap.exists?snap.data():null;remote=d&&typeof d.save==='string'?JSON.parse(d.save):null}catch(e){}
-  const neverSynced=S.sid!==u.uid;
-  const useRemote=()=>{S=normalize(remote);S.sid=u.uid;saveLocal();applyTheme();refreshView();cloudReady=true;setSync('cloud');toast('☁️ Progress loaded from your account')};
-  const useLocal=()=>{S.sid=u.uid;cloudReady=true;dirty=true;save();pushCloud();toast('☁️ This device’s progress is now saved to your account')};
-  if(!remote){cloudReady=true;S.sid=u.uid;dirty=true;await pushCloud();return}
-  if(!neverSynced){cloudReady=true;if((remote.t||0)>(S.t||0))useRemote();else{dirty=true;await pushCloud()}return}
-  if(progressOf(S)<=progressOf(normalize({}))+1){useRemote();return}
+function getLast(uid){try{return +localStorage.getItem('pa_synct_'+uid)||0}catch(e){return 0}}
+function setLast(t){lastSync=t;try{fbUser&&localStorage.setItem('pa_synct_'+fbUser.uid,String(t))}catch(e){}}
+function busy(){return !!(cur||RUN||document.querySelector('.packov'))}
+function adopt(remote,quiet){S=normalize(remote);S.sid=fbUser.uid;saveLocal();setLast(S.t||0);applyTheme();refreshView();
+ if(!quiet)toast('☁️ Loaded your newest progress')}
+function tryPending(){if(pendingRemote&&!busy()){const r=pendingRemote;pendingRemote=null;if((r.t||0)>(S.t||0))adopt(r)}}
+setInterval(tryPending,1000);
+function readDoc(d){let remote=null;try{remote=d&&typeof d.save==='string'?JSON.parse(d.save):null}catch(e){}if(remote&&d.t)remote.t=Math.max(remote.t||0,d.t);return remote}
+function setName(n){myName=n||null;applyLook&&applyLook()}
+async function onUser(u){fbUser=u;cloudReady=false;cloudRef=null;pendingRemote=null;if(unsub){unsub();unsub=null}setName(null);
+ if(!u){holdT=false;setSync('out');return}
+ cloudRef=fbDb.collection('saves').doc(u.uid);lastSync=getLast(u.uid);let done=false;const to=setTimeout(()=>{if(!done){holdT=false;setSync('offline')}},12000);
+ try{const snap=await cloudRef.get({source:'server'});done=true;clearTimeout(to);
+  const d=snap.exists?snap.data():null,remote=readDoc(d);setName(d&&d.name);
+  const finish=()=>{holdT=false;cloudReady=true;listen();if(!myName)setTimeout(()=>{if(!myName&&!document.querySelector('.modal'))nameUI(true)},900)};
+  const pushLocal=async()=>{S.sid=u.uid;holdT=false;cloudReady=true;dirty=true;await pushCloud()};
+  if(!remote){await pushLocal();finish();return}
+  const rt=remote.t||0,lt=S.t||0;
+  if(S.sid===u.uid){
+   const remoteNew=rt>lastSync,localNew=lt>lastSync;
+   if(remoteNew&&(!localNew||rt>=lt))adopt(remote,rt<=lt);
+   else if(localNew){await pushLocal()}
+   setSync('cloud');finish();return}
+  if(progressOf(S)<=progressOf(normalize({}))+1){adopt(remote);setSync('cloud');finish();return}
   const m=modal('☁️ Which progress do you want?');el('p','',m).textContent='Your account already has a save, and this device has its own progress too. Pick one to keep. The other one will be replaced.';
-  const a=el('button','btn',m);a.innerHTML=`Use my account’s save<br><small>⭐ Level ${remote.lvl||1} · 🪙 ${fmt(remote.coins||0)}</small>`;a.addEventListener('click',()=>{closeModal();useRemote()});
-  const b=el('button','btn ghost',m);b.innerHTML=`Use this device’s progress<br><small>⭐ Level ${S.lvl} · 🪙 ${fmt(S.coins)}</small>`;b.addEventListener('click',()=>{closeModal();useLocal()});
+  const a=el('button','btn',m);a.innerHTML=`Use my account’s save<br><small>⭐ Level ${remote.lvl||1} · 🪙 ${fmt(remote.coins||0)}</small>`;a.addEventListener('click',()=>{closeModal();adopt(remote);setSync('cloud');finish()});
+  const b=el('button','btn ghost',m);b.innerHTML=`Use this device’s progress<br><small>⭐ Level ${S.lvl} · 🪙 ${fmt(S.coins)}</small>`;b.addEventListener('click',async()=>{closeModal();await pushLocal();toast('☁️ This device’s progress is now saved to your account');finish()});
   setSync('connecting')}
- catch(e){done=true;clearTimeout(to);cloudRef=null;setSync('offline')}}
+ catch(e){done=true;clearTimeout(to);holdT=false;cloudRef=null;setSync('offline')}}
+function listen(){if(!cloudRef||unsub)return;const me=fbUser&&fbUser.uid;
+ unsub=cloudRef.onSnapshot(snap=>{if(!fbUser||fbUser.uid!==me||snap.metadata.hasPendingWrites||!snap.exists)return;const d=snap.data();setName(d.name);
+  if(d.dev===DEV)return;const r=readDoc(d);if(!r)return;const rt=r.t||0;
+  if(rt>(S.t||0)){if(busy()){pendingRemote=r;toast('☁️ Newer progress from another device will load after this game')}else adopt(r)}
+  else if((S.t||0)>rt&&(S.t||0)>lastSync){dirty=true;queueCloud()}},()=>{})}
 async function initCloud(){setSync('connecting');
- if(!(await loadFirebase())){return setSync('device')}
- fbAuth.onAuthStateChanged(onUser,()=>setSync('device'));
+ if(!(await loadFirebase())){holdT=false;return setSync('device')}
+ fbAuth.onAuthStateChanged(onUser,()=>{holdT=false;setSync('device')});
 }
-addEventListener('visibilitychange',()=>{if(document.visibilityState==='hidden'){saveLocal();if(dirty)pushCloud()}});
+addEventListener('visibilitychange',()=>{if(document.visibilityState==='hidden'){saveLocal();if(dirty)pushCloud()}else if(cloudRef&&cloudReady){cloudRef.get({source:'server'}).then(s=>{const r=s.exists&&readDoc(s.data());if(r&&s.data().dev!==DEV&&(r.t||0)>(S.t||0)){if(busy())pendingRemote=r;else adopt(r)}}).catch(()=>{})}});
 addEventListener('pagehide',()=>{saveLocal();if(dirty)pushCloud()});
 function authMsg(e){const c=(e&&e.code)||'';
- return({'auth/invalid-credential':'Wrong email or password.','auth/wrong-password':'Wrong email or password.','auth/user-not-found':'No account with that email. Tap “Create account”.','auth/email-already-in-use':'That email already has an account. Tap “Sign in” instead.',
- 'auth/weak-password':'Password needs at least 6 characters.','auth/invalid-email':'That email doesn’t look right.','auth/missing-password':'Type a password first.','auth/too-many-requests':'Too many tries. Wait a minute and try again.',
- 'auth/network-request-failed':'Couldn’t connect. Check your internet.','auth/popup-closed-by-user':'The Google window was closed before sign-in finished. Try again, or use email below.','auth/cancelled-popup-request':'Sign-in was cancelled.','auth/popup-blocked':'Your browser blocked the Google sign-in window. Click the pop-up icon at the right end of the address bar, choose “Always allow”, then try again. Or use email below.',
- 'auth/unauthorized-domain':'This website isn’t allowed to sign in yet.','auth/operation-not-supported-in-this-environment':'Google sign-in doesn’t work in this app. Use email and password instead.','auth/web-storage-unsupported':'This browser blocks sign-in storage.'})[c]||'Something went wrong. Try again.'}
+ return({'auth/network-request-failed':'Couldn’t connect. Check your internet.','auth/popup-closed-by-user':'The Google window was closed before sign-in finished. Try again.','auth/cancelled-popup-request':'Sign-in was cancelled.',
+ 'auth/popup-blocked':'Your browser blocked the Google sign-in window. Allow pop-ups for this site (the icon at the right end of the address bar), then try again.','auth/too-many-requests':'Too many tries. Wait a minute and try again.',
+ 'auth/unauthorized-domain':'This website isn’t allowed to sign in yet.','auth/operation-not-supported-in-this-environment':'Google sign-in doesn’t work here. Open the arcade in Chrome, Edge or Safari instead.','auth/web-storage-unsupported':'This browser blocks sign-in storage.'})[c]||'Something went wrong. Try again.'}
+/* ---------- usernames ---------- */
+const BADW=['fuck','shit','bitch','asshole','dick','cunt','nigg','fag','porn','sex','slut','whore','rape','nazi','hitler','penis','vagina','boob','cock','pussy','retard','kys','killyourself','damn','crap','bastard','piss','horny','nude','naked'];
+function nameProblem(n){if(!n)return 'Type a username.';if(n.length<3)return 'At least 3 characters.';if(n.length>16)return '16 characters max.';
+ if(!/^[A-Za-z0-9_]+$/.test(n))return 'Only letters, numbers and _ (no spaces).';if(/\d{5,}/.test(n))return 'Too many numbers in a row — don’t use phone numbers or birthdays.';
+ const k=n.toLowerCase().replace(/0/g,'o').replace(/1/g,'i').replace(/3/g,'e').replace(/4/g,'a').replace(/5/g,'s').replace(/7/g,'t').replace(/_/g,'');
+ if(BADW.some(w=>k.includes(w)))return 'Please pick a friendlier username.';if(/^(admin|mod|moderator|staff|official|pocketarcade|system)/.test(k))return 'That username is reserved.';return ''}
+async function claimName(n){const key=n.toLowerCase(),uid=fbUser.uid,ref=fbDb.collection('usernames').doc(key),old=myName&&myName.toLowerCase();
+ await fbDb.runTransaction(async tx=>{const s=await tx.get(ref);if(s.exists&&s.data().uid!==uid)throw{code:'taken'};
+  if(!s.exists)tx.set(ref,{uid,name:n,t:Date.now()});if(old&&old!==key)tx.delete(fbDb.collection('usernames').doc(old));tx.set(cloudRef,{name:n},{merge:true})});setName(n)}
+function nameUI(first){if(!fbUser||!cloudRef)return;const m=modal(myName?'✏️ Change username':'👤 Pick a username');
+ el('p','',m).textContent=myName?`Your username is ${myName}. Pick a new one below.`:'This is the name other players will see. You can change it any time.';
+ const w=el('div','namewarn',m);w.innerHTML='⚠️ <b>Don’t enter personal info.</b> No real name, email, phone number, address, school or age.';
+ const box=el('div','authbox',m),f=el('input','field',box);f.maxLength=16;f.placeholder='Username';f.autocomplete='off';f.autocapitalize='off';f.spellcheck=false;if(myName)f.value=myName;
+ const msg=el('div','amsg',box);el('small','dim',box).textContent='3–16 letters, numbers or _';
+ const ok=el('button','btn alt',m);ok.textContent=myName?'Change username':'Save username';
+ if(first){const l=el('button','btn ghost',m);l.textContent='Later';l.addEventListener('click',closeModal)}
+ let tk=null,seq=0;const check=()=>{clearTimeout(tk);const n=f.value.trim(),p=nameProblem(n);msg.style.color='';
+  if(p){msg.textContent=n?p:'';return}if(myName&&n===myName){msg.textContent='That’s your username now.';return}
+  if(myName&&n.toLowerCase()===myName.toLowerCase()){msg.textContent='Only the capitals changed — that’s the same username.';return}
+  const my=++seq;msg.textContent='Checking…';tk=setTimeout(()=>fbDb.collection('usernames').doc(n.toLowerCase()).get().then(s=>{if(my!==seq)return;const mine=s.exists&&s.data().uid===fbUser.uid;
+   if(s.exists&&!mine){msg.textContent='❌ That username is taken.'}else{msg.style.color='#5fe3a1';msg.textContent='✅ Available!'}}).catch(()=>{if(my===seq)msg.textContent=''}),400)};
+ f.addEventListener('input',check);f.addEventListener('keydown',e=>{if(e.key==='Enter')ok.click()});
+ ok.addEventListener('click',async()=>{const n=f.value.trim(),p=nameProblem(n);msg.style.color='';if(p)return msg.textContent=p;
+  if(myName&&n.toLowerCase()===myName.toLowerCase())return closeModal();ok.disabled=true;msg.textContent='Saving…';
+  try{await claimName(n);closeModal();sfx('coin');toast(`👤 You’re now ${n}!`)}
+  catch(e){ok.disabled=false;msg.textContent=e&&e.code==='taken'?'❌ That username is taken.':e&&e.code==='permission-denied'?'Usernames aren’t switched on yet (the database rules need updating).':'Couldn’t save it. Check your internet and try again.'}});
+ setTimeout(()=>f.focus(),50)}
 function authUI(box,modalEl){const w=el('div','authbox',box);
  if(!fbAuth){w.innerHTML='<small class="dim">Sign-in isn’t available right now (couldn’t reach Google). Your progress is still saved on this device.</small>';return}
- if(fbUser){const who=fbUser.displayName||fbUser.email||'your account';w.innerHTML=`<div class="who">✅ Signed in as <b></b></div>`;w.querySelector('b').textContent=who;
+ if(fbUser){w.innerHTML=`<div class="who">✅ Signed in with Google${myName?' as <b></b>':''}</div>`;if(myName)w.querySelector('b').textContent=myName;
+  const nb=el('button','btn',w);nb.textContent=myName?'✏️ Change username':'👤 Pick a username';nb.addEventListener('click',()=>nameUI(false));
   const so=el('button','btn ghost',w);so.textContent='Sign out';so.addEventListener('click',async()=>{try{await pushCloud()}catch(e){}await fbAuth.signOut();toast('Signed out. Your progress is still on this device.');modalEl.remove()});return}
- const msg=el('div','amsg',w);const err=e=>{msg.textContent=authMsg(e)};
- if(/PocketArcadeApp/.test(navigator.userAgent)&&/Android/.test(navigator.userAgent)){el('small','dim',w).textContent='Google sign-in doesn’t work inside this app. Use email and password below, or open the website in Chrome to use Google.'}
- else{const g=el('button','btn gbtn',w);g.innerHTML='<b style="font-size:18px">G</b> Sign in with Google';
-  g.addEventListener('click',()=>{msg.textContent='';fbAuth.signInWithPopup(new firebase.auth.GoogleAuthProvider()).then(()=>modalEl.remove()).catch(err)});
-  el('div','or',w).textContent='or use email'}
- const em=el('input','field',w);em.type='email';em.placeholder='Email';em.autocomplete='email';em.autocapitalize='off';
- const pw=el('input','field',w);pw.type='password';pw.placeholder='Password (6+ characters)';pw.autocomplete='current-password';
- const row=el('div','mbtns',w);
- const si=el('button','btn',row);si.textContent='Sign in';const su=el('button','btn alt',row);su.textContent='Create account';
- const fp=el('button','btn ghost',w);fp.textContent='Forgot password?';
- const run=async fn=>{msg.textContent='';try{await fn();modalEl.remove()}catch(e){err(e)}};
- si.addEventListener('click',()=>run(()=>fbAuth.signInWithEmailAndPassword(em.value.trim(),pw.value)));
- su.addEventListener('click',()=>run(()=>fbAuth.createUserWithEmailAndPassword(em.value.trim(),pw.value)));
- pw.addEventListener('keydown',e=>{if(e.key==='Enter')si.click()});
- fp.addEventListener('click',async()=>{msg.textContent='';if(!em.value.trim())return err({code:'auth/invalid-email'});try{await fbAuth.sendPasswordResetEmail(em.value.trim());msg.textContent='📧 Password reset email sent. Check your inbox (and spam).'}catch(e){err(e)}})}
+ const msg=el('div','amsg',w);
+ const g=el('button','btn gbtn',w);g.innerHTML='<b style="font-size:18px">G</b> Sign in with Google';
+ g.addEventListener('click',()=>{msg.textContent='';fbAuth.signInWithPopup(new firebase.auth.GoogleAuthProvider()).then(()=>modalEl.remove()).catch(e=>{msg.textContent=authMsg(e)})});
+ el('small','dim',w).textContent='Signing in keeps your progress safe and lets you pick a username.'}
 
 /* ---------- save panel: status, save now, save codes ---------- */
 function encodeSave(){return 'PA1:'+btoa(unescape(encodeURIComponent(JSON.stringify(S))))}
@@ -1707,7 +1742,7 @@ function itemArt(it,big){if(it.type==='cb')return `<span class="cbk" style="back
  if(it.type==='th'){const t=THEMES[it.id.slice(3)];return `<span class="sw">${t.v.slice(0,5).map(c=>`<i style="background:${c}"></i>`).join('')}</span>`}
  if(it.type==='ti')return `<span class="tiart">“${it.name}”</span>`;return `<span class="avart">${it.icon}</span>`}
 function applyLook(){const r=document.documentElement.style;const b=S.back&&CBK[S.back.slice(3)];if(b)r.setProperty('--cbk',b);else r.removeProperty('--cbk');
- const a=$('#avatar');if(a)a.textContent=S.av?itemById(S.av).icon:'🙂';const t=$('#ptitle');if(t){const it=S.title&&itemById(S.title);t.textContent=it?'🏷️ '+it.name:'';t.style.display=it?'':'none'}}
+ const a=$('#avatar');if(a)a.textContent=S.av?itemById(S.av).icon:'🙂';const t=$('#ptitle');if(t){const it=S.title&&itemById(S.title),nm=window.myName,bits=[];if(nm)bits.push('👤 '+nm);if(it)bits.push('🏷️ '+it.name);t.textContent=bits.join('  ·  ');t.style.display=bits.length?'':'none'}}
 function renderPackBar(){const b=$('#packbar');if(!b)return;const n=packTotal(),got=ITEMS.filter(i=>S.col[i.id]).length;
  b.innerHTML=`<div class="pbx"><b>🎁 Packs</b><small>${n?`You have <b>${n}</b> to open!`:'Collect avatars, titles, card backs & themes'} · 🎴 ${got}/${ITEMS.length}</small></div>`;
  const o=el('button','btn'+(n?' alt':''),b);o.textContent=n?`Open (${n})`:'Get packs';o.addEventListener('click',()=>n?openPackPicker():openShop('packs'));
@@ -1861,7 +1896,10 @@ $('#recbtn').addEventListener('click',openRecords);$('#setbtn').addEventListener
 addEventListener('keydown',e=>{if(!cur||!cur.key||document.querySelector('.modal'))return;const m={ArrowUp:'u',ArrowDown:'d',ArrowLeft:'l',ArrowRight:'r',' ':'u',w:'u',s:'d',a:'l',d:'r'}[e.key];if(m){e.preventDefault();cur.key(m)}});
 $('#syncbtn').addEventListener('click',openSavePanel);
 let rzT;addEventListener('resize',()=>{clearTimeout(rzT);rzT=setTimeout(()=>{if(cur&&!RUN&&stage.querySelector('.ov.startov'))startOv()},200)});
-if(/PocketArcadeApp/.test(navigator.userAgent)){const g=$('#getapp');g&&g.remove()}
+(()=>{let app=/PocketArcadeApp/.test(navigator.userAgent);try{if(/[?&]app=/.test(location.search))sessionStorage.setItem('pa_app','1');if(sessionStorage.getItem('pa_app'))app=true}catch(e){}
+ try{if(matchMedia('(display-mode: standalone)').matches||navigator.standalone)app=true}catch(e){}
+ const ud=navigator.userAgentData;if(ud&&ud.brands&&!ud.mobile&&ud.brands.some(b=>/Chromium/.test(b.brand))&&!ud.brands.some(b=>/Chrome|Edge|Opera|Brave|Vivaldi|Yandex|Samsung|Arc/.test(b.brand)))app=true;
+ if(app){const g=$('#getapp');g&&g.remove()}})();
 if(!/github\.io$/.test(location.hostname))document.querySelectorAll('#getapp a.dl').forEach(a=>{a.target='_blank';a.rel='noopener'});
 applyTheme();if(!S.mis||S.mis.day!==today())genMissions();renderMenu();initCloud();
 </script>
