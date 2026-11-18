@@ -1500,7 +1500,7 @@ async function onUser(u){fbUser=u;BANNED=false;ADMIN=false;{const ab=$('#admbtn'
   const d=snap.exists?snap.data():null,remote=readDoc(d);setName(d&&d.name);
   const finish=()=>{holdT=false;cloudReady=true;listen();afterSignIn(u);if(!myName)setTimeout(()=>{if(!myName&&!document.querySelector('.modal'))nameUI(true)},900)};
   const pushLocal=async()=>{S.sid=u.uid;holdT=false;cloudReady=true;dirty=true;await pushCloud()};
-  if(!remote){await pushLocal();finish();return}
+  if(!remote){await pushLocal();cloudRef.set({created:Date.now()},{merge:true}).catch(()=>{});finish();return}
   const rt=remote.t||0,lt=S.t||0;
   if(S.sid===u.uid){
    const remoteNew=rt>lastSync,localNew=lt>lastSync;
@@ -1605,7 +1605,7 @@ window.openBoards=openBoards;
 const ADM_HELP=[['YOUR ACCOUNT'],['/coins N','set your coins','/coins 5000'],['/addcoins N','add to your coins','/addcoins 250'],['/level N','set your level','/level 10'],['/pack TYPE [N]','give yourself packs (basic, super, mega)','/pack mega 3'],['/unlockall','unlock every game, mode and theme for you'],
  ['PLAYERS'],['/players','list every username'],['/lookup NAME','see a player’s level, coins, playtime and packs','/lookup Speedy'],['/give NAME coins N','add coins to a player','/give Speedy coins 500'],['/give NAME pack TYPE [N]','give a player packs','/give Speedy pack super 2'],
  ['/rename NAME NEWNAME','change a player’s username','/rename Speedy SpeedyKid'],['/resetname NAME','remove a username so they pick a new one','/resetname Speedy'],
- ['MODERATION'],['/lbremove NAME','take a player off the leaderboards','/lbremove Speedy'],['/ban NAME','block a player from leaderboards and new usernames','/ban Speedy'],['/unban NAME','undo a ban','/unban Speedy'],
+ ['MODERATION'],['/scan','check every leaderboard player for cheating'],['/check NAME','detailed cheat report for one player','/check Speedy'],['/lbremove NAME','take a player off the leaderboards','/lbremove Speedy'],['/ban NAME','block a player from leaderboards and new usernames','/ban Speedy'],['/unban NAME','undo a ban','/unban Speedy'],
  ['EVERYONE'],['/announce TEXT','show a message on everyone’s home menu','/announce New games this weekend!'],['/announce off','remove the message'],['/event double|triple HOURS','coin multiplier for all players','/event double 2'],['/event off','end the event'],
  ['CONSOLE'],['/help','show this list'],['/clear','clear the console'],['↑ / ↓','scroll through commands you already typed']];
 async function findUser(n){if(!n)throw 'Type a username.';const s=await fbDb.collection('usernames').doc(n.toLowerCase()).get();if(!s.exists)throw `No player called "${n}".`;return{uid:s.data().uid,name:s.data().name}}
@@ -1633,6 +1633,12 @@ async function runCmd(line,log){const a=line.trim().split(/\s+/),c=(a[0]||'').to
   try{await fbDb.collection('leaderboard').doc(u.uid).set({name:nn},{merge:true})}catch(e){}return log(`${u.name} is now ${nn}`)}
  case 'resetname':{const u=await findUser(a[1]);await fbDb.collection('usernames').doc(u.name.toLowerCase()).delete();await fbDb.collection('saves').doc(u.uid).set({name:null},{merge:true});
   try{await fbDb.collection('leaderboard').doc(u.uid).delete()}catch(e){}return log(`${u.name}’s username was removed. They’ll pick a new one.`)}
+ case 'check':{const u=await findUser(a[1]);const all=await fbDb.collection('leaderboard').limit(500).get(),docs=[];all.forEach(d=>docs.push(d.data()));
+  const r=await checkUid(u.uid,u.name,peerMap(docs));if(r.sv)log(`${u.name}: level ${r.sv.lvl} · ${fmt(r.sv.coins)} 🪙 · ${fmtTime(r.sv.stats.time||0)} played · ${Object.values(r.sv.stats.plays).reduce((x,y)=>x+y,0)} games`);
+  if(!r.F.length)return log('✅ Nothing suspicious found.');r.F.forEach(([i,m])=>log(`${i} ${m}`,i==='🚩'?'err':''));return log(r.F.some(f=>f[0]==='🚩')?'🚩 = almost certainly cheating · ⚠️ = worth a look. Check before you ban.':'⚠️ = could be cheating or could just be skill/luck.','dim')}
+ case 'scan':{log('Scanning everyone on the leaderboards…','dim');const all=await fbDb.collection('leaderboard').limit(500).get(),rows=[];all.forEach(d=>rows.push([d.id,d.data()]));const peers=peerMap(rows.map(r=>r[1]));let bad=0;
+  for(const[uid,lb]of rows){try{const r=await checkUid(uid,lb.name||'?',peers,lb);const reds=r.F.filter(f=>f[0]==='🚩').length,warns=r.F.length-reds;if(r.F.length){bad++;log(`${reds?'🚩':'⚠️'} ${r.name}: ${reds?reds+' red flag'+(reds>1?'s':''):''}${reds&&warns?', ':''}${warns?warns+' warning'+(warns>1?'s':''):''} — /check ${r.name}`,reds?'err':'')}}catch(e){}}
+  return log(bad?`Done. ${bad} of ${rows.length} players flagged. Use /check NAME for details.`:`Done. All ${rows.length} players look clean ✅`)}
  case 'lbremove':{const u=await findUser(a[1]);await fbDb.collection('leaderboard').doc(u.uid).delete();return log(`Removed ${u.name} from leaderboards (they come back when they play again unless banned).`)}
  case 'ban':{const u=await findUser(a[1]);await fbDb.collection('bans').doc(u.uid).set({name:u.name,t:Date.now()});try{await fbDb.collection('leaderboard').doc(u.uid).delete()}catch(e){}return log(`${u.name} is banned from leaderboards and new usernames.`)}
  case 'unban':{const u=await findUser(a[1]);await fbDb.collection('bans').doc(u.uid).delete();return log(`${u.name} is unbanned.`)}
@@ -1642,6 +1648,31 @@ async function runCmd(line,log){const a=line.trim().split(/\s+/),c=(a[0]||'').to
   const mult={double:2,triple:3}[k];if(!mult)throw 'Use: event double HOURS   or   event triple HOURS   or   event off';const h=a[2]?Math.min(168,Math.max(.25,+a[2]||1)):1;
   await r.set({mult,until:Date.now()+h*3600000,t:Date.now()});return log(`${mult}× coins for everyone for ${h} hour${h===1?'':'s'}!`)}
  default:throw `Unknown command "${c}". Type /help for the list.`}}
+/* ---------- cheat checker (admin) ---------- */
+function xpTotal(sv){let t=sv.xp||0;for(let l=1;l<(sv.lvl||1);l++)t+=need(l);return t}
+const LOWMIN={memory:[8,8],golf:[9,9],sudoku:[15,60],mines:[2,5]};
+function cheatCheck(sv,meta,lb,peers){const F=[],red=m=>F.push(['🚩',m]),warn=m=>F.push(['⚠️',m]);
+ const plays=Object.values(sv.stats.plays||{}).reduce((a,b)=>a+b,0),time=sv.stats.time||0,hrs=time/3600,now=Date.now();
+ if(sv.coins>3000+hrs*6000+plays*120)red(`${fmt(sv.coins)} coins is far more than ${fmtTime(time)} of play (${plays} games) can earn`);
+ else if(sv.coins>1500+hrs*3000+plays*60)warn(`${fmt(sv.coins)} coins is a lot for ${fmtTime(time)} of play — check if they won big at the casino`);
+ const xt=xpTotal(sv);if(sv.lvl>2&&xt>plays*45+600)red(`Level ${sv.lvl} needs ${fmt(xt)} XP but they’ve only played ${plays} games`);
+ if(plays>30&&time<plays*4)warn(`${plays} games in only ${fmtTime(time)} of playtime`);
+ if((sv.t||0)>now+10*60e3)red('Their save is dated in the future (device clock changed)');
+ const fut=d=>{const x=Date.parse(d||'');return isFinite(x)&&x>now+36*3600e3};if(fut(sv.daily)||fut(sv.mis&&sv.mis.day)||fut(sv.dr&&sv.dr.day))red('Played or claimed rewards on a future date (device clock changed to get extra rewards)');
+ ALL.forEach(g=>{const b=sv.best[bestKey(g,true)];if(b==null)return;const pl=sv.stats.plays[g.id]||0,w=sv.stats.wins[g.id]||0;
+  if(g.versus&&Object.keys(sv.stats.wins).length&&b>w+1)warn(`${g.name}: win streak ${b} but only ${w} wins recorded`);
+  const lm=LOWMIN[g.id];if(g.low&&lm){if(b<lm[0])red(`${g.name}: ${b} is impossible (best possible is ${lm[0]})`);else if(b<lm[1])warn(`${g.name}: ${b} is suspiciously good`)}});
+ if(lb){if((lb.coins||0)>(sv.coins||0)*2+1000)red(`Leaderboard says ${fmt(lb.coins||0)} coins but their save only has ${fmt(sv.coins)} (leaderboard edited directly)`);
+  if((lb.play||0)>time+3600)red(`Leaderboard playtime (${fmtTime(lb.play||0)}) is more than their save (${fmtTime(time)}) (leaderboard edited directly)`);
+  Object.entries(lb.best||{}).forEach(([id,v])=>{const g=ALL.find(x=>x.id===id);if(!g)return;const sb=sv.best[bestKey(g,true)];
+   if(sb==null)return red(`${g.name}: leaderboard score ${fmt(v)} isn’t in their save at all (leaderboard edited directly)`);
+   if(g.low?v<sb:v>sb)red(`${g.name}: leaderboard score ${fmt(v)} is better than their real best (${fmt(sb)})`)});
+  if(peers)Object.entries(lb.best||{}).forEach(([id,v])=>{const g=ALL.find(x=>x.id===id);if(!g||g.low||g.versus)return;const others=(peers[id]||[]).filter(x=>x!==v).sort((a,b)=>b-a);if(others.length>=2&&v>others[0]*5&&v>50)warn(`${g.name}: score ${fmt(v)} is over 5× the next best player (${fmt(others[0])})`)})}
+ return F}
+async function checkUid(uid,name,peers,lbDoc){const sref=await fbDb.collection('saves').doc(uid).get();if(!sref.exists)return{name,F:[['⚠️','No cloud save to check']],sv:null};
+ const d=sref.data(),sv=normalize(JSON.parse(d.save));const lb=lbDoc!==undefined?lbDoc:(await fbDb.collection('leaderboard').doc(uid).get().then(x=>x.exists?x.data():null));
+ return{name,sv,F:cheatCheck(sv,{created:d.created||0},lb,peers)}}
+function peerMap(docs){const m={};docs.forEach(d=>Object.entries(d.best||{}).forEach(([k,v])=>(m[k]=m[k]||[]).push(v)));return m}
 const packTotalOf=s=>Object.values(s.packs||{}).reduce((x,y)=>x+(y||0),0);
 function openAdmin(){if(!ADMIN)return;const m=modal('🛠️ Admin console');m.classList.add('admbox');
  const out=el('div','admlog',m);const log=(t,cls)=>{const d=el('div',cls||'',out);d.textContent=t;out.scrollTop=out.scrollHeight};
