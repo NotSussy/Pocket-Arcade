@@ -2022,8 +2022,6 @@ addEventListener('keydown',e=>{if(!cur||!cur.key||document.querySelector('.modal
 $('#syncbtn').addEventListener('click',openSavePanel);
 let rzT;addEventListener('resize',()=>{clearTimeout(rzT);rzT=setTimeout(()=>{if(cur&&!RUN&&stage.querySelector('.ov.startov'))startOv()},200)});
 (()=>{let app=/PocketArcadeApp/.test(navigator.userAgent);try{if(/[?&]app=/.test(location.search))sessionStorage.setItem('pa_app','1');if(sessionStorage.getItem('pa_app'))app=true}catch(e){}
- try{if(matchMedia('(display-mode: standalone)').matches||navigator.standalone)app=true}catch(e){}
- const ud=navigator.userAgentData;if(ud&&ud.brands&&!ud.mobile&&ud.brands.some(b=>/Chromium/.test(b.brand))&&!ud.brands.some(b=>/Chrome|Edge|Opera|Brave|Vivaldi|Yandex|Samsung|Arc/.test(b.brand)))app=true;
  if(app){const g=$('#getapp');g&&g.remove()}})();
 if(!/github\.io$/.test(location.hostname))document.querySelectorAll('#getapp a.dl').forEach(a=>{a.target='_blank';a.rel='noopener'});
 if(window.FB_ON)$('#lbbtn').style.display='';$('#lbbtn').addEventListener('click',()=>window.openBoards&&openBoards());$('#admbtn').addEventListener('click',()=>window.openAdmin&&openAdmin());
