@@ -183,7 +183,7 @@ canvas{display:block;border-radius:14px;background:#15172b}
 .bs .hit::after,.bs .sunk::after{content:'✕';color:#fff;font-weight:900;font-size:80%}
 .bs .miss::after{content:'';width:24%;height:24%;border-radius:50%;background:rgba(255,255,255,.6)}
 .bslab{font-size:13px;color:var(--dim);margin:8px 0 4px;font-weight:700}
-.getapp{margin-top:18px}.dlrow{display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap;font-size:14px}.dls{display:flex;gap:6px;flex-wrap:wrap}
+.getapp{margin:4px 0 12px}.dlrow{display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap;font-size:14px}.dls{display:flex;gap:6px;flex-wrap:wrap}
 .dl{background:var(--a);color:#1a1300;text-decoration:none;font-weight:800;font-size:13px;padding:8px 12px;border-radius:10px;white-space:nowrap}.dl.alt2{background:var(--b);color:#06231c}
 .dlhelp{font-size:13px;color:var(--dim)}.dlhelp summary{cursor:pointer;font-weight:700;color:var(--ink)}.dlhelp p{margin:8px 0 0;line-height:1.45}.dlhelp code{background:#0f1020;padding:2px 5px;border-radius:5px;font-size:12px;word-break:break-all}
 .authbox{display:flex;flex-direction:column;gap:8px;background:var(--panel);border-radius:14px;padding:12px;margin:8px 0}.authbox .who{font-size:14px}.authbox .field{background:#0f1020;color:var(--ink);border:2px solid #3a3d6a;border-radius:10px;padding:11px;font:inherit;font-size:16px;width:100%;box-sizing:border-box}.authbox .or{text-align:center;color:var(--dim);font-size:12px}.authbox .amsg{color:#ff8fb1;font-size:13px;min-height:0}.gbtn{background:#fff!important;color:#1f1f1f!important;display:flex;align-items:center;justify-content:center;gap:10px}.authbox .btn small{font-weight:600;opacity:.8}
@@ -344,17 +344,6 @@ canvas{display:block;border-radius:14px;background:#15172b}
 <body>
 <section id="menu" class="view on">
   <div class="top"><h1>Pocket <span>Arcade</span></h1><div class="topr"><button class="syncbtn syncchip" id="syncbtn">⏳ Connecting…</button><div class="wallet">🪙 <span class="wal">0</span></div><button class="shopbtn" id="shopbtn">🛒 Shop</button></div></div>
-  <div class="prof"><button class="lvl" id="lvlbtn"><b id="lvlnum">Lv 1</b><span class="xpbar"><i id="xpfill"></i></span><small id="xptxt"></small></button><button class="syncbtn" id="recbtn">🏆 Records</button><button class="syncbtn" id="setbtn" aria-label="Settings">⚙️</button></div>
-  <div id="daily"></div>
-  <div class="panels"><div id="missions" class="panel"></div><div id="dailych" class="panel"></div></div>
-  <div class="sec">Events</div>
-  <div class="grid ev" id="events"></div>
-  <div class="sec">Solo classics</div>
-  <div class="grid" id="cards-solo"></div>
-  <div class="sec">You vs CPU</div>
-  <div class="grid" id="cards-vs"></div>
-  <div class="sec" id="locked-h">🔒 Unlock in the shop</div>
-  <div class="grid" id="cards-locked"></div>
   <div class="panel getapp" id="getapp"><h4>📲 Get the app</h4>
    <div class="dlrow"><span>🪟 Download the app for <b>Windows</b> here:</span><a class="dl" href="https://notsussy.github.io/Pocket-Arcade/downloads/Pocket-Arcade-Setup.exe" target="_blank" rel="noopener">⬇ Download</a></div>
    <div class="dlrow"><span>🍎 Download the app for <b>Mac</b> here:</span><span class="dls"><a class="dl" href="https://notsussy.github.io/Pocket-Arcade/downloads/Pocket-Arcade-Mac-AppleSilicon.zip" target="_blank" rel="noopener">⬇ Apple chip (M1–M4)</a><a class="dl alt2" href="https://notsussy.github.io/Pocket-Arcade/downloads/Pocket-Arcade-Mac-Intel.zip" target="_blank" rel="noopener">⬇ Intel</a></span></div>
@@ -366,6 +355,17 @@ canvas{display:block;border-radius:14px;background:#15172b}
     <p><b>Android / Pixel:</b> open the downloaded .apk. When Android asks, allow installing from your browser, then tap Install. (Pixels use the same file as other Android phones.)</p>
     <p><b>No download needed:</b> in Chrome or Edge, open the website’s menu and choose <b>Install app</b> (or <b>Add to Home screen</b>). On iPhone, use Safari’s Share button → <b>Add to Home Screen</b>.</p>
     <p class="dim">The apps open the arcade website, so they update themselves. They’re not from an app store, so your device may show a warning first.</p></details></div>
+  <div class="prof"><button class="lvl" id="lvlbtn"><b id="lvlnum">Lv 1</b><span class="xpbar"><i id="xpfill"></i></span><small id="xptxt"></small></button><button class="syncbtn" id="recbtn">🏆 Records</button><button class="syncbtn" id="setbtn" aria-label="Settings">⚙️</button></div>
+  <div id="daily"></div>
+  <div class="panels"><div id="missions" class="panel"></div><div id="dailych" class="panel"></div></div>
+  <div class="sec">Events</div>
+  <div class="grid ev" id="events"></div>
+  <div class="sec">Solo classics</div>
+  <div class="grid" id="cards-solo"></div>
+  <div class="sec">You vs CPU</div>
+  <div class="grid" id="cards-vs"></div>
+  <div class="sec" id="locked-h">🔒 Unlock in the shop</div>
+  <div class="grid" id="cards-locked"></div>
   <p class="note">Tap the save button at the top to check cloud save or make a backup save code. ⚙️ has sound and vibration settings.</p>
 </section>
 <section id="game" class="view">
