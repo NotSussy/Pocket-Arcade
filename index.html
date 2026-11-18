@@ -183,7 +183,7 @@ canvas{display:block;border-radius:14px;background:#15172b}
 .bs .hit::after,.bs .sunk::after{content:'✕';color:#fff;font-weight:900;font-size:80%}
 .bs .miss::after{content:'';width:24%;height:24%;border-radius:50%;background:rgba(255,255,255,.6)}
 .bslab{font-size:13px;color:var(--dim);margin:8px 0 4px;font-weight:700}
-.getapp{margin:4px 0 12px}.dlrow{display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap;font-size:14px}.dls{display:flex;gap:6px;flex-wrap:wrap}
+.getapp{margin:18px 0 6px;scroll-margin-top:12px;transition:box-shadow .4s}.getapp.flash{box-shadow:0 0 0 3px var(--a),0 0 30px var(--a)}.dlrow{display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap;font-size:14px}.dls{display:flex;gap:6px;flex-wrap:wrap}
 .dl{background:var(--a);color:#1a1300;text-decoration:none;font-weight:800;font-size:13px;padding:8px 12px;border-radius:10px;white-space:nowrap}.dl.alt2{background:var(--b);color:#06231c}
 .dlhelp{font-size:13px;color:var(--dim)}.dlhelp summary{cursor:pointer;font-weight:700;color:var(--ink)}.dlhelp p{margin:8px 0 0;line-height:1.45}.dlhelp code{background:#0f1020;padding:2px 5px;border-radius:5px;font-size:12px;word-break:break-all}
 .authbox{display:flex;flex-direction:column;gap:8px;background:var(--panel);border-radius:14px;padding:12px;margin:8px 0}.authbox .who{font-size:14px}.authbox .field{background:#0f1020;color:var(--ink);border:2px solid #3a3d6a;border-radius:10px;padding:11px;font:inherit;font-size:16px;width:100%;box-sizing:border-box}.authbox .or{text-align:center;color:var(--dim);font-size:12px}.authbox .amsg{color:#ff8fb1;font-size:13px;min-height:0}.gbtn{background:#fff!important;color:#1f1f1f!important;display:flex;align-items:center;justify-content:center;gap:10px}.authbox .btn small{font-weight:600;opacity:.8}.lbsel{background:#0f1020;color:var(--ink);border:2px solid #3a3d6a;border-radius:10px;padding:9px;font:inherit;font-size:15px;width:100%}.lblist{display:flex;flex-direction:column;gap:4px;min-height:60px}.lbrow{display:flex;align-items:center;gap:8px;padding:7px 8px;border-radius:10px;background:#14152b}.lbrow.me{background:#2a2d55;box-shadow:0 0 0 2px var(--b)}.lbrow .rk{width:34px;text-align:center;font-weight:800;color:var(--dim)}.lbrow .av{font-size:22px}.lbrow .nm{flex:1;min-width:0;display:flex;flex-direction:column}.lbrow .nm b{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.lbrow .nm small{color:var(--dim);font-size:11.5px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.lbrow .vl{font-weight:800;color:var(--a);white-space:nowrap}.admbox{max-width:560px!important}.admlog{background:#05060f;border:1px solid #2a2d55;border-radius:10px;padding:10px;font-family:ui-monospace,Menlo,Consolas,monospace;font-size:12.5px;height:260px;overflow-y:auto;display:flex;flex-direction:column;gap:4px;white-space:pre-wrap;word-break:break-word}.admlog .cmd{color:var(--b)}.admlog .err{color:#ff8fb1}.admlog .dim{color:var(--dim)}.admlog .hd{color:var(--a);font-weight:800}.admquick{display:flex;flex-wrap:wrap;gap:6px}.admquick .syncbtn{font-size:12px;padding:6px 9px}.admrow{display:flex;gap:8px}.mbox .admrow .btn{width:auto;flex:none}.mbox .admrow .field{flex:1;background:#0f1020;color:var(--ink);border:2px solid #3a3d6a;border-radius:10px;padding:10px;font:inherit;font-family:ui-monospace,Menlo,Consolas,monospace;font-size:15px;min-width:0}.admrow .btn{width:auto;margin:0;padding:10px 16px}.namewarn{background:#3a1f12;border:2px solid #ff9d2e;color:#ffd9b0;border-radius:12px;padding:10px 12px;font-size:14px;line-height:1.4}
@@ -322,6 +322,13 @@ canvas{display:block;border-radius:14px;background:#15172b}
 .mbox{position:relative;max-height:88vh;max-height:calc(100dvh - 32px);overflow-y:auto;overscroll-behavior:contain;-webkit-overflow-scrolling:touch}
 .announce{background:linear-gradient(90deg,#3b2a0a,#2a1f4f);border:2px solid var(--a);border-radius:12px;padding:9px 12px;font-size:14px;font-weight:700;line-height:1.35;margin:4px 0 8px}
 .prof .syncbtn{padding-left:9px;padding-right:9px}@media (max-width:440px){.prof .bl{display:none}.prof .syncbtn{min-width:40px}}
+.phead{display:flex;align-items:center;gap:8px;cursor:pointer;user-select:none}.phead h4{flex:1}.psum{color:var(--dim);font-size:12.5px;font-weight:700}
+.mintog{background:#22254a;border:0;color:var(--ink);width:30px;height:28px;border-radius:8px;font-size:14px;cursor:pointer;flex:none}
+.panel.min{gap:0}.panel.min>*:not(.phead){display:none!important}
+.apppop{position:fixed;left:50%;bottom:calc(14px + env(safe-area-inset-bottom));transform:translate(-50%,140%);z-index:40;display:flex;align-items:center;gap:10px;width:min(440px,calc(100vw - 24px));background:linear-gradient(120deg,#2a1f4f,#16183a);border:2px solid var(--a);border-radius:16px;padding:10px 10px 10px 14px;box-shadow:0 10px 30px rgba(0,0,0,.5);cursor:pointer;transition:transform .35s cubic-bezier(.2,1.3,.4,1)}
+.apppop.on{transform:translate(-50%,0)}.apppop .apt{flex:1;display:flex;flex-direction:column;min-width:0}.apppop .apt small{color:var(--dim);font-size:12px}
+.apppop .apgo{background:var(--a);color:#1a1300;border:0;border-radius:10px;padding:9px 12px;font-weight:800;font:inherit;font-weight:800;font-size:14px;cursor:pointer;white-space:nowrap}
+.apppop .api{font-size:26px;line-height:1}.apppop .apx{background:none;border:0;color:var(--dim);font-size:16px;padding:6px;cursor:pointer}
 .avsm{font-size:22px;line-height:1;margin-right:-2px}.ptitle{font-size:13px;font-weight:800;color:var(--b);margin:-2px 0 2px}
 .packbar{flex-direction:row;align-items:center;gap:8px;margin-top:10px;background:linear-gradient(120deg,var(--panel),#2a1f4f)}.packbar .pbx{flex:1;min-width:0;display:flex;flex-direction:column;gap:2px}.packbar .pbx b{font-size:16px}.packbar .pbx small{color:var(--dim);font-size:12.5px}
 .packbar .btn{margin:0;padding:10px 12px;font-size:14px;width:auto;white-space:nowrap}
@@ -378,8 +385,18 @@ canvas{display:block;border-radius:14px;background:#15172b}
 <body>
 <section id="menu" class="view on">
   <div class="top"><h1>Pocket <span>Arcade</span></h1><div class="topr"><button class="syncbtn syncchip" id="syncbtn">⏳ Connecting…</button><div class="wallet">🪙 <span class="wal">0</span></div><button class="shopbtn" id="shopbtn">🛒 Shop</button></div></div>
+  <div class="prof"><button class="lvl" id="lvlbtn"><span id="avatar" class="avsm">🙂</span><b id="lvlnum">Lv 1</b><span class="xpbar"><i id="xpfill"></i></span><small id="xptxt"></small></button><button class="syncbtn" id="recbtn">🏆<span class="bl"> Records</span></button><button class="syncbtn" id="lbbtn" style="display:none">🏅<span class="bl"> Top</span></button><button class="syncbtn" id="admbtn" style="display:none" aria-label="Admin console">🛠️</button><button class="syncbtn" id="setbtn" aria-label="Settings">⚙️</button></div>
   <div id="ptitle" class="ptitle" style="display:none"></div>
   <div id="announce" class="announce" style="display:none"></div>
+  <div id="daily"></div>
+  <div id="packbar" class="panel packbar"></div>
+  <div class="panels"><div id="missions" class="panel"></div><div id="dailych" class="panel"></div></div>
+  <div class="sec">Events</div>
+  <div class="grid ev" id="events"></div>
+  <div class="sec">Solo classics</div>
+  <div class="grid" id="cards-solo"></div>
+  <div class="sec">You vs CPU</div>
+  <div class="grid" id="cards-vs"></div>
   <div class="panel getapp" id="getapp"><h4>📲 Get the app</h4>
    <div class="dlrow"><span>🪟 Download the app for <b>Windows</b> here:</span><a class="dl" href="https://raw.githubusercontent.com/NotSussy/Pocket-Arcade/main/downloads/Pocket-Arcade-Setup.exe" download>⬇ Download</a></div>
    <div class="dlrow"><span>🍎 Download the app for <b>Mac</b> here:</span><span class="dls"><a class="dl" href="https://raw.githubusercontent.com/NotSussy/Pocket-Arcade/main/downloads/Pocket-Arcade-Mac-AppleSilicon.zip" download>⬇ Apple chip (M1–M4)</a><a class="dl alt2" href="https://raw.githubusercontent.com/NotSussy/Pocket-Arcade/main/downloads/Pocket-Arcade-Mac-Intel.zip" download>⬇ Intel</a></span></div>
@@ -391,18 +408,7 @@ canvas{display:block;border-radius:14px;background:#15172b}
     <p><b>Android / Pixel:</b> open the downloaded .apk. When Android asks, allow installing from your browser, then tap Install. (Pixels use the same file as other Android phones.)</p>
     <p><b>No download needed:</b> in Chrome or Edge, open the website’s menu and choose <b>Install app</b> (or <b>Add to Home screen</b>). On iPhone, use Safari’s Share button → <b>Add to Home Screen</b>.</p>
     <p class="dim">The apps open the arcade website, so they update themselves. They’re not from an app store, so your device may show a warning first.</p></details></div>
-  <div class="prof"><button class="lvl" id="lvlbtn"><span id="avatar" class="avsm">🙂</span><b id="lvlnum">Lv 1</b><span class="xpbar"><i id="xpfill"></i></span><small id="xptxt"></small></button><button class="syncbtn" id="recbtn">🏆<span class="bl"> Records</span></button><button class="syncbtn" id="lbbtn" style="display:none">🏅<span class="bl"> Top</span></button><button class="syncbtn" id="admbtn" style="display:none" aria-label="Admin console">🛠️</button><button class="syncbtn" id="setbtn" aria-label="Settings">⚙️</button></div>
-  <div id="daily"></div>
-  <div id="packbar" class="panel packbar"></div>
-  <div class="panels"><div id="missions" class="panel"></div><div id="dailych" class="panel"></div></div>
-  <div class="sec">Events</div>
-  <div class="grid ev" id="events"></div>
-  <div class="sec">Solo classics</div>
-  <div class="grid" id="cards-solo"></div>
-  <div class="sec">You vs CPU</div>
-  <div class="grid" id="cards-vs"></div>
-  <div class="sec" id="locked-h">🔒 Unlock in the shop</div>
-  <div class="grid" id="cards-locked"></div>
+  <div id="apppop" class="apppop" style="display:none"><span class="api">📲</span><span class="apt"><b>Get the app</b><small>Windows · Mac · Android · Pixel</small></span><button class="apgo">Downloads ↓</button><button class="apx" aria-label="Close">✕</button></div>
   <p class="note">Tap the save button at the top to check cloud save or make a backup save code. ⚙️ has sound and vibration settings.</p>
 </section>
 <section id="game" class="view">
@@ -1009,7 +1015,7 @@ const WORDS_VALID='aaaahaadmiaahedaaliiaamiraarghaaronaartiababaabacaabaciabacka
 /* ================= PONG (vs CPU) ================= */
 const pong=(()=>{let A,ctx,W,H,b,me,cpu,sc,alive,raf,last,pause,pw,ph,err,flash,WIN=5;
 function serve(toMe){const s=H*.5;b={x:W/2,y:H/2,vx:(Math.random()-.5)*W*.7,vy:(toMe?1:-1)*s,r:Math.max(6,W*.024)};pause=.8;newErr()}
-function newErr(){const l=clamp(A.level(),-3,8);err=(Math.random()-.5)*pw*Math.max(.9,2.6-l*.12)}
+function newErr(){const l=clamp(A.level(),-3,8);err=(Math.random()-.5)*pw*Math.max(.8,2.3-l*.12)}
 function draw(){ctx.fillStyle='#15172b';ctx.fillRect(0,0,W,H);ctx.strokeStyle='rgba(255,255,255,.14)';ctx.setLineDash([10,12]);ctx.lineWidth=3;ctx.beginPath();ctx.moveTo(0,H/2);ctx.lineTo(W,H/2);ctx.stroke();ctx.setLineDash([]);
  ctx.textAlign='center';ctx.textBaseline='middle';ctx.font=`900 ${W*.18}px system-ui`;ctx.fillStyle='rgba(255,93,143,.16)';ctx.fillText(sc.cpu,W/2,H*.27);ctx.fillStyle='rgba(78,227,193,.16)';ctx.fillText(sc.me,W/2,H*.73);
  ctx.fillStyle='#ff5d8f';rr(ctx,cpu.x-pw/2,cpu.y-ph/2,pw,ph,ph/2);ctx.fillStyle='#4ee3c1';rr(ctx,me.x-pw/2,me.y-ph/2,pw,ph,ph/2);
@@ -1024,7 +1030,7 @@ function point(mine){if(mine)sc.me++;else sc.cpu++;flash={t:.8,mine};buzz(mine?4
  if(sc.me>=WIN||sc.cpu>=WIN){alive=false;draw();const w=sc.me>=WIN;setTimeout(()=>A.result(w?'win':'lose',`Final score ${sc.me}–${sc.cpu}`),700);return true}
  serve(!mine);return false}
 function loop(now){if(!alive)return;const dt=clamp((now-last)/1000,.001,.033);last=now;if(flash&&(flash.t-=dt)<=0)flash=null;
- const l=clamp(A.level(),-3,8),cs=W*(.26+l*.03),tx=clamp(predict()+err,pw/2,W-pw/2),d=tx-cpu.x;cpu.x+=clamp(d,-cs*dt,cs*dt);
+ const l=clamp(A.level(),-3,8),cs=W*(.29+l*.03),tx=clamp(predict()+err,pw/2,W-pw/2),d=tx-cpu.x;cpu.x+=clamp(d,-cs*dt,cs*dt);
  if(pause>0)pause-=dt;else{const n=Math.ceil(Math.hypot(b.vx,b.vy)*dt/(b.r*.8))||1;
   for(let i=0;i<n;i++){b.x+=b.vx*dt/n;b.y+=b.vy*dt/n;if(b.x<b.r){b.x=b.r;b.vx=Math.abs(b.vx)}if(b.x>W-b.r){b.x=W-b.r;b.vx=-Math.abs(b.vx)}
    hitP(me,-1);hitP(cpu,1);if(b.y<-b.r){if(point(true))return;break}if(b.y>H+b.r){if(point(false))return;break}}}
@@ -1750,14 +1756,21 @@ function renderMissions(){if(!S.mis||S.mis.day!==today())genMissions();const box
  S.mis.list.forEach((m,i)=>{const r=el('div','mis'+(m.got?' got':''),box),pct=Math.min(100,m.p/m.n*100);
   r.innerHTML=`<div class="mt"><b>${m.txt}</b><small>${m.unit?(m.done?'Done!':'Not yet'):`${fmt(m.p)} / ${fmt(m.n)}`} · ${m.c} 🪙${m.b?` + ${BOOSTS[m.b].icon}`:''}</small><span class="prog"><i style="width:${pct}%"></i></span></div>`;
   if(m.got)el('span','tick',r).textContent='✅';else{const b=el('button','shopbtn',r);b.textContent=m.done?'Claim':'…';b.disabled=!m.done;b.addEventListener('click',()=>claimMission(i))}});
- el('small','dim',box).textContent=S.mis.bonus?'All done today! New missions tomorrow.':'Finish all 3 for +150 🪙 and a 🎁 pack. New missions every day.'}
+ el('small','dim',box).textContent=S.mis.bonus?'All done today! New missions tomorrow.':'Finish all 3 for +150 🪙 and a 🎁 pack. New missions every day.';
+ const got=S.mis.list.filter(m=>m.got).length,ready=S.mis.list.some(m=>m.done&&!m.got);minify(box,'missions',ready?'🎁 Ready to claim!':got===S.mis.list.length?'✅ All done':`${got}/${S.mis.list.length} done`,renderMissions)}
 
 /* ---------- daily challenge ---------- */
 const dailyable=g=>!g.versus&&g.id!=='bj'&&unlocked(g);
 function drDone(){if(S.dr.day!==today())S.dr={day:today(),done:{}};return S.dr.done}
 function renderDaily(){const box=$('#dailych'),done=drDone(),list=SOLO.filter(dailyable),left=list.filter(g=>done[g.id]==null);
  box.innerHTML=`<h4>📅 Daily challenge</h4><small class="dim">One run per game per day, with the same layout for everyone and <b>2× coins</b>. ${list.length-left.length}/${list.length} done today.</small>`;
- const ch=el('div','dchips',box);list.forEach(g=>{const b=el('button','dchip'+(done[g.id]!=null?' done':''),ch);b.innerHTML=`${g.icon}<small>${done[g.id]!=null?done[g.id]:'2×'}</small>`;b.title=g.name;b.addEventListener('click',()=>openGame(g,{daily:done[g.id]==null}))})}
+ const ch=el('div','dchips',box);list.forEach(g=>{const b=el('button','dchip'+(done[g.id]!=null?' done':''),ch);b.innerHTML=`${g.icon}<small>${done[g.id]!=null?done[g.id]:'2×'}</small>`;b.title=g.name;b.addEventListener('click',()=>openGame(g,{daily:done[g.id]==null}))});
+ minify(box,'dailych',left.length?`${list.length-left.length}/${list.length} done`:'✅ All done',renderDaily)}
+function isMin(k){try{return (JSON.parse(localStorage.getItem('pa_min')||'{}'))[k]===true}catch(e){return false}}
+function setMin(k,v){try{const o=JSON.parse(localStorage.getItem('pa_min')||'{}');o[k]=v;localStorage.setItem('pa_min',JSON.stringify(o))}catch(e){}}
+function minify(box,k,sum,again){const h=box.querySelector('h4');if(!h)return;const mn=isMin(k),hd=document.createElement('div');hd.className='phead';h.replaceWith(hd);hd.appendChild(h);
+ const s=el('small','psum',hd);s.textContent=mn?sum:'';const t=el('button','mintog',hd);t.textContent=mn?'▸':'▾';t.setAttribute('aria-label',mn?'Expand':'Minimize');t.title=mn?'Expand':'Minimize';
+ box.classList.toggle('min',mn);hd.addEventListener('click',e=>{if(e.target.closest('a'))return;setMin(k,!mn);sfx('tap');again()})}
 
 /* ---------- events: tournament & boss rush ---------- */
 const CPUN=['Ace','Blaze','Pixel','Nova','Turbo','Echo','Zap','Rook','Byte','Luna','Jinx','Comet','Bolt','Vex'];
@@ -1978,11 +1991,10 @@ function renderMenu(){wallet();lvlBar();renderPackBar();applyLook();const d=$('#
   b.addEventListener('click',()=>{S.daily=td;S.coins+=100;save();toast('+100 🪙 daily reward');sfx('coin');buzz(30);renderMenu()})}else d.className='';
  renderMissions();renderDaily();renderEvents();
  const card=(g,box)=>{const lk=!unlocked(g),c=el('button','card'+(lk?' locked':''),box),b=getBest(g,true);c.style.setProperty('--accent',g.accent);
-  const bt=lk?(lvlOK(g)?`🔒 ${g.price} 🪙 · ${g.versus?'vs CPU':'Solo'}`:`🔒 Level ${g.lvl} · ${g.price} 🪙`):b==null?'Not played yet':g.versus?`Best streak: ${b}`:`Best: ${fmt(b)}${g.low?(g.label==='Time'?'s':g.label==='Strokes'?' strokes':' moves'):''}`;
+  const bt=lk?(lvlOK(g)?`🔒 ${g.price} 🪙 in the shop`:`🔒 Level ${g.lvl} · ${g.price} 🪙`):b==null?'Not played yet':g.versus?`Best streak: ${b}`:`Best: ${fmt(b)}${g.low?(g.label==='Time'?'s':g.label==='Strokes'?' strokes':' moves'):''}`;
   c.innerHTML=`<div class="ic">${g.icon}</div><b>${g.name}</b><small>${g.desc}</small><div class="best">${bt}</div>`;c.addEventListener('click',()=>openGame(g))};
- const lockedList=ALL.filter(g=>!unlocked(g));
- [['#cards-solo',SOLO.filter(unlocked)],['#cards-vs',VS.filter(unlocked)],['#cards-locked',lockedList]].forEach(([s,l])=>{const box=$(s);box.innerHTML='';l.forEach(g=>card(g,box))});
- $('#locked-h').style.display=$('#cards-locked').style.display=lockedList.length?'':'none'}
+ const sorted=L=>[...L.filter(unlocked),...L.filter(g=>!unlocked(g))];
+ [['#cards-solo',sorted(SOLO)],['#cards-vs',sorted(VS)]].forEach(([s,l])=>{const box=$(s);box.innerHTML='';l.forEach(g=>card(g,box))})}
 function openShop(tab){leave();if(tab)shopTab=tab;show('shop');renderShop()}
 function renderShop(){wallet();const T=[['packs','🎁 Packs'],['games','🎮 Games'],['modes','🎛️ Modes'],['boosts','⚡ Boosts'],['themes','🎨 Themes']],tb=$('#tabs');tb.innerHTML='';
  T.forEach(([k,l])=>{const b=el('button','tab'+(k===shopTab?' on':''),tb);b.textContent=l;b.addEventListener('click',()=>{shopTab=k;renderShop()})});
@@ -2022,7 +2034,13 @@ addEventListener('keydown',e=>{if(!cur||!cur.key||document.querySelector('.modal
 $('#syncbtn').addEventListener('click',openSavePanel);
 let rzT;addEventListener('resize',()=>{clearTimeout(rzT);rzT=setTimeout(()=>{if(cur&&!RUN&&stage.querySelector('.ov.startov'))startOv()},200)});
 (()=>{let app=/PocketArcadeApp/.test(navigator.userAgent);try{if(/[?&]app=/.test(location.search))sessionStorage.setItem('pa_app','1');if(sessionStorage.getItem('pa_app'))app=true}catch(e){}
- if(app){const g=$('#getapp');g&&g.remove()}})();
+ if(app){const g=$('#getapp');g&&g.remove();const q=$('#apppop');q&&q.remove();return}
+ const pop=$('#apppop'),ga=$('#getapp');if(!pop||!ga)return;let seen=false;try{seen=sessionStorage.getItem('pa_pop')==='x'}catch(e){}
+ const hide=()=>{pop.classList.remove('on');setTimeout(()=>pop.style.display='none',300)},dismiss=()=>{hide();try{sessionStorage.setItem('pa_pop','x')}catch(e){}};
+ pop.querySelector('.apx').addEventListener('click',e=>{e.stopPropagation();dismiss()});
+ const go=()=>{dismiss();ga.scrollIntoView({behavior:'smooth',block:'start'});ga.classList.add('flash');setTimeout(()=>ga.classList.remove('flash'),1600)};pop.addEventListener('click',go);
+ if(!seen)setTimeout(()=>{if(!$('#menu').classList.contains('on'))return;pop.style.display='';requestAnimationFrame(()=>pop.classList.add('on'))},1200);
+ if('IntersectionObserver' in window)new IntersectionObserver(es=>{if(es[0].isIntersecting&&pop.style.display!=='none')dismiss()},{threshold:.4}).observe(ga)})();
 if(!/github\.io$/.test(location.hostname))document.querySelectorAll('#getapp a.dl').forEach(a=>{a.target='_blank';a.rel='noopener'});
 if(window.FB_ON)$('#lbbtn').style.display='';$('#lbbtn').addEventListener('click',()=>window.openBoards&&openBoards());$('#admbtn').addEventListener('click',()=>window.openAdmin&&openAdmin());
 applyTheme();if(!S.mis||S.mis.day!==today())genMissions();renderMenu();initCloud();
