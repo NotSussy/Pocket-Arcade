@@ -1997,7 +1997,7 @@ function openSettings(){const m=modal('⚙️ Settings');
 let cur=null,streak=0,pot=0,pend=0,revived=false,rookie=false,shopTab='games';
 const CPUMAX=6;function cpuRec(g){return S.cpu[g.id]||(S.cpu[g.id]={r:0,w:0,l:0})}function cpuRank(g){return Math.min(CPUMAX,(S.cpu[g.id]||{}).r||0)}
 function cpuAfter(g,r){if(RUN||rookie||!g.versus||api.mode()==='casino')return '';const c=cpuRec(g);
- if(r==='win'){c.l=0;c.w++;if(c.w>=3&&c.r<CPUMAX){c.r++;c.w=0;return `<br><b>🤖 The CPU got smarter! CPU level ${c.r}</b>`}return c.r<CPUMAX?`<br><small>🤖 CPU level ${c.r} · ${3-c.w} more win${3-c.w>1?'s':''} until it levels up</small>`:'<br><small>🤖 CPU is at max level!</small>'}
+ if(r==='win'){c.l=0;c.w++;if(c.w>=3&&c.r<CPUMAX){c.r++;c.w=0;return `<br><b>The CPU got smarter · CPU level ${c.r}</b>`}return c.r<CPUMAX?`<br><small>🤖 CPU level ${c.r} · ${3-c.w} more win${3-c.w>1?'s':''} until it levels up</small>`:'<br><small>🤖 CPU is at max level!</small>'}
  if(r==='lose'){c.l++;if(c.l>=4&&c.r>0){c.r--;c.l=0;c.w=0;return `<br><small>🤖 The CPU is going a little easier on you (level ${c.r}).</small>`}}return ''}
 const mult=()=>(cur&&curMode(cur)?.mult)||1;
 function showBest(){if(RUN)return;const b=getBest(cur);$('#best').textContent=b==null?'–':b;$('#blabel').textContent=cur.versus?'Top streak':'Best'}
