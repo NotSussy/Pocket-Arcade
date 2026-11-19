@@ -337,6 +337,10 @@ canvas{display:block;border-radius:14px;background:#15172b}
 .suprow{display:flex;align-items:center;gap:10px;padding:8px 10px;border-radius:10px;background:#14152b}.suprow .tb{font-size:22px}.suprow .nm{flex:1;min-width:0}.suprow .nm b{display:block;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.suprow .nm small{color:var(--dim);font-size:11.5px}.suprow .amt{font-weight:800;color:#ff8fc8}
 .tierkey{display:flex;flex-wrap:wrap;gap:6px}.tierkey span{background:#22254a;border-radius:8px;padding:4px 8px;font-size:12px;font-weight:700}
 .askparent{background:#2a1f12;border:2px solid #ffb84d;color:#ffe3b8;border-radius:12px;padding:9px 12px;font-size:13.5px;line-height:1.4}
+#listbody{overflow-y:auto;flex:1;padding:4px max(16px,calc((100% - 1180px)/2)) 28px}.lnote{color:var(--dim);font-size:14px;margin:0 0 12px;line-height:1.4}
+.cats{grid-template-columns:repeat(auto-fit,minmax(260px,1fr))}.catc{min-height:170px}.catc .ic{font-size:40px}.catc b{font-size:20px}
+.catic{display:flex;flex-wrap:wrap;gap:4px;font-size:20px;margin-top:4px}.catic .lk{filter:grayscale(1);opacity:.45}
+.cpulv{background:#14152b;border-radius:12px;padding:8px 12px;font-size:14px;display:flex;flex-wrap:wrap;align-items:center;gap:4px 8px;justify-content:center}.cpulv em{font-style:normal}.cpulv span{color:var(--b);letter-spacing:2px}.cpulv small{width:100%;color:var(--dim);font-size:12px}
 .avsm{font-size:22px;line-height:1;margin-right:-2px}.ptitle{font-size:13px;font-weight:800;color:var(--b);margin:-2px 0 2px}
 .packbar{flex-direction:row;align-items:center;gap:8px;margin-top:10px;background:linear-gradient(120deg,var(--panel),#2a1f4f)}.packbar .pbx{flex:1;min-width:0;display:flex;flex-direction:column;gap:2px}.packbar .pbx b{font-size:16px}.packbar .pbx small{color:var(--dim);font-size:12.5px}
 .packbar .btn{margin:0;padding:10px 12px;font-size:14px;width:auto;white-space:nowrap}
@@ -387,7 +391,7 @@ canvas{display:block;border-radius:14px;background:#15172b}
 .tgl input:checked+.sw2{background:var(--b)}.tgl input:checked+.sw2::after{left:23px}
 /* bigger screens */
 @media (min-width:700px){.ov p{max-width:440px;font-size:17px}.ov h3{font-size:32px}.ov .big{font-size:76px}.ov .btns{max-width:340px}.modes{max-width:460px}.hint{font-size:14px}.status{font-size:19px}}
-@media (min-width:1000px) and (min-height:700px){#menu,.bar,.tabs,#shoplist{zoom:1.12}.card{min-height:170px}}
+@media (min-width:1000px) and (min-height:700px){#menu,.bar,.tabs,#shoplist,#listbody{zoom:1.12}.card{min-height:170px}}
 </style>
 </head>
 <body>
@@ -399,12 +403,10 @@ canvas{display:block;border-radius:14px;background:#15172b}
   <div id="daily"></div>
   <div id="packbar" class="panel packbar"></div>
   <div class="panels"><div id="missions" class="panel"></div><div id="dailych" class="panel"></div></div>
+  <div class="sec">Games</div>
+  <div class="grid cats" id="cats"></div>
   <div class="sec">Events</div>
   <div class="grid ev" id="events"></div>
-  <div class="sec">Solo classics</div>
-  <div class="grid" id="cards-solo"></div>
-  <div class="sec">You vs CPU</div>
-  <div class="grid" id="cards-vs"></div>
   <div id="supportbar" class="panel supportbar" style="display:none"></div>
   <div class="panel getapp" id="getapp"><h4>📲 Get the app</h4>
    <div class="dlrow"><span>🪟 Download the app for <b>Windows</b> here:</span><a class="dl" href="https://raw.githubusercontent.com/NotSussy/Pocket-Arcade/main/downloads/Pocket-Arcade-Setup.exe" download>⬇ Download</a></div>
@@ -428,6 +430,14 @@ canvas{display:block;border-radius:14px;background:#15172b}
     <div class="pill"><small id="blabel">Best</small><span id="best">–</span></div>
   </div>
   <div id="stage"></div>
+</section>
+<section id="list" class="view">
+  <div class="bar">
+    <button class="back" id="lback" aria-label="Back to menu">‹</button>
+    <h2 id="ltitle"></h2>
+    <div class="pill"><small>Coins</small><span class="wal">0</span></div>
+  </div>
+  <div id="listbody"><p class="lnote" id="lnote"></p><div class="grid" id="lgrid"></div></div>
 </section>
 <section id="shop" class="view">
   <div class="bar">
@@ -1024,7 +1034,7 @@ const WORDS_VALID='aaaahaadmiaahedaaliiaamiraarghaaronaartiababaabacaabaciabacka
 /* ================= PONG (vs CPU) ================= */
 const pong=(()=>{let A,ctx,W,H,b,me,cpu,sc,alive,raf,last,pause,pw,ph,err,flash,WIN=5;
 function serve(toMe){const s=H*.5;b={x:W/2,y:H/2,vx:(Math.random()-.5)*W*.7,vy:(toMe?1:-1)*s,r:Math.max(6,W*.024)};pause=.8;newErr()}
-function newErr(){const l=clamp(A.level(),-3,8);err=(Math.random()-.5)*pw*Math.max(.8,2.3-l*.12)}
+function newErr(){const l=clamp(A.level(),-3,8);err=(Math.random()-.5)*pw*Math.max(.7,2.05-l*.12)}
 function draw(){ctx.fillStyle='#15172b';ctx.fillRect(0,0,W,H);ctx.strokeStyle='rgba(255,255,255,.14)';ctx.setLineDash([10,12]);ctx.lineWidth=3;ctx.beginPath();ctx.moveTo(0,H/2);ctx.lineTo(W,H/2);ctx.stroke();ctx.setLineDash([]);
  ctx.textAlign='center';ctx.textBaseline='middle';ctx.font=`900 ${W*.18}px system-ui`;ctx.fillStyle='rgba(255,93,143,.16)';ctx.fillText(sc.cpu,W/2,H*.27);ctx.fillStyle='rgba(78,227,193,.16)';ctx.fillText(sc.me,W/2,H*.73);
  ctx.fillStyle='#ff5d8f';rr(ctx,cpu.x-pw/2,cpu.y-ph/2,pw,ph,ph/2);ctx.fillStyle='#4ee3c1';rr(ctx,me.x-pw/2,me.y-ph/2,pw,ph,ph/2);
@@ -1039,7 +1049,7 @@ function point(mine){if(mine)sc.me++;else sc.cpu++;flash={t:.8,mine};buzz(mine?4
  if(sc.me>=WIN||sc.cpu>=WIN){alive=false;draw();const w=sc.me>=WIN;setTimeout(()=>A.result(w?'win':'lose',`Final score ${sc.me}–${sc.cpu}`),700);return true}
  serve(!mine);return false}
 function loop(now){if(!alive)return;const dt=clamp((now-last)/1000,.001,.033);last=now;if(flash&&(flash.t-=dt)<=0)flash=null;
- const l=clamp(A.level(),-3,8),cs=W*(.29+l*.03),tx=clamp(predict()+err,pw/2,W-pw/2),d=tx-cpu.x;cpu.x+=clamp(d,-cs*dt,cs*dt);
+ const l=clamp(A.level(),-3,8),cs=W*(.32+l*.03),tx=clamp(predict()+err,pw/2,W-pw/2),d=tx-cpu.x;cpu.x+=clamp(d,-cs*dt,cs*dt);
  if(pause>0)pause-=dt;else{const n=Math.ceil(Math.hypot(b.vx,b.vy)*dt/(b.r*.8))||1;
   for(let i=0;i<n;i++){b.x+=b.vx*dt/n;b.y+=b.vy*dt/n;if(b.x<b.r){b.x=b.r;b.vx=Math.abs(b.vx)}if(b.x>W-b.r){b.x=W-b.r;b.vx=-Math.abs(b.vx)}
    hitP(me,-1);hitP(cpu,1);if(b.y<-b.r){if(point(true))return;break}if(b.y>H+b.r){if(point(false))return;break}}}
@@ -1456,10 +1466,10 @@ const BOOSTS={doubler:{name:'Coin Doubler',icon:'🪙',desc:'Doubles your next 3
  xp:{name:'XP Boost',icon:'⭐',desc:'Double XP for your next 5 games',price:150,qty:5,lvl:3}};
 const LVUP={2:'🏟️ Tournaments, Checkers and Color Clash in the shop',3:'🎰 Casino tables, ⛳ Mini Golf and ⭐ XP Boost in the shop',4:'👑 Boss Rush',5:'🍬 Candy theme in the shop',8:'👑 Gold Rush theme in the shop'};
 const DEF={coins:150,owned:{},boosts:{doubler:0,life:0,rookie:0,shield:0,xp:0},mode:{},theme:'classic',daily:'',best:{},t:0,
- xp:0,lvl:1,set:{sound:true,vib:true},mis:null,stats:{plays:{},wins:{},daily:0,time:0},trophies:{t4:0,t8:0,boss:0},bossBest:0,dr:{day:'',done:{}},packs:{basic:1,super:0,mega:0},col:{},colBonus:{},av:null,title:null,back:null};
+ xp:0,lvl:1,set:{sound:true,vib:true},mis:null,stats:{plays:{},wins:{},daily:0,time:0},trophies:{t4:0,t8:0,boss:0},bossBest:0,dr:{day:'',done:{}},packs:{basic:1,super:0,mega:0},col:{},colBonus:{},av:null,title:null,back:null,cpu:{}};
 function normalize(v){const d=JSON.parse(JSON.stringify(DEF));v=v&&typeof v==='object'?v:{};const st=v.stats||{};
  return Object.assign(d,v,{boosts:Object.assign({},DEF.boosts,v.boosts||{}),best:Object.assign({},v.best||{}),owned:Object.assign({},v.owned||{}),mode:Object.assign({},v.mode||{}),
-  set:Object.assign({},DEF.set,v.set||{}),stats:{plays:Object.assign({},st.plays||{}),wins:Object.assign({},st.wins||{}),daily:st.daily||0,time:st.time||0},trophies:Object.assign({},DEF.trophies,v.trophies||{}),dr:v.dr&&v.dr.done?v.dr:{day:'',done:{}},packs:Object.assign({},DEF.packs,v.packs||{}),col:Object.assign({},v.col||{}),colBonus:Object.assign({},v.colBonus||{})})}
+  set:Object.assign({},DEF.set,v.set||{}),stats:{plays:Object.assign({},st.plays||{}),wins:Object.assign({},st.wins||{}),daily:st.daily||0,time:st.time||0},trophies:Object.assign({},DEF.trophies,v.trophies||{}),dr:v.dr&&v.dr.done?v.dr:{day:'',done:{}},packs:Object.assign({},DEF.packs,v.packs||{}),col:Object.assign({},v.col||{}),colBonus:Object.assign({},v.colBonus||{}),cpu:Object.assign({},v.cpu||{})})}
 let S=(()=>{let v=null;try{v=JSON.parse(localStorage.getItem('pa_save'))}catch(e){}const s=normalize(v);
  try{for(let i=0;i<localStorage.length;i++){const k=localStorage.key(i);if(k&&k.startsWith('pa_')&&k!=='pa_save'&&s.best[k]==null){const n=+localStorage.getItem(k);if(!isNaN(n))s.best[k]=n}}}catch(e){}return s})();
 function saveLocal(){try{localStorage.setItem('pa_save',JSON.stringify(S))}catch(e){}}
@@ -1493,7 +1503,7 @@ async function pushCloud(){clearTimeout(syncT);if(!cloudRef||!cloudReady||writin
  try{const t=S.t||Date.now();await cloudRef.set({save:JSON.stringify(S),t,v:2,dev:DEV},{merge:true});setLast(t);setSync('cloud');queueLB()}
  catch(e){const c=e&&e.code;if(c==='permission-denied'||c==='invalid-argument'){cloudRef=null;setSync('offline')}else{dirty=true;setSync('retry');syncT=setTimeout(pushCloud,4000+Math.random()*2000)}}
  writing=false;if(dirty&&cloudRef&&syncState!=='retry')pushCloud()}
-function refreshView(){wallet();lvlBar&&lvlBar();if($('#menu').classList.contains('on'))renderMenu();else if($('#shop').classList.contains('on'))renderShop()}
+function refreshView(){wallet();lvlBar&&lvlBar();if($('#menu').classList.contains('on'))renderMenu();else if($('#shop').classList.contains('on'))renderShop();else if($('#list').classList.contains('on'))renderList()}
 function loadScript(src){return new Promise((res,rej)=>{const s=document.createElement('script');s.src=src;s.onload=res;s.onerror=rej;document.head.appendChild(s)})}
 function loadFirebase(){if(fbLoading)return fbLoading;const b=`https://www.gstatic.com/firebasejs/${FB_V}/firebase-`;
  fbLoading=loadScript(b+'app-compat.js').then(()=>Promise.all([loadScript(b+'auth-compat.js'),loadScript(b+'firestore-compat.js')])).then(()=>{firebase.initializeApp(FB_CONFIG);fbAuth=firebase.auth();fbDb=firebase.firestore();return true}).catch(()=>{fbLoading=null;return false});return fbLoading}
@@ -1778,7 +1788,7 @@ function seedRNG(str){let h=1779033703^str.length;for(let i=0;i<str.length;i++){
  Math.random=function(){a|=0;a=a+0x6D2B79F5|0;let t=Math.imul(a^a>>>15,1|a);t=t+Math.imul(t^t>>>7,61|t)^t;return((t^t>>>14)>>>0)/4294967296}}
 function unseed(){Math.random=_rand}
 function curMode(g){if(DAILY||RUN)return null;const id=S.mode[g.id];return(g.modes||[]).find(m=>m.id===id&&modeOK(g,m))||null}
-function show(id){['menu','game','shop'].forEach(v=>$('#'+v).classList.toggle('on',v===id))}
+function show(id){['menu','game','shop','list'].forEach(v=>$('#'+v).classList.toggle('on',v===id))}
 const today=()=>new Date().toDateString();
 
 /* ---------- XP & levels ---------- */
@@ -1985,6 +1995,10 @@ function openSettings(){const m=modal('⚙️ Settings');
 
 /* ---------- game flow ---------- */
 let cur=null,streak=0,pot=0,pend=0,revived=false,rookie=false,shopTab='games';
+const CPUMAX=6;function cpuRec(g){return S.cpu[g.id]||(S.cpu[g.id]={r:0,w:0,l:0})}function cpuRank(g){return Math.min(CPUMAX,(S.cpu[g.id]||{}).r||0)}
+function cpuAfter(g,r){if(RUN||rookie||!g.versus||api.mode()==='casino')return '';const c=cpuRec(g);
+ if(r==='win'){c.l=0;c.w++;if(c.w>=3&&c.r<CPUMAX){c.r++;c.w=0;return `<br><b>🤖 The CPU got smarter! CPU level ${c.r}</b>`}return c.r<CPUMAX?`<br><small>🤖 CPU level ${c.r} · ${3-c.w} more win${3-c.w>1?'s':''} until it levels up</small>`:'<br><small>🤖 CPU is at max level!</small>'}
+ if(r==='lose'){c.l++;if(c.l>=4&&c.r>0){c.r--;c.l=0;c.w=0;return `<br><small>🤖 The CPU is going a little easier on you (level ${c.r}).</small>`}}return ''}
 const mult=()=>(cur&&curMode(cur)?.mult)||1;
 function showBest(){if(RUN)return;const b=getBest(cur);$('#best').textContent=b==null?'–':b;$('#blabel').textContent=cur.versus?'Top streak':'Best'}
 function overlay(o){const d=el('div','ov'+(o.start?' startov':''));d.innerHTML=`<div class="big">${o.big}</div><h3>${o.h}</h3>${o.p?`<p>${o.p}</p>`:''}`;if(o.extra)d.appendChild(o.extra);
@@ -1994,7 +2008,7 @@ function bankPend(){if(pend>0)bank(pend);pend=0}
 function cashPot(){if(pot>0)bank(pot);pot=0;streak=0;api.score(0)}
 const api={
  score(n){$('#score').textContent=n},
- level(){if(RUN)return RUN.type==='boss'?RUN.i:RUN.round*2+1+Math.round(RUN.opp.r/1.5);return streak+(rookie?-3:0)},
+ level(){if(RUN)return RUN.type==='boss'?RUN.i:RUN.round*2+1+Math.round(RUN.opp.r/1.5);return streak+(rookie?-3:(cur&&cur.versus&&api.mode()!=='casino'?cpuRank(cur):0))},
  mode(){return(cur&&curMode(cur)?.id)||'classic'},
  bank(n){return bank(n*mult())},
  coins(){return S.coins},
@@ -2012,7 +2026,7 @@ const api={
   const earn=pend>0?`<div class="earn">+${fmt(pend)} 🪙</div>${daily?'<span class="boostline">📅 Daily run · 2× coins</span><br>':''}${S.boosts.doubler>0?'<span class="boostline">Coin Doubler will double this</span>':''}`:'';
   overlay({big:isNew?'🏆':g.icon,h:isNew?'New best!':(title||'Game over'),p:`${title&&isNew?title+' · ':''}${g.overLabel||g.label||'Score'}: ${fmt(n)}${earn}`,btns})},
  result(r,detail){if(!cur)return;const g=cur;g.stop();if(RUN)return runResult(r,detail);let p=detail?detail+'<br>':'',btns,big,h;
-  S.stats.plays[g.id]=(S.stats.plays[g.id]||0)+1;track('play',g);if(r==='win'){S.stats.wins[g.id]=(S.stats.wins[g.id]||0)+1;track('win',g)}addXP(r==='win'?15:r==='draw'?6:4);
+  S.stats.plays[g.id]=(S.stats.plays[g.id]||0)+1;track('play',g);if(r==='win'){S.stats.wins[g.id]=(S.stats.wins[g.id]||0)+1;track('win',g)}addXP(r==='win'?15:r==='draw'?6:4);const cpuNote=cpuAfter(g,r);
   const cashBtn=()=>({t:`Cash out ${fmt(pot)} 🪙`,cls:'alt',fn:()=>{cashPot();startOv()}});
   if(r==='win'){sfx('win');streak++;const add=Math.round(g.reward*(1+.5*(streak-1))*mult());pot+=add;const b=getBest(g),isNew=b==null||streak>b;if(isNew)setBest(g,streak);
    big='🏆';h='You win!';p+=`<div class="earn">Pot: ${fmt(pot)} 🪙</div><span class="boostline">+${add} this round · ${streak} win${streak>1?'s':''} in a row${isNew?' · new best!':''}<br>Keep going to grow the pot — lose and it’s gone.</span>`;
@@ -2020,7 +2034,7 @@ const api={
   else if(r==='lose'&&pot>0&&S.boosts.shield>0){sfx('over');S.boosts.shield--;save();big='🛡️';h='Shield saved you!';p+=`Your ${fmt(pot)} 🪙 pot and ${streak}-win streak are safe.`;btns=[{t:'Next round',fn:startGame},cashBtn()]}
   else if(r==='lose'){sfx('lose');const lost=pot;pot=0;streak=0;big='😵';h='CPU wins';p+=lost?`You lost the ${fmt(lost)} 🪙 pot.`:'Win rounds to build a coin pot, then cash out.';btns=[{t:'Play again',fn:startGame},{t:'Back to menu',cls:'ghost',fn:back}]}
   else{sfx('over');big='🤝';h='Draw';p+=pot?`Your pot is still ${fmt(pot)} 🪙.`:'Nobody wins this one.';btns=[{t:'Play again',fn:startGame}];if(pot)btns.push(cashBtn())}
-  api.score(pot);showBest();overlay({big,h,p,btns})}};
+  p+=cpuNote;api.score(pot);showBest();overlay({big,h,p,btns})}};
 function startGame(opt={}){if(!cur)return;cur.stop();stage.innerHTML='';revived=false;pend=0;rookie=false;unseed();DAILY=false;
  if(opt.daily&&dailyable(cur)&&drDone()[cur.id]==null){DAILY=true;drDone()[cur.id]=0;save();seedRNG(today()+'|'+cur.id);toast('📅 Daily run · 2× coins')}
  if(cur.versus&&!RUN&&S.boosts.rookie>0&&api.mode()!=='casino'){S.boosts.rookie--;rookie=true;save();toast('🐣 Rookie CPU this round')}
@@ -2035,23 +2049,32 @@ function startOv(opt={}){const g=cur;stage.innerHTML='';api.score(g.versus?pot:0
    else chip(`🔒 ${m.name} · ${m.price} 🪙`,false,()=>openShop('modes'))})}
  const bl=[];if(S.boosts.doubler)bl.push(`🪙×2 (${S.boosts.doubler})`);if(g.revive&&S.boosts.life)bl.push(`❤️ (${S.boosts.life})`);
  if(g.versus&&S.boosts.rookie)bl.push(`🐣 (${S.boosts.rookie})`);if(g.versus&&S.boosts.shield)bl.push(`🛡️ (${S.boosts.shield})`);if(S.boosts.xp)bl.push(`⭐ (${S.boosts.xp})`);
+ if(g.versus&&!(curMode(g)&&curMode(g).id==='casino')){const c=cpuRec(g),pips='●'.repeat(c.r)+'○'.repeat(CPUMAX-c.r);el('div','cpulv',ex).innerHTML=`<em>🤖 CPU level <b>${c.r}</b>/${CPUMAX}</em><span>${pips}</span><small>${c.r<CPUMAX?`${3-c.w} more win${3-c.w>1?'s':''} to level it up`:'Max level — good luck!'}</small>`}
  if(bl.length)el('div','boostline',ex).textContent='Boosts ready: '+bl.join('   ');
  const sel=curMode(g),how=sel&&sel.id==='casino'?`<b>🎰 Casino table:</b> ${sel.desc}<br>`+g.how:g.how;
  const btns=[{t:'Play',fn:()=>startGame()}];if(dOK)btns.push({t:'📅 Daily run · 2× coins',cls:'alt',fn:()=>startGame({daily:true})});
  overlay({start:true,big:g.icon,h:g.name,p:how+(g.versus&&!(sel&&sel.id==='casino')?' <br><b>Each win adds coins to a pot.</b> Cash out any time, or risk it for more.':''),extra:ex,btns});
  if(opt.daily&&dOK){stage.innerHTML='';startGame({daily:true})}}
-function openGame(g,opt={}){if(!unlocked(g))return openShop('games');if(cur)leave();RUN=null;cur=g;streak=0;pot=0;pend=0;show('game');$('#title').textContent=g.name;startOv(opt)}
+function openGame(g,opt={}){retList=opt.from||null;if(!unlocked(g))return openShop('games');if(cur)leave();RUN=null;cur=g;streak=0;pot=0;pend=0;show('game');$('#title').textContent=g.name;startOv(opt)}
 function leave(){unseed();DAILY=false;if(!cur)return;cur.stop();if(RUN){if(RUN.type==='boss'&&RUN.earned>0)bank(RUN.earned);RUN=null}if(cur.versus&&pot>0)cashPot();bankPend();cur=null;stage.innerHTML=''}
-function back(){leave();show('menu');renderMenu()}
+function back(){leave();if(retList){LIST=retList;show('list');renderList()}else{show('menu');renderMenu()}}
 function renderMenu(){wallet();lvlBar();renderPackBar();applyLook();const d=$('#daily'),td=today();d.innerHTML='';
  if(S.daily!==td){d.className='daily';d.innerHTML='<div><b>🎁 Daily reward</b><br><small>Free coins every day</small></div>';const b=el('button','shopbtn',d);b.textContent='Claim +100 🪙';
   b.addEventListener('click',()=>{S.daily=td;S.coins+=100;save();toast('+100 🪙 daily reward');sfx('coin');buzz(30);renderMenu()})}else d.className='';
  renderMissions();renderDaily();renderEvents();
- const card=(g,box)=>{const lk=!unlocked(g),c=el('button','card'+(lk?' locked':''),box),b=getBest(g,true);c.style.setProperty('--accent',g.accent);
-  const bt=lk?(lvlOK(g)?`🔒 ${g.price} 🪙 in the shop`:`🔒 Level ${g.lvl} · ${g.price} 🪙`):b==null?'Not played yet':g.versus?`Best streak: ${b}`:`Best: ${fmt(b)}${g.low?(g.label==='Time'?'s':g.label==='Strokes'?' strokes':' moves'):''}`;
-  c.innerHTML=`<div class="ic">${g.icon}</div><b>${g.name}</b><small>${g.desc}</small><div class="best">${bt}</div>`;c.addEventListener('click',()=>openGame(g))};
- const sorted=L=>[...L.filter(unlocked),...L.filter(g=>!unlocked(g))];
- [['#cards-solo',sorted(SOLO)],['#cards-vs',sorted(VS)]].forEach(([s,l])=>{const box=$(s);box.innerHTML='';l.forEach(g=>card(g,box))})}
+ const cat=(kind,icon,name,list,accent)=>{const c=el('button','card catc',$('#cats')),un=list.filter(unlocked).length;c.style.setProperty('--accent',accent);
+  c.innerHTML=`<div class="ic">${icon}</div><b>${name}</b><small>${kind==='vs'?'Beat the CPU, build a coin pot. The CPU gets smarter as you win.':'Classic arcade games. Beat your best scores.'}</small><div class="catic">${list.slice(0,8).map(g=>`<span class="${unlocked(g)?'':'lk'}">${g.icon}</span>`).join('')}</div><div class="best">${un}/${list.length} unlocked · Open ›</div>`;
+  c.addEventListener('click',()=>openList(kind))};
+ $('#cats').innerHTML='';cat('solo','🕹️','Solo games',SOLO,'#ffc23d');cat('vs','🤖','Vs CPU',VS,'#5fe3a1')}
+function gameCard(g,box,from){const lk=!unlocked(g),c=el('button','card'+(lk?' locked':''),box),b=getBest(g,true);c.style.setProperty('--accent',g.accent);
+ const bt=lk?(lvlOK(g)?`🔒 ${g.price} 🪙 in the shop`:`🔒 Level ${g.lvl} · ${g.price} 🪙`):b==null?'Not played yet':g.versus?`Best streak: ${b} · 🤖 CPU Lv ${cpuRank(g)}`:`Best: ${fmt(b)}${g.low?(g.label==='Time'?'s':g.label==='Strokes'?' strokes':' moves'):''}`;
+ c.innerHTML=`<div class="ic">${g.icon}</div><b>${g.name}</b><small>${g.desc}</small><div class="best">${bt}</div>`;c.addEventListener('click',()=>openGame(g,{from}))}
+let LIST=null,retList=null;
+function openList(kind){LIST=kind;show('list');renderList();$('#listbody').scrollTop=0}
+function renderList(){if(!LIST)return;wallet();const vs=LIST==='vs',L=vs?VS:SOLO,box=$('#lgrid');
+ $('#ltitle').textContent=vs?'🤖 Vs CPU':'🕹️ Solo games';
+ $('#lnote').textContent=vs?'Each win adds coins to a pot — cash out or risk it. Every CPU levels up as you beat it, so it keeps getting harder.':'Play for high scores and coins. Locked games are at the end — unlock them in the shop.';
+ box.innerHTML='';[...L.filter(unlocked),...L.filter(g=>!unlocked(g))].forEach(g=>gameCard(g,box,LIST))}
 function openShop(tab){leave();if(tab)shopTab=tab;show('shop');renderShop()}
 function renderShop(){wallet();const T=[['packs','🎁 Packs'],['games','🎮 Games'],['modes','🎛️ Modes'],['boosts','⚡ Boosts'],['themes','🎨 Themes']],tb=$('#tabs');tb.innerHTML='';
  T.forEach(([k,l])=>{const b=el('button','tab'+(k===shopTab?' on':''),tb);b.textContent=l;b.addEventListener('click',()=>{shopTab=k;renderShop()})});
@@ -2079,7 +2102,7 @@ function renderShop(){wallet();const T=[['packs','🎁 Packs'],['games','🎮 Ga
  if(shopTab==='themes'){intro.textContent='Change the colors of the whole arcade. Some themes only come from packs.';
   Object.entries(THEMES).forEach(([k,t])=>{if(t.pack&&!owned('theme:'+k))return;const o=k==='classic'||owned('theme:'+k),on=(S.theme||'classic')===k,lv=lvlOK(t),sw=`<span class="sw">${t.v.map(c=>`<i style="background:${c}"></i>`).join('')}</span>`;
    item(t.icon,t.name,sw,on?'Equipped':o?'Equip':lv?`${t.price} 🪙`:lockL(t),on||(!o&&!lv)?'own':o?'eq':'',on?null:o?()=>{S.theme=k;save();applyTheme();renderShop()}:buy(t.price,()=>{S.owned['theme:'+k]=true;S.theme=k;applyTheme()}),on||(!o&&(!lv||S.coins<t.price)))})}}
-$('#back').addEventListener('click',back);$('#shopbtn').addEventListener('click',()=>openShop());$('#sback').addEventListener('click',()=>{show('menu');renderMenu()});
+$('#back').addEventListener('click',back);$('#shopbtn').addEventListener('click',()=>openShop());$('#sback').addEventListener('click',()=>{if(retList){show('list');renderList()}else{show('menu');renderMenu()}});$('#lback').addEventListener('click',()=>{LIST=null;retList=null;show('menu');renderMenu()});
 $('#recbtn').addEventListener('click',openRecords);$('#setbtn').addEventListener('click',openSettings);$('#lvlbtn').addEventListener('click',openLevels);
 (()=>{let sx,sy,act=false;
  stage.addEventListener('pointerdown',e=>{sx=e.clientX;sy=e.clientY;act=true});
