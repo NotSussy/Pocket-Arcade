@@ -341,6 +341,17 @@ canvas{display:block;border-radius:14px;background:#15172b}
 .cats{grid-template-columns:repeat(auto-fit,minmax(260px,1fr))}.catc{min-height:170px}.catc .ic{font-size:40px}.catc b{font-size:20px}
 .catic{display:flex;flex-wrap:wrap;gap:4px;font-size:20px;margin-top:4px}.catic .lk{filter:grayscale(1);opacity:.45}
 .cpulv{background:#14152b;border-radius:12px;padding:8px 12px;font-size:14px;display:flex;flex-wrap:wrap;align-items:center;gap:4px 8px;justify-content:center}.cpulv em{font-style:normal}.cpulv span{color:var(--b);letter-spacing:2px}.cpulv small{width:100%;color:var(--dim);font-size:12px}
+.cgh{grid-column:1/-1;font-weight:800;font-size:13px;color:var(--a);margin-top:8px;padding-top:6px;border-top:1px solid #2a2d55}
+.seasontag{color:#ff9d2e}
+.pcd.rar4 .pcf.pfront,.pcd.rar4 .pcf.pback,.citem.rar4.got{animation:mythhue 2.5s linear infinite}.pcd.rar5 .pcf.pfront{box-shadow:0 0 30px #00e5ff}
+@keyframes mythhue{0%{box-shadow:0 0 24px #ff4d6d;border-color:#ff4d6d}33%{box-shadow:0 0 24px #ffd34d;border-color:#ffd34d}66%{box-shadow:0 0 24px #4ea8ff;border-color:#4ea8ff}100%{box-shadow:0 0 24px #ff4d6d;border-color:#ff4d6d}}
+.mythflash{position:fixed;left:50%;top:18%;transform:translateX(-50%);z-index:70;font-size:clamp(28px,8vw,52px);font-weight:900;color:#fff;text-shadow:0 0 20px #ff4d6d,0 0 40px #ffd34d;animation:mythpop 1.6s forwards;pointer-events:none;white-space:nowrap}
+@keyframes mythpop{0%{transform:translateX(-50%) scale(.3);opacity:0}20%{transform:translateX(-50%) scale(1.15);opacity:1}80%{opacity:1}100%{transform:translateX(-50%) scale(1);opacity:0}}
+.prof #frbtn{position:relative}.frdot{position:absolute;top:-6px;right:-6px;background:#ff4d6d;color:#fff;font-style:normal;font-size:11px;font-weight:800;min-width:18px;height:18px;border-radius:9px;display:flex;align-items:center;justify-content:center;padding:0 4px}
+.frtoggle{display:flex;align-items:center;gap:8px;font-size:14px;font-weight:700;cursor:pointer}.frtoggle input{width:20px;height:20px;accent-color:var(--b)}
+.frsec{display:flex;flex-direction:column;gap:6px}.frrow{display:flex;align-items:center;gap:8px;background:#14152b;border-radius:10px;padding:8px 10px}.frrow .nm{flex:1;min-width:0;display:flex;flex-direction:column}.frrow .nm small{color:var(--dim);font-size:11.5px}
+.mbox .frrow .btn{width:auto;margin:0;padding:8px 12px;font-size:13px}.frx{background:none;border:0;color:var(--dim);font-size:14px;cursor:pointer;padding:4px 6px}
+.seasonbox{background:linear-gradient(120deg,#2a1f12,#2a1f4f);border:2px solid var(--a);border-radius:12px;padding:10px 12px;display:flex;flex-direction:column;gap:4px}.seasonbox small{color:#e6e2ff;font-size:12.5px;line-height:1.4}
 .avsm{font-size:22px;line-height:1;margin-right:-2px}.ptitle{font-size:13px;font-weight:800;color:var(--b);margin:-2px 0 2px}
 .packbar{flex-direction:row;align-items:center;gap:8px;margin-top:10px;background:linear-gradient(120deg,var(--panel),#2a1f4f)}.packbar .pbx{flex:1;min-width:0;display:flex;flex-direction:column;gap:2px}.packbar .pbx b{font-size:16px}.packbar .pbx small{color:var(--dim);font-size:12.5px}
 .packbar .btn{margin:0;padding:10px 12px;font-size:14px;width:auto;white-space:nowrap}
@@ -356,9 +367,9 @@ canvas{display:block;border-radius:14px;background:#15172b}
 .pcd{width:min(118px,28vw);aspect-ratio:3/4.3;position:relative;perspective:700px;cursor:pointer;animation:pcin .35s backwards}
 @keyframes pcin{from{transform:translateY(40px) scale(.6);opacity:0}}
 .pcf{position:absolute;inset:0;border-radius:14px;backface-visibility:hidden;-webkit-backface-visibility:hidden;transition:transform .5s;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;text-align:center;padding:6px}
-.pcf.back{background:linear-gradient(150deg,#3a3d8a,#1c1e4a);border:3px solid var(--rc);box-shadow:0 0 14px var(--rc)}.pcf.back span{font-size:34px;font-weight:900;color:var(--rc)}
-.pcf.front{transform:rotateY(180deg);background:#181a36;border:3px solid var(--rc);box-shadow:0 0 22px var(--rc)}
-.pcd.on .back{transform:rotateY(-180deg)}.pcd.on .front{transform:rotateY(0)}
+.pcf.pback{background:linear-gradient(150deg,#3a3d8a,#1c1e4a);border:3px solid var(--rc);box-shadow:0 0 14px var(--rc)}.pcf.pback span{font-size:34px;font-weight:900;color:var(--rc)}
+.pcf.pfront{transform:rotateY(180deg);background:#181a36;border:3px solid var(--rc);box-shadow:0 0 22px var(--rc)}
+.pcd.on .pback{transform:rotateY(-180deg)}.pcd.on .pfront{transform:rotateY(0)}
 .pcf b{font-size:13px;line-height:1.15;color:#fff}.pcf small{font-size:10.5px;color:var(--rc);font-weight:800}
 .pcf em{font-style:normal;font-size:10.5px;font-weight:900;border-radius:6px;padding:2px 5px}.pcf .nw{position:absolute;top:5px;right:5px;background:#ff3d71;color:#fff}.pcf .dp{background:#2a2d55;color:#ffd34d}
 .pkbtns{display:flex;flex-wrap:wrap;gap:8px;justify-content:center;width:100%;max-width:420px}.pkbtns .btn{margin:0;flex:1 1 140px;width:auto}
@@ -397,7 +408,7 @@ canvas{display:block;border-radius:14px;background:#15172b}
 <body>
 <section id="menu" class="view on">
   <div class="top"><h1>Pocket <span>Arcade</span></h1><div class="topr"><button class="syncbtn syncchip" id="syncbtn">⏳ Connecting…</button><div class="wallet">🪙 <span class="wal">0</span></div><button class="shopbtn" id="shopbtn">🛒 Shop</button></div></div>
-  <div class="prof"><button class="lvl" id="lvlbtn"><span id="avatar" class="avsm">🙂</span><b id="lvlnum">Lv 1</b><span class="xpbar"><i id="xpfill"></i></span><small id="xptxt"></small></button><button class="syncbtn" id="recbtn">🏆<span class="bl"> Records</span></button><button class="syncbtn" id="lbbtn" style="display:none">🏅<span class="bl"> Top</span></button><button class="syncbtn" id="admbtn" style="display:none" aria-label="Admin console">🛠️</button><button class="syncbtn" id="setbtn" aria-label="Settings">⚙️</button></div>
+  <div class="prof"><button class="lvl" id="lvlbtn"><span id="avatar" class="avsm">🙂</span><b id="lvlnum">Lv 1</b><span class="xpbar"><i id="xpfill"></i></span><small id="xptxt"></small></button><button class="syncbtn" id="recbtn">🏆<span class="bl"> Records</span></button><button class="syncbtn" id="lbbtn" style="display:none">🏅<span class="bl"> Top</span></button><button class="syncbtn" id="frbtn" style="display:none">👥<span class="bl"> Friends</span><i class="frdot" style="display:none">0</i></button><button class="syncbtn" id="admbtn" style="display:none" aria-label="Admin console">🛠️</button><button class="syncbtn" id="setbtn" aria-label="Settings">⚙️</button></div>
   <div id="ptitle" class="ptitle" style="display:none"></div>
   <div id="announce" class="announce" style="display:none"></div>
   <div id="daily"></div>
@@ -1466,10 +1477,10 @@ const BOOSTS={doubler:{name:'Coin Doubler',icon:'🪙',desc:'Doubles your next 3
  xp:{name:'XP Boost',icon:'⭐',desc:'Double XP for your next 5 games',price:150,qty:5,lvl:3}};
 const LVUP={2:'🏟️ Tournaments, Checkers and Color Clash in the shop',3:'🎰 Casino tables, ⛳ Mini Golf and ⭐ XP Boost in the shop',4:'👑 Boss Rush',5:'🍬 Candy theme in the shop',8:'👑 Gold Rush theme in the shop'};
 const DEF={coins:150,owned:{},boosts:{doubler:0,life:0,rookie:0,shield:0,xp:0},mode:{},theme:'classic',daily:'',best:{},t:0,
- xp:0,lvl:1,set:{sound:true,vib:true},mis:null,stats:{plays:{},wins:{},daily:0,time:0},trophies:{t4:0,t8:0,boss:0},bossBest:0,dr:{day:'',done:{}},packs:{basic:1,super:0,mega:0},col:{},colBonus:{},av:null,title:null,back:null,cpu:{}};
+ xp:0,lvl:1,set:{sound:true,vib:true},mis:null,stats:{plays:{},wins:{},daily:0,time:0},trophies:{t4:0,t8:0,boss:0},bossBest:0,dr:{day:'',done:{}},packs:{basic:1,super:0,mega:0},col:{},colBonus:{},av:null,title:null,back:null,cpu:{},season:{id:'',pts:0},sClaim:{}};
 function normalize(v){const d=JSON.parse(JSON.stringify(DEF));v=v&&typeof v==='object'?v:{};const st=v.stats||{};
  return Object.assign(d,v,{boosts:Object.assign({},DEF.boosts,v.boosts||{}),best:Object.assign({},v.best||{}),owned:Object.assign({},v.owned||{}),mode:Object.assign({},v.mode||{}),
-  set:Object.assign({},DEF.set,v.set||{}),stats:{plays:Object.assign({},st.plays||{}),wins:Object.assign({},st.wins||{}),daily:st.daily||0,time:st.time||0},trophies:Object.assign({},DEF.trophies,v.trophies||{}),dr:v.dr&&v.dr.done?v.dr:{day:'',done:{}},packs:Object.assign({},DEF.packs,v.packs||{}),col:Object.assign({},v.col||{}),colBonus:Object.assign({},v.colBonus||{}),cpu:Object.assign({},v.cpu||{})})}
+  set:Object.assign({},DEF.set,v.set||{}),stats:{plays:Object.assign({},st.plays||{}),wins:Object.assign({},st.wins||{}),daily:st.daily||0,time:st.time||0},trophies:Object.assign({},DEF.trophies,v.trophies||{}),dr:v.dr&&v.dr.done?v.dr:{day:'',done:{}},packs:Object.assign({},DEF.packs,v.packs||{}),col:Object.assign({},v.col||{}),colBonus:Object.assign({},v.colBonus||{}),cpu:Object.assign({},v.cpu||{}),season:v.season&&v.season.id?v.season:{id:'',pts:0},sClaim:Object.assign({},v.sClaim||{})})}
 let S=(()=>{let v=null;try{v=JSON.parse(localStorage.getItem('pa_save'))}catch(e){}const s=normalize(v);
  try{for(let i=0;i<localStorage.length;i++){const k=localStorage.key(i);if(k&&k.startsWith('pa_')&&k!=='pa_save'&&s.best[k]==null){const n=+localStorage.getItem(k);if(!isNaN(n))s.best[k]=n}}}catch(e){}return s})();
 function saveLocal(){try{localStorage.setItem('pa_save',JSON.stringify(S))}catch(e){}}
@@ -1518,7 +1529,7 @@ function tryPending(){if(pendingRemote&&!busy()){const r=pendingRemote;pendingRe
 setInterval(tryPending,1000);
 function readDoc(d){let remote=null;try{remote=d&&typeof d.save==='string'?JSON.parse(d.save):null}catch(e){}if(remote&&d.t)remote.t=Math.max(remote.t||0,d.t);return remote}
 function setName(n){const ch=(n||null)!==myName;myName=n||null;applyLook&&applyLook();if(ch&&myName&&cloudReady)queueLB(true)}
-async function onUser(u){fbUser=u;BANNED=false;ADMIN=false;{const ab=$('#admbtn');if(ab)ab.style.display='none'}cloudReady=false;cloudRef=null;pendingRemote=null;if(unsub){unsub();unsub=null}setName(null);
+async function onUser(u){fbUser=u;BANNED=false;ADMIN=false;FR={list:[],inc:[],out:[]};clearInterval(frT);updFrDot();{const ab=$('#admbtn');if(ab)ab.style.display='none'}cloudReady=false;cloudRef=null;pendingRemote=null;if(unsub){unsub();unsub=null}setName(null);
  if(!u){holdT=false;setSync('out');return}
  cloudRef=fbDb.collection('saves').doc(u.uid);lastSync=getLast(u.uid);let done=false;const to=setTimeout(()=>{if(!done){holdT=false;setSync('offline')}},12000);
  try{const snap=await cloudRef.get({source:'server'});done=true;clearTimeout(to);
@@ -1601,29 +1612,35 @@ function watchConfig(){if(cfgOn||!fbDb)return;cfgOn=true;const c=fbDb.collection
  c.doc('event').onSnapshot(s=>{EVT=s.exists?s.data():null;showAnnounce()},()=>{})}
 function lbData(){const best={};ALL.forEach(g=>{const v=getBest(g,true);if(v!=null&&isFinite(v))best[g.id]=v});
  const av=S.av&&itemById(S.av),ti=S.title&&itemById(S.title);
- return{name:myName,coins:Math.max(0,Math.floor(S.coins||0)),play:Math.floor(S.stats.time||0),lvl:S.lvl||1,av:av?av.icon:'🙂',title:ti?ti.name:'',best}}
+ const ss=curSeason(),o={name:myName,coins:Math.max(0,Math.floor(S.coins||0)),play:Math.floor(S.stats.time||0),lvl:S.lvl||1,av:av?av.icon:'🙂',title:ti?ti.name:'',best,season:ss.id};if(seasonNum(ss.id)>=1)o['ss_'+ss.id]=Math.floor(ss.pts||0);return o}
 function queueLB(now){clearTimeout(lbT);lbT=setTimeout(writeLB,now?50:3000)}
 async function writeLB(){if(!fbUser||!myName||BANNED||!fbDb)return;const d=lbData(),k=JSON.stringify(d);if(k===lbLast)return;
- try{await fbDb.collection('leaderboard').doc(fbUser.uid).set(Object.assign(d,{t:Date.now()}));lbLast=k}catch(e){}}
+ try{await fbDb.collection('leaderboard').doc(fbUser.uid).set(Object.assign(d,{t:Date.now()}),{merge:true});lbLast=k}catch(e){}}
 async function afterSignIn(u){BANNED=false;ADMIN=false;lbLast='';$('#admbtn').style.display='none';
  try{const b=await fbDb.collection('bans').doc(u.uid).get();BANNED=b.exists}catch(e){}
  try{await fbDb.collection('admin').doc('check').get();ADMIN=true}catch(e){ADMIN=false}
- if(fbUser&&fbUser.uid===u.uid){$('#admbtn').style.display=ADMIN?'':'none';queueLB(true);refreshMyBadge()}}
-let lbTab='coins';
+ if(fbUser&&fbUser.uid===u.uid){$('#admbtn').style.display=ADMIN?'':'none';queueLB(true);refreshMyBadge();checkSeasonRewards();friendPoll()}}
+async function checkSeasonRewards(){const pv=prevSeasonId(),now=new Date();if(seasonNum(pv)<1||S.sClaim[pv]!=null||!fbUser)return;
+ if(now<new Date(Date.UTC(now.getUTCFullYear(),now.getUTCMonth(),2)))return;
+ try{const q=await fbDb.collection('leaderboard').orderBy('ss_'+pv,'desc').limit(3).get();const rank=q.docs.findIndex(d=>d.id===fbUser.uid)+1;
+  if(rank>0&&!BANNED)grantExclusive(rank,pv);else{S.sClaim[pv]=0;save()}}catch(e){}}
+let lbTab='season';
 async function openBoards(tab){if(tab)lbTab=tab;const m=modal('🏅 Leaderboards');
- const tb=el('div','ctabs',m);tb.style.gridTemplateColumns='repeat(3,1fr)';[['coins','🪙 Coins'],['play','⏱️ Playtime'],['game','🎮 Games']].forEach(([k,l])=>{const b=el('button','tab'+(lbTab===k||(k==='game'&&lbTab.startsWith('g:'))?' on':''),tb);b.textContent=l;b.addEventListener('click',()=>openBoards(k==='game'?'g:'+(lbTab.startsWith('g:')?lbTab.slice(2):ALL[0].id):k))});
+ const tb=el('div','ctabs',m);tb.style.gridTemplateColumns='repeat(4,1fr)';[['season','🏆 Season'],['coins','🪙 Coins'],['play','⏱️ Time'],['game','🎮 Games']].forEach(([k,l])=>{const b=el('button','tab'+(lbTab===k||(k==='game'&&lbTab.startsWith('g:'))?' on':''),tb);b.textContent=l;b.addEventListener('click',()=>openBoards(k==='game'?'g:'+(lbTab.startsWith('g:')?lbTab.slice(2):ALL[0].id):k))});
  let g=null;if(lbTab.startsWith('g:')){g=ALL.find(x=>x.id===lbTab.slice(2))||ALL[0];const sel=el('select','field lbsel',m);ALL.forEach(x=>{const o=el('option','',sel);o.value=x.id;o.textContent=x.icon+' '+x.name;if(x===g)o.selected=true});sel.addEventListener('change',()=>openBoards('g:'+sel.value))}
+ const sid=seasonId(),isSeason=lbTab==='season';if(isSeason){const ms=seasonEnds()-new Date(),left=Math.ceil(ms/864e5),hrs=Math.ceil(ms/36e5);const sb=el('div','seasonbox',m);sb.innerHTML=`<b>🏆 Season ${seasonNum(sid)} · ${seasonMonth(sid)}</b><small>Ends in ${hrs<48?hrs+' hour'+(hrs>1?'s':''):left+' days'} (${seasonEnds().toLocaleString(undefined,{weekday:'short',month:'short',day:'numeric',hour:'numeric',minute:'2-digit'})}). Earn coins in games to score points. The <b>top 3</b> get <b>Exclusive</b> avatars, titles, card backs and themes that can’t be found in packs.</small><small>Your points this season: <b>${fmt(curSeason().pts)}</b></small>`;
+  const pv=prevSeasonId();if(seasonNum(pv)>=1&&fbDb)fbDb.collection('leaderboard').orderBy('ss_'+pv,'desc').limit(3).get().then(q=>{if(q.empty)return;const w=el('small','',sb);w.innerHTML=`Season ${seasonNum(pv)} champions: `+q.docs.map((d,i)=>`${['🥇','🥈','🥉'][i]} <b></b>`).join(' ');w.querySelectorAll('b').forEach((b,i)=>b.textContent=q.docs[i].data().name||'?')}).catch(()=>{})}
  const note=el('small','dim',m);note.textContent=!fbUser?'Sign in and pick a username to get on the board.':!myName?'Pick a username (Save & sync) to get on the board.':BANNED?'Your account can’t appear on leaderboards.':'Top 50 players. Updates when you finish games.';
  const L=el('div','lblist',m);L.textContent='Loading…';if(!fbDb){L.textContent='Leaderboards couldn’t load. Check your internet.';return}
- const field=g?'best.'+g.id:lbTab,asc=g&&g.low;
- const fmtV=v=>g?(g.versus?`🔥 ${v}`:g.low?`${fmt(v)}${g.label==='Time'?'s':g.label==='Strokes'?' strokes':' moves'}`:fmt(v)):lbTab==='play'?fmtTime(v):`${fmt(v)} 🪙`;
+ const field=g?'best.'+g.id:isSeason?'ss_'+sid:lbTab,asc=g&&g.low;
+ const fmtV=v=>g?(g.versus?`🔥 ${v}`:g.low?`${fmt(v)}${g.label==='Time'?'s':g.label==='Strokes'?' strokes':' moves'}`:fmt(v)):lbTab==='play'?fmtTime(v):isSeason?`${fmt(v)} pts`:`${fmt(v)} 🪙`;
  if(myName&&!BANNED)await writeLB();
  try{if(!SUPMAP)await loadSupporters().catch(()=>{});const q=await fbDb.collection('leaderboard').orderBy(field,asc?'asc':'desc').limit(50).get();L.innerHTML='';
   if(q.empty){L.textContent='No one is on this board yet. Be the first!';return}let i=0,me=false;
-  q.forEach(doc=>{const d=doc.data(),v=g?d.best&&d.best[g.id]:d[lbTab];i++;const r=el('div','lbrow'+(fbUser&&doc.id===fbUser.uid?' me':''),L);if(fbUser&&doc.id===fbUser.uid)me=true;
+  q.forEach(doc=>{const d=doc.data(),v=g?d.best&&d.best[g.id]:d[isSeason?'ss_'+sid:lbTab];i++;const r=el('div','lbrow'+(fbUser&&doc.id===fbUser.uid?' me':''),L);if(fbUser&&doc.id===fbUser.uid)me=true;
    r.innerHTML=`<span class="rk">${i<=3?['🥇','🥈','🥉'][i-1]:'#'+i}</span><span class="av">${d.av||'🙂'}</span><span class="nm"><b></b><small></small></span><span class="vl">${fmtV(v)}</span>`;
    r.querySelector('b').textContent=(d.name||'?')+(badgeFor(doc.id)?' '+badgeFor(doc.id):'');r.querySelector('small').textContent=`Lv ${d.lvl||1}${d.title?' · '+d.title:''}`});
-  if(!me&&myName&&!BANNED){const d=lbData(),v=g?d.best[g.id]:d[lbTab];el('small','dim',m).textContent=v==null?'You don’t have a score here yet.':`You: ${fmtV(v)} — not in the top 50 yet. Keep going!`}}
+  if(!me&&myName&&!BANNED){const d=lbData(),v=g?d.best[g.id]:d[isSeason?'ss_'+sid:lbTab];el('small','dim',m).textContent=v==null?'You don’t have a score here yet.':`You: ${fmtV(v)} — not in the top 50 yet. Keep going!`}}
  catch(e){L.textContent='Leaderboards aren’t switched on yet (the database rules need updating).'}}
 window.openBoards=openBoards;
 /* ---------- admin console (only works for the admin account; the database rules enforce it) ---------- */
@@ -1757,6 +1774,60 @@ async function adminDonate(name,amount,log){if(!(amount>0)||amount>10000)throw '
  await ref.set({name:shown,uid,total,last:amount,t:Date.now()},{merge:true});
  await fbDb.collection('config').doc('shoutout').set({name:shown,amount,t:Date.now()});
  const t=tierOf(total);log(`💖 Shoutout sent: "Thank you ${shown} for donating ${money(amount)}!"`);log(`${shown} has donated ${money(total)} total → ${t?t[1]+' '+t[2]:'Supporter'}${uid?'':' (not a username, so no badge)'}`)}
+/* ---------- friends ---------- */
+let FR={list:[],inc:[],out:[]},frT=null,NOREQ=false;
+const pairId=(a,b)=>[a,b].sort().join('_');
+async function loadFriends(){if(!fbUser||!fbDb)return;const me=fbUser.uid;
+ const[fs,inc,out,pr]=await Promise.all([fbDb.collection('friendships').where('users','array-contains',me).get(),fbDb.collection('friendreq').where('to','==',me).get(),fbDb.collection('friendreq').where('from','==',me).get(),fbDb.collection('profiles').doc(me).get().catch(()=>null)]);
+ FR.list=fs.docs.map(d=>{const x=d.data(),o=(x.users||[]).find(u=>u!==me);return{id:d.id,uid:o,name:(x.names||{})[o]||'?'}}).filter(f=>f.uid);
+ FR.inc=inc.docs.map(d=>Object.assign({id:d.id},d.data()));FR.out=out.docs.map(d=>Object.assign({id:d.id},d.data()));NOREQ=!!(pr&&pr.exists&&pr.data().noReq===true);updFrDot()}
+function updFrDot(){const b=$('#frbtn');if(!b)return;b.style.display=fbUser?'':'none';const d=b.querySelector('.frdot'),n=FR.inc.length;if(d){d.textContent=n;d.style.display=n?'':'none'}}
+function friendPoll(){clearInterval(frT);loadFriends().catch(()=>{});frT=setInterval(()=>{if(fbUser&&document.visibilityState==='visible')loadFriends().catch(()=>{})},45000)}
+async function acceptFriend(r){const me=fbUser.uid;await fbDb.collection('friendships').doc(pairId(me,r.from)).set({users:[r.from,me],from:r.from,to:me,names:{[r.from]:r.fromName||'?',[me]:myName},t:Date.now()});
+ await fbDb.collection('friendreq').doc(r.id).delete();await loadFriends()}
+async function sendFriend(raw){if(!myName)throw 'Pick a username first (Save & sync).';const name=(raw||'').trim();if(!name)throw 'Type your friend’s username.';
+ if(name.toLowerCase()===myName.toLowerCase())throw 'That’s you! 😄';if(!/^[A-Za-z0-9_]{3,16}$/.test(name))throw `There’s no player called "${name}".`;
+ const s=await fbDb.collection('usernames').doc(name.toLowerCase()).get();if(!s.exists)throw `There’s no player called "${name}". Check the spelling.`;
+ const{uid,name:real}=s.data();await loadFriends();
+ if(FR.list.some(f=>f.uid===uid))throw `${real} is already your friend.`;if(FR.out.some(r=>r.to===uid))throw `You already sent ${real} a request.`;
+ const inc=FR.inc.find(r=>r.from===uid);if(inc){await acceptFriend(inc);return `${real} had already asked you — you’re now friends! 🎉`}
+ const pr=await fbDb.collection('profiles').doc(uid).get().catch(()=>null);if(pr&&pr.exists&&pr.data().noReq===true)throw `${real} has friend requests turned off.`;
+ await fbDb.collection('friendreq').doc(uid+'_'+fbUser.uid).set({from:fbUser.uid,fromName:myName,to:uid,toName:real,t:Date.now()});await loadFriends();return `Friend request sent to ${real}!`}
+let frBoard='season';
+async function openFriends(){const m=modal('👥 Friends');
+ if(!fbUser){el('p','',m).textContent='Sign in with Google (Save & sync) to add friends.';return}
+ if(!myName){el('p','',m).textContent='Pick a username first, so friends can find you.';const b=el('button','btn alt',m);b.textContent='👤 Pick a username';b.addEventListener('click',()=>nameUI(false));return}
+ el('small','dim',m).innerHTML=`Your username is <b></b>. Friends add you with it.`;m.querySelector('small b').textContent=myName;
+ const row=el('div','admrow',m),f=el('input','field',row);f.placeholder='Friend’s username';f.maxLength=16;f.autocapitalize='off';f.autocomplete='off';f.spellcheck=false;const add=el('button','btn alt',row);add.textContent='Add';
+ const msg=el('div','amsg',m);
+ const go=async()=>{add.disabled=true;msg.style.color='';msg.textContent='Sending…';try{msg.style.color='#5fe3a1';msg.textContent=await sendFriend(f.value);f.value='';sfx('coin');draw()}catch(e){msg.style.color='#ff8fb1';msg.textContent=typeof e==='string'?e:e&&e.code==='permission-denied'?'Couldn’t send it — they may have friend requests turned off.':'Couldn’t send it. Check your internet.'}add.disabled=false};
+ add.addEventListener('click',go);f.addEventListener('keydown',e=>{if(e.key==='Enter')go()});
+ const tg=el('label','frtoggle',m);tg.innerHTML='<input type="checkbox"> <span>Allow friend requests</span>';const cb=tg.querySelector('input');cb.checked=!NOREQ;
+ cb.addEventListener('change',async()=>{const v=!cb.checked;try{await fbDb.collection('profiles').doc(fbUser.uid).set({noReq:v},{merge:true});NOREQ=v;toast(v?'Friend requests turned off':'Friend requests turned on')}catch(e){cb.checked=!cb.checked;toast('Couldn’t change that right now')}});
+ const rq=el('div','frsec',m),bd=el('div','frsec',m);
+ async function draw(){try{await loadFriends()}catch(e){rq.innerHTML='<small class="dim">Friends aren’t switched on yet (the database rules need updating).</small>';bd.innerHTML='';return}
+  rq.innerHTML='';
+  if(FR.inc.length){el('div','cgh',rq).textContent=`📨 Friend requests (${FR.inc.length})`;FR.inc.forEach(r=>{const x=el('div','frrow',rq);x.innerHTML='<span class="nm"><b></b><small>wants to be your friend</small></span>';x.querySelector('b').textContent=r.fromName||'?';
+   const a=el('button','btn alt',x);a.textContent='Accept';a.addEventListener('click',async()=>{a.disabled=true;try{await acceptFriend(r);toast(`🎉 You and ${r.fromName} are now friends!`);sfx('win')}catch(e){toast('Couldn’t accept right now')}draw()});
+   const d=el('button','btn ghost',x);d.textContent='Decline';d.addEventListener('click',async()=>{try{await fbDb.collection('friendreq').doc(r.id).delete()}catch(e){}draw()})})}
+  if(FR.out.length){el('div','cgh',rq).textContent='⏳ Waiting for them to accept';FR.out.forEach(r=>{const x=el('div','frrow',rq);x.innerHTML='<span class="nm"><b></b><small>request sent</small></span>';x.querySelector('b').textContent=r.toName||'?';
+   const c=el('button','btn ghost',x);c.textContent='Cancel';c.addEventListener('click',async()=>{try{await fbDb.collection('friendreq').doc(r.id).delete()}catch(e){}draw()})})}
+  drawBoard()}
+ async function drawBoard(){bd.innerHTML='';el('div','cgh',bd).textContent=`🏅 Friend leaderboard (${FR.list.length} friend${FR.list.length===1?'':'s'})`;
+  if(!FR.list.length){el('small','dim',bd).textContent='Add a friend above to compare coins, playtime and scores!';return}
+  const tb=el('div','ctabs',bd);tb.style.gridTemplateColumns='repeat(4,1fr)';[['season','🏆 Season'],['coins','🪙 Coins'],['play','⏱️ Time'],['game','🎮 Games']].forEach(([k,l])=>{const b=el('button','tab'+(frBoard===k||(k==='game'&&frBoard.startsWith('g:'))?' on':''),tb);b.textContent=l;b.addEventListener('click',()=>{frBoard=k==='game'?'g:'+(frBoard.startsWith('g:')?frBoard.slice(2):ALL[0].id):k;drawBoard()})});
+  let g=null;if(frBoard.startsWith('g:')){g=ALL.find(x=>x.id===frBoard.slice(2))||ALL[0];const sel=el('select','field lbsel',bd);ALL.forEach(x=>{const o=el('option','',sel);o.value=x.id;o.textContent=x.icon+' '+x.name;if(x===g)o.selected=true});sel.addEventListener('change',()=>{frBoard='g:'+sel.value;drawBoard()})}
+  const L=el('div','lblist',bd);L.textContent='Loading…';await writeLB();const sid=seasonId();
+  const people=[{uid:fbUser.uid,name:myName,me:true},...FR.list];
+  const docs=await Promise.all(people.map(p=>fbDb.collection('leaderboard').doc(p.uid).get().then(d=>d.exists?d.data():null).catch(()=>null)));
+  const val=d=>!d?null:g?(d.best||{})[g.id]??null:frBoard==='season'?(d.season===sid||d['ss_'+sid]!=null?d['ss_'+sid]??0:0):d[frBoard]??null;
+  const fmtV=v=>v==null?'—':g?(g.versus?`🔥 ${v}`:g.low?`${fmt(v)}${g.label==='Time'?'s':g.label==='Strokes'?' strokes':' moves'}`:fmt(v)):frBoard==='play'?fmtTime(v):frBoard==='season'?`${fmt(v)} pts`:`${fmt(v)} 🪙`;
+  const rows=people.map((p,i)=>({p,d:docs[i],v:val(docs[i])})).sort((a,b)=>a.v==null?1:b.v==null?-1:g&&g.low?a.v-b.v:b.v-a.v);
+  L.innerHTML='';rows.forEach((r,i)=>{const x=el('div','lbrow'+(r.p.me?' me':''),L);x.innerHTML=`<span class="rk">${r.v==null?'–':i<3?['🥇','🥈','🥉'][i]:'#'+(i+1)}</span><span class="av">${(r.d&&r.d.av)||'🙂'}</span><span class="nm"><b></b><small></small></span><span class="vl">${fmtV(r.v)}</span>`;
+   x.querySelector('b').textContent=(r.p.me?'You':(r.d&&r.d.name)||r.p.name)+(badgeFor(r.p.uid)?' '+badgeFor(r.p.uid):'');x.querySelector('small').textContent=r.d?`Lv ${r.d.lvl||1}${r.d.title?' · '+r.d.title:''}`:'hasn’t played online yet';
+   if(!r.p.me){const rm=el('button','frx',x);rm.textContent='✕';rm.title='Remove friend';rm.addEventListener('click',async()=>{if(!confirm(`Remove ${r.p.name} from your friends?`))return;try{await fbDb.collection('friendships').doc(r.p.id).delete()}catch(e){}draw()})}})}
+ draw();setTimeout(()=>f.focus(),50)}
+window.openFriends=openFriends;
 
 /* ---------- save panel: status, save now, save codes ---------- */
 function encodeSave(){return 'PA1:'+btoa(unescape(encodeURIComponent(JSON.stringify(S))))}
@@ -1779,7 +1850,8 @@ const fmt=n=>Math.round(n).toLocaleString();
 function toast(t){const d=el('div','toast',document.body);d.innerHTML=t;setTimeout(()=>d.remove(),2300)}
 function applyTheme(){const t=THEMES[S.theme]||THEMES.classic,r=document.documentElement.style;['--bg','--panel','--a','--b','--c'].forEach((k,i)=>r.setProperty(k,t.v[i]))}
 function wallet(){document.querySelectorAll('.wal').forEach(e=>e.textContent=fmt(S.coins))}
-function bank(n,quiet){n=Math.round(n);if(n<=0)return 0;let note='';const em=window.coinMult?window.coinMult():1;if(em>1&&!quiet){n*=em;note+=` <small>(🎉 ${em}× event)</small>`}if(S.boosts.doubler>0&&!quiet){n*=2;S.boosts.doubler--;note=' <small>(doubled!)</small>'}
+function bank(n,quiet){n=Math.round(n);if(n<=0)return 0;let note='';const em=window.coinMult?window.coinMult():1;if(em>1&&!quiet){n*=em;note+=` <small>(🎉 ${em}× event)</small>`}
+ try{if(!(cur&&api.mode()==='casino'))seasonAdd(n)}catch(e){seasonAdd(n)}if(S.boosts.doubler>0&&!quiet){n*=2;S.boosts.doubler--;note=' <small>(doubled!)</small>'}
  S.coins+=n;if(!quiet)track('coins',null,n);save();wallet();toast(`+${fmt(n)} 🪙${note}`);sfx('coin');buzz(20);return n}
 const owned=k=>!!S.owned[k],lvlOK=x=>!x.lvl||S.lvl>=x.lvl,unlocked=g=>!g.price||owned('game:'+g.id);
 const modeOK=(g,m)=>m.lvl&&!m.price?S.lvl>=m.lvl:owned(`mode:${g.id}:${m.id}`);
@@ -1904,12 +1976,18 @@ function fmtTime(t){const h=Math.floor(t/3600),mi=Math.floor(t%3600/60);return h
 setInterval(()=>{if(cur&&document.visibilityState==='visible'&&$('#game').classList.contains('on'))S.stats.time=(S.stats.time||0)+5},5000);
 
 /* ---------- packs & collection ---------- */
-const RAR=[{n:'Common',c:'#9aa0c3',dup:10},{n:'Rare',c:'#4ea8ff',dup:30},{n:'Epic',c:'#b46bff',dup:80},{n:'Legendary',c:'#ffc23d',dup:250}];
+const RAR=[{n:'Common',c:'#9aa0c3',dup:10},{n:'Rare',c:'#4ea8ff',dup:30},{n:'Epic',c:'#b46bff',dup:80},{n:'Legendary',c:'#ffc23d',dup:250},{n:'Mythic',c:'#ff4d6d',dup:600},{n:'Exclusive',c:'#00e5ff',dup:0}];
 const CBK={stripes:'repeating-linear-gradient(45deg,#6aa8ff 0 6px,#4f86e0 6px 12px)',
  red:'repeating-linear-gradient(45deg,#ff6b6b 0 6px,#d94848 6px 12px)',dots:'radial-gradient(circle,#c6f26b 22%,transparent 24%) 0 0/10px 10px,#2f8f55',
  waves:'repeating-radial-gradient(circle at 0 100%,#b38cff 0 5px,#7a4fe0 5px 10px)',check:'conic-gradient(#222 25%,#eee 0 50%,#222 0 75%,#eee 0) 0 0/12px 12px',
  galaxy:'radial-gradient(circle at 30% 30%,#fff 1px,transparent 2px) 0 0/13px 13px,radial-gradient(circle at 70% 60%,#ffe6a0 1px,transparent 2px) 0 0/17px 17px,linear-gradient(135deg,#1b1060,#5a1d8c 55%,#0b2a6b)',
- fire:'radial-gradient(ellipse at 50% 110%,#ffe14d,#ff7b1c 40%,#c41d1d 75%,#4a0a0a)',gold:'repeating-linear-gradient(135deg,#fff3b0 0 3px,#ffd34d 3px 9px,#d9a520 9px 12px)'};
+ fire:'radial-gradient(ellipse at 50% 110%,#ffe14d,#ff7b1c 40%,#c41d1d 75%,#4a0a0a)',
+ prism:'conic-gradient(from 0deg,#ff4d6d,#ffd34d,#5fe3a1,#4ea8ff,#b46bff,#ff4d6d)',void:'radial-gradient(circle at 50% 50%,#000 0 30%,#3b0a5c 55%,#ff4d6d 70%,#000 72%)',
+ champ:'radial-gradient(circle at 50% 40%,#fff6c2,#ffd34d 30%,#c98a10 70%,#6b4200)',star:'radial-gradient(circle,#fff 1px,transparent 2px) 0 0/9px 9px,linear-gradient(135deg,#0e3a5c,#2b8fd9,#a0e9ff)',
+ cobweb:'radial-gradient(circle at 50% 50%,#ff8a1c 0 16%,transparent 17%),repeating-conic-gradient(from 0deg at 50% 50%,#151515 0 14deg,#3a3a3a 14deg 16deg)',
+ candycane:'repeating-linear-gradient(45deg,#fff 0 6px,#e2232b 6px 12px)',pastel:'repeating-linear-gradient(0deg,#ffd1e8 0 8px,#d1f0ff 8px 16px,#fff6c2 16px 24px,#d8ffd1 24px 32px)',
+ hearts:'radial-gradient(circle at 30% 40%,#ff4d6d 0 25%,transparent 26%) 0 0/14px 14px,#ffd1dc',surf:'repeating-radial-gradient(circle at 50% 120%,#0ea5e9 0 6px,#38bdf8 6px 12px,#e0f2fe 12px 14px)',
+ autumn:'repeating-linear-gradient(135deg,#c2410c 0 7px,#ea580c 7px 14px,#f59e0b 14px 21px)',gold:'repeating-linear-gradient(135deg,#fff3b0 0 3px,#ffd34d 3px 9px,#d9a520 9px 12px)'};
 const ITEMS=[];
 (()=>{const add=(type,r,list)=>list.forEach(([id,icon,name,x])=>ITEMS.push({id:type+':'+id,type,r,icon,name,x}));
  add('av',0,[['smile','😀','Smiley'],['cat','🐱','Cat'],['dog','🐶','Dog'],['frog','🐸','Frog'],['panda','🐼','Panda'],['fox','🦊','Fox'],['peng','🐧','Penguin'],['turtle','🐢','Turtle']]);
@@ -1925,22 +2003,55 @@ const ITEMS=[];
  add('cb',2,[['galaxy','🂠','Galaxy'],['fire','🂠','Inferno']]);
  add('cb',3,[['gold','🂠','Gold Foil']]);
  add('th',2,[['lava','🌋','Lava'],['arctic','❄️','Arctic']]);
- add('th',3,[['cosmic','🌠','Cosmic'],['rainbow','🌈','Rainbow']])})();
+ add('th',3,[['cosmic','🌠','Cosmic'],['rainbow','🌈','Rainbow']]);
+ add('av',4,[['invader','👾','Space Invader'],['genie','🧞','Genie']]);add('ti',4,[['mythical','🏷️','Mythical'],['untouch','🏷️','Untouchable']]);add('cb',4,[['prism','🂠','Prism'],['void','🂠','The Void']]);add('th',4,[['aurora','🌌','Aurora']]);
+ const ex=(type,list)=>list.forEach(([id,icon,name,rk])=>ITEMS.push({id:type+':'+id,type,r:5,icon,name,ex:rk}));
+ ex('av',[['champ','🏆','Champion',1],['star','🌟','Season Star',3]]);ex('ti',[['champ','🏷️','Season Champion',1],['top3','🏷️','Top 3 Finisher',3]]);ex('cb',[['champ','🂠','Champion Gold',1],['star','🂠','Starlight',3]]);ex('th',[['champ','👑','Champion',1],['star','✨','Starlight',3]]);
+ const sz=(season,type,r,list)=>list.forEach(([id,icon,name])=>ITEMS.push({id:type+':'+id,type,r,icon,name,season}));
+ const SEAS={halloween:{av:[[0,'bat','🦇','Bat'],[1,'ghost','👻','Ghost'],[2,'vampire','🧛','Vampire'],[3,'skull','💀','Skeleton'],[4,'pumpking','🎃','Pumpkin King']],ti:[[1,'trickortreat','Trick or Treater'],[2,'spooky','Spooky']],cb:[[2,'cobweb','Cobwebs']],th:[[3,'spooky','🦇','Spooky']]},
+  christmas:{av:[[0,'snowman','⛄','Snowman'],[1,'reindeer','🦌','Reindeer'],[2,'elf','🧝','Elf'],[3,'xtree','🎄','Christmas Tree'],[4,'santa','🎅','Santa']],ti:[[1,'jolly','Jolly'],[2,'nicelist','On the Nice List']],cb:[[2,'candycane','Candy Cane']],th:[[3,'winter','❄️','Winter Wonderland']]},
+  easter:{av:[[0,'chick','🐣','Chick'],[1,'bunny','🐰','Bunny'],[2,'tulip','🌷','Tulip'],[3,'nest','🪺','Egg Nest'],[4,'butterfly','🦋','Butterfly Queen']],ti:[[1,'egghunter','Egg Hunter'],[2,'springfling','Spring Fling']],cb:[[2,'pastel','Pastel Eggs']],th:[[3,'spring','🌷','Springtime']]},
+  valentine:{av:[[0,'letter','💌','Love Letter'],[1,'teddy','🧸','Teddy Bear'],[2,'cupid','💘','Cupid'],[3,'rose','🌹','Rose'],[4,'heartthrob','💖','Heartthrob']],ti:[[1,'sweetheart','Sweetheart'],[2,'heartbreaker','Heartbreaker']],cb:[[2,'hearts','Hearts']],th:[[3,'love','💝','Lovebirds']]},
+  summer:{av:[[0,'crab','🦀','Crab'],[1,'dolphin','🐬','Dolphin'],[2,'shark','🦈','Shark'],[3,'surfer','🏄','Surfer'],[4,'sunny','🌞','Sunshine']],ti:[[1,'beachbum','Beach Bum'],[2,'heatwave','Heatwave']],cb:[[2,'surf','Surf’s Up']],th:[[3,'beach','🏖️','Beach Day']]},
+  harvest:{av:[[0,'corn','🌽','Corn'],[1,'pie','🥧','Pumpkin Pie'],[2,'leaf','🍂','Falling Leaf'],[3,'turkey','🦃','Turkey'],[4,'maple','🍁','Maple Spirit']],ti:[[1,'gobbler','Gobbler'],[2,'grateful','Grateful']],cb:[[2,'autumn','Autumn Leaves']],th:[[3,'harvest','🍁','Harvest']]}};
+ Object.entries(SEAS).forEach(([se,d])=>{d.av.forEach(([r,id,ic,n])=>sz(se,'av',r,[[id,ic,n]]));d.ti.forEach(([r,id,n])=>sz(se,'ti',r,[[id,'🏷️',n]]));d.cb.forEach(([r,id,n])=>sz(se,'cb',r,[[id,'🂠',n]]));d.th.forEach(([r,id,ic,n])=>sz(se,'th',r,[[id,ic,n]]))})})();
 Object.assign(THEMES,{lava:{name:'Lava',icon:'🌋',pack:1,v:['#1a0806','#2e120c','#ff9d2e','#ffd166','#ff3d3d']},
  arctic:{name:'Arctic',icon:'❄️',pack:1,v:['#0b1a24','#16303f','#bdf3ff','#7fd1ff','#ff8fb1']},
  cosmic:{name:'Cosmic',icon:'🌠',pack:1,v:['#0a0624','#1c1450','#ffd86b','#8be9ff','#ff6bd6']},
- rainbow:{name:'Rainbow',icon:'🌈',pack:1,v:['#141226','#24213f','#ffe14d','#5cf2a0','#ff5fa2']}});
-const PACKS={basic:{name:'Basic Pack',icon:'🎁',price:120,n:3,odds:[70,24,5.5,.5],min:0,col:['#4ea8ff','#2b5fd9']},
- super:{name:'Super Pack',icon:'💠',price:300,n:4,odds:[55,32,11,2],min:1,col:['#b46bff','#6a2bd9']},
- mega:{name:'Mega Pack',icon:'🌟',price:700,n:5,odds:[35,40,20,5],min:2,col:['#ffc23d','#e0661b']}};
+ rainbow:{name:'Rainbow',icon:'🌈',pack:1,v:['#141226','#24213f','#ffe14d','#5cf2a0','#ff5fa2']},
+ aurora:{name:'Aurora',icon:'🌌',pack:1,v:['#071a1f','#0f2e35','#5fffd0','#b28bff','#ff7ad9']},champ:{name:'Champion',icon:'👑',pack:1,v:['#1a1300','#2e2408','#ffd34d','#fff3b0','#ff9d2e']},
+ star:{name:'Starlight',icon:'✨',pack:1,v:['#06182a','#0f2c47','#a0e9ff','#ffffff','#ffd34d']},spooky:{name:'Spooky',icon:'🦇',pack:1,v:['#120a1a','#24142e','#ff8a1c','#b46bff','#5fe3a1']},
+ winter:{name:'Winter Wonderland',icon:'❄️',pack:1,v:['#0b1724','#152a3f','#ffffff','#5fe3a1','#ff4d5e']},spring:{name:'Springtime',icon:'🌷',pack:1,v:['#1a1726','#2a2540','#ffd1e8','#a6f0c6','#fff3a0']},
+ love:{name:'Lovebirds',icon:'💝',pack:1,v:['#1f0a14','#33121f','#ff4d6d','#ffb3c6','#ffd34d']},beach:{name:'Beach Day',icon:'🏖️',pack:1,v:['#06222e','#0d3a4a','#ffd166','#38bdf8','#ff8a65']},
+ harvest:{name:'Harvest',icon:'🍁',pack:1,v:['#1c0f06','#2e1a0c','#f59e0b','#ea580c','#fde68a']}});
+const PACKS={basic:{name:'Basic Pack',icon:'🎁',price:120,n:3,odds:[70,24,5.3,.6,.1],min:0,col:['#4ea8ff','#2b5fd9']},
+ super:{name:'Super Pack',icon:'💠',price:300,n:4,odds:[55,32,10.5,2,.5],min:1,col:['#b46bff','#6a2bd9']},
+ mega:{name:'Mega Pack',icon:'🌟',price:700,n:5,odds:[35,40,19.5,4,1.5],min:2,col:['#ffc23d','#e0661b']},
+ halloween:{name:'Halloween Pack',icon:'🎃',price:400,n:4,odds:[42,34,16,6,2],min:1,col:['#ff8a1c','#5a1d8c'],season:'halloween',when:'October 1 – November 2'},
+ harvest:{name:'Harvest Pack',icon:'🦃',price:400,n:4,odds:[42,34,16,6,2],min:1,col:['#f59e0b','#9a3412'],season:'harvest',when:'November 3 – 30'},
+ christmas:{name:'Christmas Pack',icon:'🎄',price:400,n:4,odds:[42,34,16,6,2],min:1,col:['#e2232b','#137a3b'],season:'christmas',when:'December 1 – January 6'},
+ valentine:{name:'Valentine’s Pack',icon:'💝',price:400,n:4,odds:[42,34,16,6,2],min:1,col:['#ff4d6d','#9d174d'],season:'valentine',when:'February 1 – 15'},
+ easter:{name:'Easter Pack',icon:'🐣',price:400,n:4,odds:[42,34,16,6,2],min:1,col:['#f9a8d4','#7dd3fc'],season:'easter',when:'2 weeks before Easter – 1 week after'},
+ summer:{name:'Summer Pack',icon:'☀️',price:400,n:4,odds:[42,34,16,6,2],min:1,col:['#38bdf8','#f59e0b'],season:'summer',when:'June 15 – August 31'}};
+const SEAS_INFO={halloween:['🎃','Halloween'],harvest:['🦃','Harvest'],christmas:['🎄','Christmas'],valentine:['💝','Valentine’s'],easter:['🐣','Easter'],summer:['☀️','Summer']};
+function easterDate(y){const a=y%19,b=Math.floor(y/100),c=y%100,d=Math.floor(b/4),e=b%4,f=Math.floor((b+8)/25),g=Math.floor((b-f+1)/3),h=(19*a+b-d-g+15)%30,i=Math.floor(c/4),k=c%4,l=(32+2*e+2*i-h-k)%7,m=Math.floor((a+11*h+22*l)/451),mo=Math.floor((h+l-7*m+114)/31),da=((h+l-7*m+114)%31)+1;return new Date(y,mo-1,da)}
+function seasonWindow(se,now=new Date()){const y=now.getFullYear(),D=(yy,m,d,end)=>new Date(yy,m,d,end?23:0,end?59:0,end?59:0);
+ const W={halloween:[D(y,9,1),D(y,10,2,1)],harvest:[D(y,10,3),D(y,10,30,1)],valentine:[D(y,1,1),D(y,1,15,1)],summer:[D(y,5,15),D(y,7,31,1)],
+  christmas:now.getMonth()===0?[D(y-1,11,1),D(y,0,6,1)]:[D(y,11,1),D(y+1,0,6,1)],easter:(()=>{const e=easterDate(y);return[new Date(e.getTime()-14*864e5),new Date(e.getTime()+7*864e5+86399e3)]})()}[se];return W}
+function packOnSale(k,now=new Date()){const P=PACKS[k];if(!P.season)return true;const w=seasonWindow(P.season,now);return now>=w[0]&&now<=w[1]}
+function daysLeft(k){const w=seasonWindow(PACKS[k].season);return Math.max(1,Math.ceil((w[1]-new Date())/864e5))}
+function nextSeasonal(){const now=new Date();let best=null;Object.keys(PACKS).filter(k=>PACKS[k].season).forEach(k=>[now,new Date(now.getFullYear()+1,1,1)].forEach(ref=>{const w=seasonWindow(PACKS[k].season,ref);if(w[0]>now&&(!best||w[0]<best[1]))best=[k,w[0]]}));return best}
+const onSale=()=>Object.keys(PACKS).filter(k=>PACKS[k].season&&packOnSale(k));
+const colItems=()=>ITEMS.filter(i=>!i.ex);
 const TYPES={av:['🙂','Avatars','Shows next to your level'],ti:['🏷️','Titles','Shows under Pocket Arcade'],cb:['🂠','Card backs','Blackjack, Hold’em & Solitaire'],th:['🎨','Themes','Pack-only arcade colors']};
 const itemById=id=>ITEMS.find(i=>i.id===id);
-function rollRar(odds){let r=Math.random()*100;for(let i=0;i<4;i++){if(r<odds[i])return i;r-=odds[i]}return 0}
+function rollRar(odds){let r=Math.random()*100;for(let i=0;i<odds.length;i++){if(r<odds[i])return i;r-=odds[i]}return 0}
+const packPool=(k,r)=>{const se=PACKS[k].season;let pool=ITEMS.filter(x=>x.r===r&&!x.ex&&(se?x.season===se:!x.season));while(!pool.length&&r>0){r--;pool=ITEMS.filter(x=>x.r===r&&!x.ex&&(se?x.season===se:!x.season))}return pool}
 function openPackRoll(k){const P=PACKS[k],out=[];for(let i=0;i<P.n;i++){let r=rollRar(P.odds);if(i===P.n-1&&P.min&&out.every(o=>o.r<P.min))r=Math.max(r,P.min);
-  const pool=ITEMS.filter(x=>x.r===r);out.push(pool[Math.random()*pool.length|0])}
+  const pool=packPool(k,r);out.push(pool[Math.random()*pool.length|0])}
  return out.map(it=>{const had=(S.col[it.id]||0)>0;S.col[it.id]=(S.col[it.id]||0)+1;let dup=0;if(had){dup=RAR[it.r].dup;S.coins+=dup}
   if(!had&&it.type==='th')S.owned['theme:'+it.id.slice(3)]=true;return{it,dup,isNew:!had}})}
-function colCheck(){Object.keys(TYPES).forEach(t=>{if(S.colBonus[t])return;if(ITEMS.filter(i=>i.type===t).every(i=>S.col[i.id])){S.colBonus[t]=true;S.coins+=300;setTimeout(()=>{toast(`🏅 Full set: ${TYPES[t][1]}! +300 🪙`);sfx('level')},900)}})}
+function colCheck(){Object.keys(TYPES).forEach(t=>{if(S.colBonus[t])return;if(ITEMS.filter(i=>i.type===t&&!i.ex&&!i.season).every(i=>S.col[i.id])){S.colBonus[t]=true;S.coins+=300;setTimeout(()=>{toast(`🏅 Full set: ${TYPES[t][1]}! +300 🪙`);sfx('level')},900)}})}
 function givePack(k,n=1,why){S.packs[k]=(S.packs[k]||0)+n;save();renderPackBar();if(why)setTimeout(()=>toast(`${PACKS[k].icon} ${why}: free ${PACKS[k].name}!`),1500)}
 function packTotal(){return Object.values(S.packs).reduce((a,b)=>a+(b||0),0)}
 function itemArt(it,big){if(it.type==='cb')return `<span class="cbk" style="background:${CBK[it.id.slice(3)]}"></span>`;
@@ -1948,8 +2059,8 @@ function itemArt(it,big){if(it.type==='cb')return `<span class="cbk" style="back
  if(it.type==='ti')return `<span class="tiart">“${it.name}”</span>`;return `<span class="avart">${it.icon}</span>`}
 function applyLook(){const r=document.documentElement.style;const b=S.back&&CBK[S.back.slice(3)];if(b)r.setProperty('--cbk',b);else r.removeProperty('--cbk');
  const a=$('#avatar');if(a)a.textContent=S.av?itemById(S.av).icon:'🙂';const t=$('#ptitle');if(t){const it=S.title&&itemById(S.title),nm=window.myName,bits=[];if(nm)bits.push('👤 '+nm+(window.myBadge?' '+window.myBadge:''));if(it)bits.push('🏷️ '+it.name);t.textContent=bits.join('  ·  ');t.style.display=bits.length?'':'none'}}
-function renderPackBar(){const b=$('#packbar');if(!b)return;const n=packTotal(),got=ITEMS.filter(i=>S.col[i.id]).length;
- b.innerHTML=`<div class="pbx"><b>🎁 Packs</b><small>${n?`You have <b>${n}</b> to open!`:'Collect avatars, titles, card backs & themes'} · 🎴 ${got}/${ITEMS.length}</small></div>`;
+function renderPackBar(){const b=$('#packbar');if(!b)return;const n=packTotal(),CI=colItems(),got=CI.filter(i=>S.col[i.id]).length,sale=onSale()[0];
+ b.innerHTML=`<div class="pbx"><b>🎁 Packs</b><small>${n?`You have <b>${n}</b> to open!`:sale?`<b>${PACKS[sale].icon} ${PACKS[sale].name}</b> is here for ${daysLeft(sale)} more day${daysLeft(sale)>1?'s':''}!`:'Collect avatars, titles, card backs & themes'} · 🎴 ${got}/${CI.length}</small></div>`;
  const o=el('button','btn'+(n?' alt':''),b);o.textContent=n?`Open (${n})`:'Get packs';o.addEventListener('click',()=>n?openPackPicker():openShop('packs'));
  const c=el('button','btn ghost',b);c.textContent='🎴';c.title='Collection';c.addEventListener('click',()=>openCollection())}
 function openPackPicker(){const ks=Object.keys(PACKS).filter(k=>S.packs[k]>0);if(ks.length===1)return packOpen(ks[0]);
@@ -1965,24 +2076,43 @@ function packOpen(k){if(!(S.packs[k]>0))return;closeModal();const P=PACKS[k];con
    else if(packTotal()){const a=el('button','btn alt',btns);a.textContent=`Open more (${packTotal()})`;a.addEventListener('click',()=>{ov.remove();openPackPicker()})}
    const c=el('button','btn',btns);c.textContent='🎴 Collection';c.addEventListener('click',()=>{ov.remove();openCollection()});
    const d=el('button','btn ghost',btns);d.textContent='Done';d.addEventListener('click',()=>ov.remove())};
-  res.forEach((r,i)=>{const c=el('div','pcd',cards);c.style.setProperty('--rc',RAR[r.it.r].c);c.style.animationDelay=i*.08+'s';
-   c.innerHTML=`<div class="pcf back"><span>?</span></div><div class="pcf front">${r.isNew?'<em class="nw">NEW!</em>':''}${itemArt(r.it,1)}<b>${r.it.name}</b><small>${RAR[r.it.r].n} · ${TYPES[r.it.type][1].replace(/s$/,'')}</small>${r.dup?`<em class="dp">Duplicate +${r.dup} 🪙</em>`:''}</div>`;
-   const flip=()=>{if(c.classList.contains('on'))return;c.classList.add('on');sfx(r.it.r>=2?'win':'tap');buzz(r.it.r>=2?50:10);if(--left===0)setTimeout(finish,300)};c.addEventListener('click',flip)});
+  res.forEach((r,i)=>{const c=el('div','pcd rar'+r.it.r,cards);c.style.setProperty('--rc',RAR[r.it.r].c);c.style.animationDelay=i*.08+'s';
+   c.innerHTML=`<div class="pcf pback"><span>?</span></div><div class="pcf pfront">${r.isNew?'<em class="nw">NEW!</em>':''}${itemArt(r.it,1)}<b>${r.it.name}</b><small>${RAR[r.it.r].n} · ${TYPES[r.it.type][1].replace(/s$/,'')}${r.it.season?' · '+SEAS_INFO[r.it.season][0]:''}</small>${r.dup?`<em class="dp">Duplicate +${r.dup} 🪙</em>`:''}</div>`;
+   const flip=()=>{if(c.classList.contains('on'))return;c.classList.add('on');sfx(r.it.r>=2?'win':'tap');buzz(r.it.r>=4?[60,40,60,40,120]:r.it.r>=2?50:10);if(r.it.r>=4){sfx('level');const f=el('div','mythflash',ov);f.textContent='✨ MYTHIC! ✨';setTimeout(()=>f.remove(),1600)}if(--left===0)setTimeout(finish,300)};c.addEventListener('click',flip)});
   const all=el('button','btn ghost',btns);all.textContent='Flip all';all.addEventListener('click',()=>cards.querySelectorAll('.pcd').forEach((c,i)=>setTimeout(()=>c.click(),i*220)))}}
 let colTab='av';
-function openCollection(tab){if(tab)colTab=tab;const m=modal('🎴 Collection');const got=ITEMS.filter(i=>S.col[i.id]).length;
- el('p','',m).innerHTML=`<b>${got}</b> of ${ITEMS.length} collected. Duplicates turn into coins. Finish a whole set for +300 🪙.`;
- const tb=el('div','ctabs',m);Object.entries(TYPES).forEach(([t,[ic,nm]])=>{const all=ITEMS.filter(i=>i.type===t),h=all.filter(i=>S.col[i.id]).length;const b=el('button','tab'+(t===colTab?' on':''),tb);b.innerHTML=`${ic} ${nm}<br><small>${h}/${all.length}${S.colBonus[t]?' ✅':''}</small>`;b.addEventListener('click',()=>openCollection(t))});
+function openCollection(tab){if(tab)colTab=tab;const m=modal('🎴 Collection');const CI=colItems(),got=CI.filter(i=>S.col[i.id]).length;
+ el('p','',m).innerHTML=`<b>${got}</b> of ${CI.length} collected. Duplicates turn into coins. Finish a whole set of the regular pack items for +300 🪙.`;
+ const tb=el('div','ctabs',m);Object.entries(TYPES).forEach(([t,[ic,nm]])=>{const all=ITEMS.filter(i=>i.type===t&&!i.ex),h=all.filter(i=>S.col[i.id]).length;const b=el('button','tab'+(t===colTab?' on':''),tb);b.innerHTML=`${ic} ${nm}<br><small>${h}/${all.length}${S.colBonus[t]?' ✅':''}</small>`;b.addEventListener('click',()=>openCollection(t))});
  el('small','dim',m).textContent=TYPES[colTab][2];
  const g=el('div','cgrid',m),slot={av:'av',ti:'title',cb:'back'}[colTab];
  if(colTab!=='th'){const on=!S[slot];const d=el('button','citem got'+(on?' eq':''),g);d.innerHTML=`${colTab==='av'?'<span class="avart">🙂</span>':colTab==='cb'?`<span class="cbk" style="background:${CBK.stripes}"></span>`:'<span class="tiart">None</span>'}<b>Default</b><small>${on?'Equipped':'Tap to use'}</small>`;
   d.addEventListener('click',()=>{S[slot]=null;save();applyLook();openCollection()})}
- ITEMS.filter(i=>i.type===colTab).forEach(it=>{const n=S.col[it.id]||0,d=el('button','citem'+(n?' got':''),g);d.style.setProperty('--rc',RAR[it.r].c);
+ const show=it=>{const n=S.col[it.id]||0,d=el('button','citem rar'+it.r+(n?' got':''),g);d.style.setProperty('--rc',RAR[it.r].c);
   const eq=colTab==='th'?S.theme===it.id.slice(3):S[slot]===it.id;if(eq)d.classList.add('eq');
-  d.innerHTML=n?`${itemArt(it)}<b>${it.name}</b><small>${eq?'Equipped':RAR[it.r].n+(n>1?` ×${n}`:'')}</small>`:`<span class="avart q">?</span><b>???</b><small>${RAR[it.r].n}</small>`;
-  if(n)d.addEventListener('click',()=>{if(colTab==='th'){S.theme=eq?'classic':it.id.slice(3);applyTheme()}else S[slot]=eq?null:it.id;save();applyLook();sfx('tap');openCollection()})});
- const od=el('details','dlhelp',m);od.innerHTML='<summary>Pack odds</summary>'+Object.values(PACKS).map(P=>`<p><b>${P.icon} ${P.name}</b> (${P.n} cards): ${P.odds.map((o,i)=>`${RAR[i].n} ${o}%`).join(' · ')}${P.min?` — at least one ${RAR[P.min].n}+`:''}</p>`).join('')+'<p class="dim">Packs only cost coins you win in the arcade — never real money.</p>'}
+  const hint=it.ex?(it.ex===1?'🏆 #1 in a season':'🏆 Top 3 in a season'):it.season?`${SEAS_INFO[it.season][0]} ${SEAS_INFO[it.season][1]} pack`:RAR[it.r].n;
+  d.innerHTML=n?`${itemArt(it)}<b>${it.name}</b><small>${eq?'Equipped':RAR[it.r].n+(n>1?` ×${n}`:'')}</small>`:`<span class="avart q">?</span><b>???</b><small>${hint}</small>`;
+  if(n)d.addEventListener('click',()=>{if(colTab==='th'){S.theme=eq?'classic':it.id.slice(3);applyTheme()}else S[slot]=eq?null:it.id;save();applyLook();sfx('tap');openCollection()})};
+ const head=t=>{el('div','cgh',g).textContent=t};
+ ITEMS.filter(i=>i.type===colTab&&!i.ex&&!i.season).sort((a,b)=>a.r-b.r).forEach(show);
+ Object.keys(SEAS_INFO).forEach(se=>{const L=ITEMS.filter(i=>i.type===colTab&&i.season===se);if(!L.length)return;head(`${SEAS_INFO[se][0]} ${SEAS_INFO[se][1]}${onSale().includes(se)?' · on sale now!':''}`);L.forEach(show)});
+ head('🏆 Exclusive — season rewards');ITEMS.filter(i=>i.type===colTab&&i.ex).forEach(show);
+ const od=el('details','dlhelp',m);od.innerHTML='<summary>Pack odds</summary>'+Object.entries(PACKS).map(([k,P])=>`<p><b>${P.icon} ${P.name}</b> (${P.n} cards${P.season?`, ${P.when}`:''}): ${P.odds.map((o,i)=>`${RAR[i].n} ${o}%`).join(' · ')}${P.min?` — at least one ${RAR[P.min].n}+`:''}</p>`).join('')+'<p class="dim">Exclusive items can’t come from packs — only the top 3 players of each monthly season get them. Packs only cost coins you win in the arcade — never real money.</p>'}
 
+/* ---------- monthly seasons ---------- */
+const SEASON0=[2026,10];
+const seasonId=(d=new Date())=>`${d.getUTCFullYear()}_${String(d.getUTCMonth()+1).padStart(2,'0')}`;
+const prevSeasonId=(d=new Date())=>seasonId(new Date(Date.UTC(d.getUTCFullYear(),d.getUTCMonth()-1,15)));
+const seasonNum=id=>{const[y,m]=id.split('_').map(Number);return (y-SEASON0[0])*12+(m-1-SEASON0[1])+1};
+const seasonMonth=id=>{const[y,m]=id.split('_').map(Number);return new Date(Date.UTC(y,m-1,15)).toLocaleDateString(undefined,{month:'long',timeZone:'UTC'})};
+const seasonEnds=()=>{const n=new Date();return new Date(Date.UTC(n.getUTCFullYear(),n.getUTCMonth()+1,1))};
+function curSeason(){const id=seasonId();if(!S.season.id||S.season.id<id)S.season={id,pts:0};return S.season}
+function seasonAdd(n){if(seasonNum(seasonId())<1)return;curSeason().pts+=Math.round(n)}
+function grantExclusive(rank,sid){const got=ITEMS.filter(i=>i.ex&&rank<=i.ex);got.forEach(i=>{S.col[i.id]=(S.col[i.id]||0)+1;if(i.type==='th')S.owned['theme:'+i.id.slice(3)]=true});
+ S.sClaim[sid]=rank;save();renderMenu();sfx('level');buzz([80,60,80,60,200]);
+ const m=modal(`🏆 Season ${seasonNum(sid)} rewards!`);el('p','',m).innerHTML=`You finished <b>#${rank}</b> in Season ${seasonNum(sid)} (${seasonMonth(sid)})! Here are your <b>Exclusive</b> rewards:`;
+ const g=el('div','cgrid',m);got.forEach(it=>{const d=el('div','citem got rar5',g);d.style.setProperty('--rc',RAR[5].c);d.innerHTML=`${itemArt(it)}<b>${it.name}</b><small>Exclusive</small>`});
+ const b=el('button','btn alt',m);b.textContent='🎴 Equip them';b.addEventListener('click',()=>openCollection('av'))}
 /* ---------- settings & modal helpers ---------- */
 function modal(title){closeModal();const m=el('div','modal',document.body),box=el('div','mbox',m);el('h3','',box).textContent=title;
  const cl=el('button','mclose',box);cl.textContent='✕';cl.addEventListener('click',closeModal);m.addEventListener('click',e=>{if(e.target===m)closeModal()});return box}
@@ -2096,7 +2226,8 @@ function renderShop(){wallet();const T=[['packs','🎁 Packs'],['games','🎮 Ga
  if(shopTab==='boosts'){intro.textContent='One-time power-ups. They kick in automatically when they apply.';
   Object.entries(BOOSTS).forEach(([k,b])=>{const lv=lvlOK(b);item(b.icon,b.name,`${b.desc}<br><span class="have">You have ${S.boosts[k]}</span>`,lv?`${b.price} 🪙`:lockL(b),lv?'':'own',buy(b.price,()=>{S.boosts[k]+=b.qty;toast(`${b.icon} +${b.qty} ${b.name}`)}),!lv||S.coins<b.price)})}
  if(shopTab==='packs'){intro.textContent='Each pack has random collectibles: avatars, titles, card backs and pack-only themes. Duplicates turn into coins.';
-  Object.entries(PACKS).forEach(([k,P])=>item(P.icon,P.name,`${P.n} cards${P.min?` · at least one ${RAR[P.min].n}+`:''}<br><span class="have">You have ${S.packs[k]||0} unopened</span>`,`${P.price} 🪙`,'',()=>{if(S.coins<P.price)return toast('Not enough coins yet');S.coins-=P.price;S.packs[k]=(S.packs[k]||0)+1;save();wallet();sfx('coin');buzz(25);packOpen(k);renderShop()},S.coins<P.price));
+  const nx=nextSeasonal();Object.entries(PACKS).forEach(([k,P])=>{if(P.season&&!packOnSale(k))return;item(P.icon,P.name,`${P.season?`<b class="seasontag">⏳ Limited time · ${daysLeft(k)} day${daysLeft(k)>1?'s':''} left</b><br>${SEAS_INFO[P.season][1]} items only · `:''}${P.n} cards${P.min?` · at least one ${RAR[P.min].n}+`:''} · Mythic chance ${P.odds[4]}%<br><span class="have">You have ${S.packs[k]||0} unopened</span>`,`${P.price} 🪙`,'',()=>{if(S.coins<P.price)return toast('Not enough coins yet');S.coins-=P.price;S.packs[k]=(S.packs[k]||0)+1;save();wallet();sfx('coin');buzz(25);packOpen(k);renderShop()},S.coins<P.price)});
+  if(nx)el('p','shopnote',L).innerHTML=`Next limited pack: <b>${PACKS[nx[0]].icon} ${PACKS[nx[0]].name}</b> on ${nx[1].toLocaleDateString(undefined,{month:'long',day:'numeric'})}.`;
   if(packTotal()){const b=el('button','btn alt',L);b.textContent=`🎁 Open my packs (${packTotal()})`;b.addEventListener('click',openPackPicker)}
   const c=el('button','btn ghost',L);c.textContent='🎴 My collection';c.addEventListener('click',()=>openCollection())}
  if(shopTab==='themes'){intro.textContent='Change the colors of the whole arcade. Some themes only come from packs.';
@@ -2122,7 +2253,7 @@ let rzT;addEventListener('resize',()=>{clearTimeout(rzT);rzT=setTimeout(()=>{if(
  if(!seen)setTimeout(()=>{if(!$('#menu').classList.contains('on'))return;pop.style.display='';requestAnimationFrame(()=>pop.classList.add('on'))},1200);
  if('IntersectionObserver' in window)new IntersectionObserver(es=>{if(es[0].isIntersecting&&pop.style.display!=='none')dismiss()},{threshold:.4}).observe(ga)})();
 if(!/github\.io$/.test(location.hostname))document.querySelectorAll('#getapp a.dl').forEach(a=>{a.target='_blank';a.rel='noopener'});
-if(window.FB_ON)$('#lbbtn').style.display='';$('#lbbtn').addEventListener('click',()=>window.openBoards&&openBoards());$('#admbtn').addEventListener('click',()=>window.openAdmin&&openAdmin());
+if(window.FB_ON)$('#lbbtn').style.display='';$('#lbbtn').addEventListener('click',()=>window.openBoards&&openBoards());$('#admbtn').addEventListener('click',()=>window.openAdmin&&openAdmin());$('#frbtn').addEventListener('click',()=>window.openFriends&&openFriends());
 applyTheme();if(!S.mis||S.mis.day!==today())genMissions();renderMenu();initCloud();
 </script>
 
