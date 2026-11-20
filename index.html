@@ -706,8 +706,8 @@ function mm(b,pl,depth){const w=win(b);if(w)return b[w[0]]==='O'?10-depth:depth-
  let best=pl==='O'?-99:99;for(let i=0;i<9;i++)if(!b[i]){b[i]=pl;const s=mm(b,pl==='O'?'X':'O',depth+1);b[i]='';best=pl==='O'?Math.max(best,s):Math.min(best,s)}return best}
 function finds(pl){for(let i=0;i<9;i++)if(!bd[i]){bd[i]=pl;const w=win(bd);bd[i]='';if(w)return i}return -1}
 function cpuPick(){const empty=[];bd.forEach((v,i)=>{if(!v)empty.push(i)});
- let i=finds('O');if(i>=0)return i;i=finds('X');const sloppy=Math.max(.08,.3-A.level()*.04);
- if(i>=0&&Math.random()>sloppy*.5)return i;if(Math.random()<sloppy)return empty[Math.random()*empty.length|0];
+ const sloppy=clamp(.55-A.level()*.05,.18,.7);let i=finds('O');if(i>=0&&Math.random()>sloppy*.35)return i;i=finds('X');
+ if(i>=0&&Math.random()>sloppy*.85)return i;if(Math.random()<sloppy)return empty[Math.random()*empty.length|0];
  let best=-99,mv=empty[0];for(const j of shuffle(empty.slice())){bd[j]='O';const s=mm(bd,'X',1);bd[j]='';if(s>best){best=s;mv=j}}return mv}
 function put(i,pl){bd[i]=pl;cells[i].innerHTML=`<span>${pl==='X'?'✕':'◯'}</span>`;cells[i].className=pl==='X'?'x':'o';buzz(8)}
 function check(){const w=win(bd);if(w){alive=false;w.forEach(i=>cells[i].classList.add('w'));const me=bd[w[0]]==='X';
@@ -731,12 +731,14 @@ function lineAt(r,c,pl){for(const[dr,dc]of[[0,1],[1,0],[1,1],[1,-1]]){const run=
   if(run.length>=4)return run}return null}
 function winsAt(c,pl){const r=rowFor(c);if(r<0)return false;bd[r][c]=pl;const w=lineAt(r,c,pl);bd[r][c]=0;return!!w}
 function cpuPick(){const cols=[];for(let c=0;c<C;c++)if(rowFor(c)>=0)cols.push(c);
- for(const c of cols)if(winsAt(c,2))return c;
- const sloppy=Math.max(.04,.18-A.level()*.02);
- for(const c of cols)if(winsAt(c,1)&&Math.random()>sloppy)return c;
+ const sloppy=clamp(.5-A.level()*.05,.15,.65);
+ for(const c of cols)if(winsAt(c,2)&&Math.random()>sloppy*.3)return c;
+ for(const c of cols)if(winsAt(c,1)&&Math.random()>sloppy*.8)return c;
+ if(Math.random()<sloppy*.7)return cols[Math.random()*cols.length|0];
+ const careful=Math.random()>sloppy;
  let best=-1e9,pick=cols[0];
  for(const c of cols){const r=rowFor(c);let s=(3-Math.abs(c-3))*3+Math.random()*3;
-  bd[r][c]=2;for(let k=0;k<C;k++)if(winsAt(k,1))s-=200;
+  bd[r][c]=2;if(careful)for(let k=0;k<C;k++)if(winsAt(k,1))s-=200;
   for(const[dr,dc]of[[0,1],[1,0],[1,1],[1,-1]]){let n=0;for(const sg of[1,-1]){let a=r+dr*sg,b=c+dc*sg;while(a>=0&&a<R&&b>=0&&b<C&&bd[a][b]===2){n++;a+=dr*sg;b+=dc*sg}}s+=n*n*2}
   bd[r][c]=1;if(lineAt(r,c,1))s+=0;let threat=0;for(const[dr,dc]of[[0,1],[1,1],[1,-1]]){let n=0;for(const sg of[1,-1]){let a=r+dr*sg,b=c+dc*sg;while(a>=0&&a<R&&b>=0&&b<C&&bd[a][b]===1){n++;a+=dr*sg;b+=dc*sg}}threat=Math.max(threat,n)}s+=threat*3;
   bd[r][c]=0;if(s>best){best=s;pick=c}}
@@ -1308,9 +1310,10 @@ function adj(k){const t=k[0],[r,c]=k.slice(1).split('_').map(Number),o=[];if(t==
 function allLines(){const o=[];for(let r=0;r<=N;r++)for(let c=0;c<N;c++)o.push(L('h',r,c));for(let r=0;r<N;r++)for(let c=0;c<=N;c++)o.push(L('v',r,c));return o}
 function free(){return allLines().filter(k=>!lines.has(k))}
 function greedy(set){const s=new Set(set);let n=0,go=true;while(go){go=false;for(let r=0;r<N;r++)for(let c=0;c<N;c++)if(cnt(r,c,s)===3){sidesOf(r,c).forEach(k=>s.add(k));n++;go=true}}return n}
-function cpuPick(){const f=free(),l=clamp(A.level(),-3,6),dumb=l<0?.45:l<2?.15:0;
- for(const k of f)if(adj(k).some(([r,c])=>cnt(r,c,lines)===3)&&Math.random()>dumb*.5)return k;
+function cpuPick(){const f=free(),l=clamp(A.level(),-3,8),dumb=clamp(.5-l*.05,.14,.65);
+ for(const k of f)if(adj(k).some(([r,c])=>cnt(r,c,lines)===3)&&Math.random()>dumb*.6)return k;
  const safe=f.filter(k=>adj(k).every(([r,c])=>cnt(r,c,lines)<2));
+ if(safe.length&&Math.random()<dumb*.35)return f[Math.random()*f.length|0];
  if(safe.length)return safe[Math.random()*safe.length|0];
  if(Math.random()<dumb)return f[Math.random()*f.length|0];
  let best=1e9,pick=f[0];for(const k of f){const s=new Set(lines);s.add(k);const g=greedy(s)+Math.random()*.1;if(g<best){best=g;pick=k}}return pick}
@@ -1459,11 +1462,11 @@ function resolve(c,who,col){disc.push(c);color=col;buzz(10);const hand=who?cpu:m
 function endTurn(who,skip){turn=skip?who:1-who;drew=false;render();if(turn===1&&alive)timer=setTimeout(cpuTurn,850)}
 function cpuTurn(){if(!alive)return;const l=clamp(A.level(),-3,6),play=cpu.map((c,i)=>[c,i]).filter(([c])=>ok(c));
  if(!play.length){const c=take();cpu.push(c);say('CPU draws a card');render();if(ok(c)){timer=setTimeout(()=>cpuPlay(cpu.length-1),700)}else timer=setTimeout(()=>endTurn(1),600);return}
- let pick;if(l<0&&Math.random()<.5)pick=play[Math.random()*play.length|0];
+ const sloppy=clamp(.6-l*.06,.2,.75);let pick;if(Math.random()<sloppy)pick=play[Math.random()*play.length|0];
  else{const pr=([c])=>{let s=0;const act='S R +2'.includes(c.v);if(c.c===4)s-=me.length<=2?-30:20;if(act)s+=me.length<=3?25:5;if(c.c===color)s+=8;if(c.v==='+4')s+=me.length<=2?10:-10;return s+Math.random()*3};pick=play.sort((a,b)=>pr(b)-pr(a))[0]}
  cpuPlay(pick[1])}
-function cpuPlay(i){if(!alive)return;const c=cpu.splice(i,1)[0];let col=c.c;if(c.c===4){const cnt=[0,0,0,0];cpu.forEach(x=>{if(x.c<4)cnt[x.c]++});col=cnt.indexOf(Math.max(...cnt));if(Math.max(...cnt)===0)col=Math.random()*4|0}resolve(c,1,col)}
-return{id:'clash',reward:35,name:'Color Clash',icon:'🌈',accent:'#ff9f43',versus:true,price:350,lvl:2,desc:'Match colors or numbers. Empty your hand first.',
+function cpuPlay(i){if(!alive)return;const c=cpu.splice(i,1)[0];let col=c.c;if(c.c===4){const cnt=[0,0,0,0];cpu.forEach(x=>{if(x.c<4)cnt[x.c]++});col=cnt.indexOf(Math.max(...cnt));if(Math.max(...cnt)===0||Math.random()<clamp(.45-A.level()*.05,.1,.6))col=Math.random()*4|0}resolve(c,1,col)}
+return{id:'clash',reward:35,name:'Color Cards',icon:'🌈',accent:'#ff9f43',versus:true,price:350,lvl:2,desc:'Match colors or numbers. Empty your hand first.',
  how:'Play a card that matches the top card’s color or symbol. ⊘ Skip and ⇄ Reverse make the CPU miss a turn, +2 and +4 make it draw, and ★ wild cards let you pick the color. Can’t play? Draw a card. First to empty their hand wins.',
  start(st,a){A=a;const v=avail(st,60);W=Math.min(v.w,760);deck=build();me=[];cpu=[];for(let k=0;k<7;k++){me.push(take());cpu.push(take())}
   let f;do{f=take();if(f.c===4)deck.unshift(f)}while(f.c===4);disc=[f];color=f.c;turn=0;drew=false;alive=true;
@@ -1490,7 +1493,7 @@ const BOOSTS={doubler:{name:'Coin Doubler',icon:'🪙',desc:'Doubles your next 3
  rookie:{name:'Rookie CPU',icon:'🐣',desc:'The CPU plays much easier for your next 3 vs-CPU rounds',price:120,qty:3},
  shield:{name:'Streak Shield',icon:'🛡️',desc:'Lose a vs-CPU round without losing your pot or streak',price:150,qty:1},
  xp:{name:'XP Boost',icon:'⭐',desc:'Double XP for your next 5 games',price:150,qty:5,lvl:3}};
-const LVUP={2:'🏟️ Tournaments, Checkers and Color Clash in the shop',3:'🎰 Casino tables, ⛳ Mini Golf and ⭐ XP Boost in the shop',4:'👑 Boss Rush',5:'🍬 Candy theme in the shop',8:'👑 Gold Rush theme in the shop'};
+const LVUP={2:'🏟️ Tournaments, Checkers and Color Cards in the shop',3:'🎰 Casino tables, ⛳ Mini Golf and ⭐ XP Boost in the shop',4:'👑 Boss Rush',5:'🍬 Candy theme in the shop',8:'👑 Gold Rush theme in the shop'};
 const DEF={coins:150,owned:{},boosts:{doubler:0,life:0,rookie:0,shield:0,xp:0},mode:{},theme:'classic',daily:'',best:{},t:0,
  xp:0,lvl:1,set:{sound:true,vib:true},mis:null,stats:{plays:{},wins:{},daily:0,time:0},trophies:{t4:0,t8:0,boss:0},bossBest:0,dr:{day:'',done:{}},packs:{basic:1,super:0,mega:0},col:{},colBonus:{},av:null,title:null,back:null,cpu:{},season:{id:'',pts:0},sClaim:{}};
 function normalize(v){const d=JSON.parse(JSON.stringify(DEF));v=v&&typeof v==='object'?v:{};const st=v.stats||{};
@@ -2164,7 +2167,7 @@ const UPDATES=[
  ['2.4','Nov 18, 2026',['Online leaderboards for coins, playtime and every game','Usernames! You pick one and can change it whenever. Sign in is Google only now','Your progress syncs between devices way better now and always keeps the newest save','Added packs with avatars, titles, card backs and themes to collect','Announcements and coin events','You can minimize daily missions and the daily challenge now','Fixed some menus not fitting on phones']],
  ['2.3','Nov 17, 2026',['Pocket Arcade has apps now for Windows, Mac and Android. They update on their own','You can also install it right from your browser']],
  ['2.2','',['Added cloud saves','Made the Pong and Air Hockey CPUs easier']],
- ['2.1','',['10 new games: Pong, Checkers, Dots & Boxes, Mini Golf, Color Clash, Dodger, Falling Blocks, Word Guess, Sudoku and Solitaire','Added the daily challenge, Boss Rush, tournaments and a casino table','Added missions, levels, records, and sound']],
+ ['2.1','',['10 new games: Pong, Checkers, Dots & Boxes, Mini Golf, Color Cards, Dodger, Falling Blocks, Word Guess, Sudoku and Solitaire','Added the daily challenge, Boss Rush, tournaments and a casino table','Added missions, levels, records, and sound']],
  ['1.0','',['First version of Pocket Arcade']]];
 function updBlock(box,[v,d,list]){const h=el('div','updh',box);h.textContent=`v${v}${d?' ('+d+')':''}`;const ul=el('ul','updl',box);list.forEach(t=>{el('li','',ul).textContent=t})}
 function openUpdates(){const m=modal('Pocket Arcade Updates');m.classList.add('updbox');UPDATES.forEach(u=>updBlock(m,u))}
