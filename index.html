@@ -105,7 +105,7 @@ canvas{display:block;border-radius:14px;background:#15172b}
 .tug .knot{position:absolute;left:50%;top:50%;width:46px;height:46px;margin:-23px 0 0 -23px;border-radius:50%;background:var(--a);display:flex;align-items:center;justify-content:center;font-size:24px;transition:transform .07s linear;box-shadow:0 0 0 5px rgba(255,204,51,.25)}
 .tug .cnt{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-size:80px;font-weight:900;pointer-events:none;text-shadow:0 4px 20px rgba(0,0,0,.6)}
 .pad{margin-top:12px;width:100%;max-width:720px;height:84px;border-radius:20px;border:none;background:var(--b);color:#06231c;font:inherit;font-size:28px;font-weight:900;cursor:pointer;touch-action:manipulation}
-.pad:active{transform:scale(.97);background:#7dffe0}
+.pad:active{transform:scale(.97);filter:brightness(1.18)}
 /* cards (shared) */
 .felt{position:relative;width:100%;max-width:760px;border-radius:22px;padding:14px 12px;background:radial-gradient(ellipse at 50% 40%,#1f7a55,#11523a 70%,#0c3d2b);box-shadow:inset 0 0 0 6px #5b3a1f,inset 0 0 0 9px #3d2614;display:flex;flex-direction:column;gap:10px;align-items:center}
 .cards{display:flex;gap:6px;justify-content:center;flex-wrap:nowrap;width:100%;min-height:calc(var(--cw)*1.4)}
@@ -358,6 +358,27 @@ canvas{display:block;border-radius:14px;background:#15172b}
 .pk .pkn{color:#fff;font-size:15px}.pkcards.many{max-height:62vh;overflow-y:auto;padding:6px}.pkcards.many .pcd{width:min(96px,22vw)}
 .pcf .stk{position:absolute;top:5px;left:5px;background:#ffd34d;color:#1a1300;font-style:normal;font-weight:900;font-size:12px;border-radius:7px;padding:2px 6px}
 .updbox{max-width:520px!important}.updh{font-weight:800;color:var(--a);margin-top:6px}.updl{margin:2px 0 6px;padding-left:20px;display:flex;flex-direction:column;gap:5px;font-size:14px;line-height:1.45;color:var(--ink)}
+/* pack cards: everything inside scales with the card so nothing squishes */
+.pcd{container-type:inline-size;aspect-ratio:3/4.6}.pcf{overflow:hidden;gap:1.5cqw;padding:6cqw 5cqw}
+.pcf .avart{font-size:30cqw;line-height:1.05}.pcf .tiart{font-size:10.5cqw;padding:2cqw 0;line-height:1.15}.pcf .cbk{width:26cqw;height:36cqw}.pcf .sw{gap:1.5cqw!important}.pcf .sw i{width:8.5cqw!important;height:24cqw!important}
+.pcf b{font-size:11cqw!important;line-height:1.12}.pcf small{font-size:8.6cqw!important;line-height:1.2}
+.pcf .dp{font-size:8.2cqw!important;padding:1.5cqw 4cqw!important}.pcf .nw,.pcf .stk{font-size:9cqw!important;padding:1cqw 3.5cqw!important}
+.pcf .dp .dpw{display:none}@container (min-width:112px){.pcf .dp .dpw{display:inline}}.pcd .pfront .tiart{display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.pcf.pback span{font-size:28cqw!important}
+.pcd.rar6 .pcf.pfront b,.citem.rar6 b{text-shadow:0 1px 4px #000,0 0 10px #000}.pcd.rar6 .pcf.pfront,.pcd.rar6 .pcf.pback,.citem.rar6.got{background:radial-gradient(circle,#fff 1px,transparent 1.6px) 0 0/10px 10px,linear-gradient(160deg,#1a0f3d,#3a1f7a 55%,#0b2a5c);border-color:#c4a6ff;animation:cosmicglow 3s ease-in-out infinite}
+@keyframes cosmicglow{0%,100%{box-shadow:0 0 18px #7df9ff,0 0 40px #8a5cff}50%{box-shadow:0 0 30px #ff7ad9,0 0 60px #c4a6ff}}
+.cosmicflash{background:linear-gradient(90deg,#7df9ff,#c4a6ff,#ff7ad9);-webkit-background-clip:text;background-clip:text;color:transparent;text-shadow:none;filter:drop-shadow(0 0 18px #c4a6ff)}
+.frch{background:#22254a;border:0;border-radius:8px;font-size:15px;padding:5px 7px;cursor:pointer}
+.mview{position:fixed;inset:0;z-index:55;background:var(--bg);display:flex;flex-direction:column;align-items:center;gap:12px;padding:calc(10px + env(safe-area-inset-top)) 14px 20px;overflow-y:auto}
+.mtop{display:flex;align-items:center;gap:10px;width:100%;max-width:560px}.mtop h2{margin:0;font-size:19px;flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.mstat{font-size:18px;font-weight:800;color:var(--dim);min-height:26px;text-align:center}.mstat.myturn{color:var(--b);animation:pulse 1.2s ease-in-out infinite}
+@keyframes pulse{50%{opacity:.55}}
+.mboard.ttt{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;width:min(92vw,380px)}
+.mcell{aspect-ratio:1;border:0;border-radius:16px;background:var(--panel);font-size:clamp(40px,14vw,70px);font-weight:900;color:var(--ink);cursor:pointer}
+.mcell.me{color:var(--b)}.mcell.them{color:#ff7aa8}.mcell.win{background:#2a4a3f}
+.mboard.c4{display:grid;grid-template-columns:repeat(7,1fr);gap:5px;width:min(94vw,440px);background:#2b5fd9;padding:8px;border-radius:16px}
+.mhole{aspect-ratio:1;border-radius:50%;background:#0f1020;position:relative;cursor:pointer}.mhole i{position:absolute;inset:6%;border-radius:50%}.mhole i.me{background:var(--b)}.mhole i.them{background:#ff5d8f}.mhole.win{box-shadow:0 0 0 3px #fff}
+.mtbtns{display:flex;flex-direction:row;flex-wrap:wrap;gap:8px;justify-content:center;width:100%;max-width:440px;flex:none}.mtbtns .btn{flex:1 1 40%;width:auto;margin:0;height:auto;min-height:50px;padding:12px}.mboard{flex:none}
 .avsm{font-size:22px;line-height:1;margin-right:-2px}.ptitle{font-size:13px;font-weight:800;color:var(--b);margin:-2px 0 2px}
 .packbar{flex-direction:row;align-items:center;gap:8px;margin-top:10px;background:linear-gradient(120deg,var(--panel),#2a1f4f)}.packbar .pbx{flex:1;min-width:0;display:flex;flex-direction:column;gap:2px}.packbar .pbx b{font-size:16px}.packbar .pbx small{color:var(--dim);font-size:12.5px}
 .packbar .btn{margin:0;padding:10px 12px;font-size:14px;width:auto;white-space:nowrap}
@@ -1498,10 +1519,10 @@ const BOOSTS={doubler:{name:'Coin Doubler',icon:'🪙',desc:'Doubles your next 3
  xp:{name:'XP Boost',icon:'⭐',desc:'Double XP for your next 5 games',price:150,qty:5,lvl:3}};
 const LVUP={2:'🏟️ Tournaments, Checkers and Color Cards in the shop',3:'🎰 Casino tables, ⛳ Mini Golf and ⭐ XP Boost in the shop',4:'👑 Boss Rush',5:'🍬 Candy theme in the shop',8:'👑 Gold Rush theme in the shop'};
 const DEF={coins:150,owned:{},boosts:{doubler:0,life:0,rookie:0,shield:0,xp:0},mode:{},theme:'classic',daily:'',best:{},t:0,
- xp:0,lvl:1,set:{sound:true,vib:true},mis:null,stats:{plays:{},wins:{},daily:0,time:0},trophies:{t4:0,t8:0,boss:0},bossBest:0,dr:{day:'',done:{}},packs:{basic:1,super:0,mega:0},col:{},colBonus:{},av:null,title:null,back:null,cpu:{},season:{id:'',pts:0},sClaim:{}};
+ xp:0,lvl:1,set:{sound:true,vib:true},mis:null,stats:{plays:{},wins:{},daily:0,time:0},trophies:{t4:0,t8:0,boss:0},bossBest:0,dr:{day:'',done:{}},packs:{basic:1,super:0,mega:0},col:{},colBonus:{},av:null,title:null,back:null,cpu:{},season:{id:'',pts:0},sClaim:{},vsSeen:{}};
 function normalize(v){const d=JSON.parse(JSON.stringify(DEF));v=v&&typeof v==='object'?v:{};const st=v.stats||{};
  return Object.assign(d,v,{boosts:Object.assign({},DEF.boosts,v.boosts||{}),best:Object.assign({},v.best||{}),owned:Object.assign({},v.owned||{}),mode:Object.assign({},v.mode||{}),
-  set:Object.assign({},DEF.set,v.set||{}),stats:{plays:Object.assign({},st.plays||{}),wins:Object.assign({},st.wins||{}),daily:st.daily||0,time:st.time||0},trophies:Object.assign({},DEF.trophies,v.trophies||{}),dr:v.dr&&v.dr.done?v.dr:{day:'',done:{}},packs:Object.assign({},DEF.packs,v.packs||{}),col:Object.assign({},v.col||{}),colBonus:Object.assign({},v.colBonus||{}),cpu:Object.assign({},v.cpu||{}),season:v.season&&v.season.id?v.season:{id:'',pts:0},sClaim:Object.assign({},v.sClaim||{})})}
+  set:Object.assign({},DEF.set,v.set||{}),stats:{plays:Object.assign({},st.plays||{}),wins:Object.assign({},st.wins||{}),daily:st.daily||0,time:st.time||0},trophies:Object.assign({},DEF.trophies,v.trophies||{}),dr:v.dr&&v.dr.done?v.dr:{day:'',done:{}},packs:Object.assign({},DEF.packs,v.packs||{}),col:Object.assign({},v.col||{}),colBonus:Object.assign({},v.colBonus||{}),cpu:Object.assign({},v.cpu||{}),season:v.season&&v.season.id?v.season:{id:'',pts:0},sClaim:Object.assign({},v.sClaim||{}),vsSeen:Object.assign({},v.vsSeen||{})})}
 let S=(()=>{let v=null;try{v=JSON.parse(localStorage.getItem('pa_save'))}catch(e){}const s=normalize(v);
  try{for(let i=0;i<localStorage.length;i++){const k=localStorage.key(i);if(k&&k.startsWith('pa_')&&k!=='pa_save'&&s.best[k]==null){const n=+localStorage.getItem(k);if(!isNaN(n))s.best[k]=n}}}catch(e){}return s})();
 function saveLocal(){try{localStorage.setItem('pa_save',JSON.stringify(S))}catch(e){}}
@@ -1550,7 +1571,7 @@ function tryPending(){if(pendingRemote&&!busy()){const r=pendingRemote;pendingRe
 setInterval(tryPending,1000);
 function readDoc(d){let remote=null;try{remote=d&&typeof d.save==='string'?JSON.parse(d.save):null}catch(e){}if(remote&&d.t)remote.t=Math.max(remote.t||0,d.t);return remote}
 function setName(n){const ch=(n||null)!==myName;myName=n||null;applyLook&&applyLook();if(ch&&myName&&cloudReady)queueLB(true)}
-async function onUser(u){fbUser=u;BANNED=false;ADMIN=false;FR={list:[],inc:[],out:[]};clearInterval(frT);updFrDot();{const ab=$('#admbtn');if(ab)ab.style.display='none'}cloudReady=false;cloudRef=null;pendingRemote=null;if(unsub){unsub();unsub=null}setName(null);
+async function onUser(u){fbUser=u;BANNED=false;ADMIN=false;FR={list:[],inc:[],out:[]};MT={inc:[],out:[],live:[]};mSeen=null;clearInterval(frT);updFrDot();{const ab=$('#admbtn');if(ab)ab.style.display='none'}cloudReady=false;cloudRef=null;pendingRemote=null;if(unsub){unsub();unsub=null}setName(null);
  if(!u){holdT=false;setSync('out');return}
  cloudRef=fbDb.collection('saves').doc(u.uid);lastSync=getLast(u.uid);let done=false;const to=setTimeout(()=>{if(!done){holdT=false;setSync('offline')}},12000);
  try{const snap=await cloudRef.get({source:'server'});done=true;clearTimeout(to);
@@ -1802,8 +1823,8 @@ async function loadFriends(){if(!fbUser||!fbDb)return;const me=fbUser.uid;
  const[fs,inc,out,pr]=await Promise.all([fbDb.collection('friendships').where('users','array-contains',me).get(),fbDb.collection('friendreq').where('to','==',me).get(),fbDb.collection('friendreq').where('from','==',me).get(),fbDb.collection('profiles').doc(me).get().catch(()=>null)]);
  FR.list=fs.docs.map(d=>{const x=d.data(),o=(x.users||[]).find(u=>u!==me);return{id:d.id,uid:o,name:(x.names||{})[o]||'?'}}).filter(f=>f.uid);
  FR.inc=inc.docs.map(d=>Object.assign({id:d.id},d.data()));FR.out=out.docs.map(d=>Object.assign({id:d.id},d.data()));NOREQ=!!(pr&&pr.exists&&pr.data().noReq===true);updFrDot()}
-function updFrDot(){const b=$('#frbtn');if(!b)return;b.style.display=fbUser?'':'none';const d=b.querySelector('.frdot'),n=FR.inc.length;if(d){d.textContent=n;d.style.display=n?'':'none'}}
-function friendPoll(){clearInterval(frT);loadFriends().catch(()=>{});frT=setInterval(()=>{if(fbUser&&document.visibilityState==='visible')loadFriends().catch(()=>{})},45000)}
+function updFrDot(){const b=$('#frbtn');if(!b)return;b.style.display=fbUser?'':'none';const d=b.querySelector('.frdot'),n=FR.inc.length+(fbUser?MT.inc.length+myTurns():0);if(d){d.textContent=n;d.style.display=n?'':'none'}}
+function friendPoll(){clearInterval(frT);loadFriends().catch(()=>{});loadMatches().catch(()=>{});frT=setInterval(()=>{if(fbUser&&document.visibilityState==='visible'){loadFriends().catch(()=>{});loadMatches().catch(()=>{})}},20000)}
 async function acceptFriend(r){const me=fbUser.uid;await fbDb.collection('friendships').doc(pairId(me,r.from)).set({users:[r.from,me],from:r.from,to:me,names:{[r.from]:r.fromName||'?',[me]:myName},t:Date.now()});
  await fbDb.collection('friendreq').doc(r.id).delete();await loadFriends()}
 async function sendFriend(raw){if(!myName)throw 'Pick a username first (Save & sync).';const name=(raw||'').trim();if(!name)throw 'Type your friend’s username.';
@@ -1827,7 +1848,13 @@ async function openFriends(){const m=modal('👥 Friends');
  cb.addEventListener('change',async()=>{const v=!cb.checked;try{await fbDb.collection('profiles').doc(fbUser.uid).set({noReq:v},{merge:true});NOREQ=v;toast(v?'Friend requests turned off':'Friend requests turned on')}catch(e){cb.checked=!cb.checked;toast('Couldn’t change that right now')}});
  const rq=el('div','frsec',m),bd=el('div','frsec',m);
  async function draw(){try{await loadFriends()}catch(e){rq.innerHTML='<small class="dim">Friends aren’t switched on yet (the database rules need updating).</small>';bd.innerHTML='';return}
+  try{await loadMatches()}catch(e){}
   rq.innerHTML='';
+  const games=[...MT.inc,...MT.live,...MT.out];if(games.length){el('div','cgh',rq).textContent='⚔️ Games with friends';games.forEach(g=>{const x=el('div','frrow',rq),G=MGAMES[g.game],op=otherName(g);
+   const txt=g.status==='invited'?(g.players[1]===fbUser.uid?`challenged you to ${G.name}`:`waiting for them to accept`):g.turn===fbUser.uid?`${G.name} · your turn!`:`${G.name} · their turn`;
+   x.innerHTML=`<span class="nm"><b></b><small>${G.icon} ${txt}</small></span>`;x.querySelector('b').textContent=op;
+   if(g.status==='invited'&&g.players[1]===fbUser.uid){const a=el('button','btn alt',x);a.textContent='Play';a.addEventListener('click',()=>mAnswer(g,true));const d=el('button','btn ghost',x);d.textContent='No';d.addEventListener('click',async()=>{await mAnswer(g,false);draw()})}
+   else{const o=el('button','btn'+(g.turn===fbUser.uid?' alt':' ghost'),x);o.textContent='Open';o.addEventListener('click',()=>openMatch(g.id))}})}
   if(FR.inc.length){el('div','cgh',rq).textContent=`📨 Friend requests (${FR.inc.length})`;FR.inc.forEach(r=>{const x=el('div','frrow',rq);x.innerHTML='<span class="nm"><b></b><small>wants to be your friend</small></span>';x.querySelector('b').textContent=r.fromName||'?';
    const a=el('button','btn alt',x);a.textContent='Accept';a.addEventListener('click',async()=>{a.disabled=true;try{await acceptFriend(r);toast(`🎉 You and ${r.fromName} are now friends!`);sfx('win')}catch(e){toast('Couldn’t accept right now')}draw()});
    const d=el('button','btn ghost',x);d.textContent='Decline';d.addEventListener('click',async()=>{try{await fbDb.collection('friendreq').doc(r.id).delete()}catch(e){}draw()})})}
@@ -1846,9 +1873,54 @@ async function openFriends(){const m=modal('👥 Friends');
   const rows=people.map((p,i)=>({p,d:docs[i],v:val(docs[i])})).sort((a,b)=>a.v==null?1:b.v==null?-1:g&&g.low?a.v-b.v:b.v-a.v);
   L.innerHTML='';rows.forEach((r,i)=>{const x=el('div','lbrow'+(r.p.me?' me':''),L);x.innerHTML=`<span class="rk">${r.v==null?'–':i<3?['🥇','🥈','🥉'][i]:'#'+(i+1)}</span><span class="av">${(r.d&&r.d.av)||'🙂'}</span><span class="nm"><b></b><small></small></span><span class="vl">${fmtV(r.v)}</span>`;
    x.querySelector('b').textContent=(r.p.me?'You':(r.d&&r.d.name)||r.p.name)+(badgeFor(r.p.uid)?' '+badgeFor(r.p.uid):'');x.querySelector('small').textContent=r.d?`Lv ${r.d.lvl||1}${r.d.title?' · '+r.d.title:''}`:'hasn’t played online yet';
-   if(!r.p.me){const rm=el('button','frx',x);rm.textContent='✕';rm.title='Remove friend';rm.addEventListener('click',async()=>{if(!confirm(`Remove ${r.p.name} from your friends?`))return;try{await fbDb.collection('friendships').doc(r.p.id).delete()}catch(e){}draw()})}})}
+   if(!r.p.me){const ch=el('button','frch',x);ch.textContent='⚔️';ch.title='Challenge to a game';ch.addEventListener('click',()=>pickChallenge({uid:r.p.uid,name:(r.d&&r.d.name)||r.p.name}));const rm=el('button','frx',x);rm.textContent='✕';rm.title='Remove friend';rm.addEventListener('click',async()=>{if(!confirm(`Remove ${r.p.name} from your friends?`))return;try{await fbDb.collection('friendships').doc(r.p.id).delete()}catch(e){}draw()})}})}
  draw();setTimeout(()=>f.focus(),50)}
 window.openFriends=openFriends;
+/* ---------- friend challenges (online games vs friends) ---------- */
+const MGAMES={ttt:{name:'Tic-Tac-Toe',icon:'⭕',size:9},c4:{name:'Connect 4',icon:'🔴',size:42}};
+let MT={inc:[],out:[],live:[]},mSeen=null,mUnsub=null;
+const mid=()=>Date.now().toString(36)+Math.random().toString(36).slice(2,8);
+const meIdx=m=>m.players.indexOf(fbUser.uid),otherName=m=>m.names[m.players[1-meIdx(m)]]||'Friend';
+function mWinner(game,b){if(game==='ttt'){for(const l of[[0,1,2],[3,4,5],[6,7,8],[0,3,6],[1,4,7],[2,5,8],[0,4,8],[2,4,6]])if(b[l[0]]&&b[l[0]]===b[l[1]]&&b[l[1]]===b[l[2]])return{p:b[l[0]],cells:l};return b.every(x=>x)?{p:0}:null}
+ const at=(r,c)=>b[r*7+c];for(let r=0;r<6;r++)for(let c=0;c<7;c++){const v=at(r,c);if(!v)continue;for(const[dr,dc]of[[0,1],[1,0],[1,1],[1,-1]]){const cells=[0,1,2,3].map(k=>[r+dr*k,c+dc*k]);if(cells.every(([a,d])=>a>=0&&a<6&&d>=0&&d<7&&at(a,d)===v))return{p:v,cells:cells.map(([a,d])=>a*7+d)}}}
+ return b.every(x=>x)?{p:0}:null}
+async function loadMatches(){if(!fbUser||!fbDb)return;const q=await fbDb.collection('matches').where('players','array-contains',fbUser.uid).get();const me=fbUser.uid,now=Date.now();
+ const all=q.docs.map(d=>Object.assign({id:d.id},d.data())).filter(m=>now-(m.t||0)<3*864e5);
+ MT.inc=all.filter(m=>m.status==='invited'&&m.players[1]===me);MT.out=all.filter(m=>m.status==='invited'&&m.players[0]===me);MT.live=all.filter(m=>m.status==='active');
+ const ids=MT.inc.map(m=>m.id);if(mSeen){const fresh=MT.inc.filter(m=>!mSeen.includes(m.id));if(fresh.length&&!document.querySelector('.mview')){toast(`⚔️ ${fresh[0].names[fresh[0].players[0]]} challenged you to ${MGAMES[fresh[0].game].name}!`);sfx('level')}}mSeen=ids;updFrDot()}
+const myTurns=()=>MT.live.filter(m=>m.turn===fbUser.uid).length;
+async function challenge(f,game){const me=fbUser.uid,m={game,players:[me,f.uid],names:{[me]:myName,[f.uid]:f.name},status:'invited',turn:null,board:Array(MGAMES[game].size).fill(0),winner:null,moves:0,t:Date.now()};
+ const id=mid();await fbDb.collection('matches').doc(id).set(m);toast(`⚔️ Challenge sent to ${f.name}!`);openMatch(id)}
+function pickChallenge(f){const m=modal(`⚔️ Challenge ${f.name}`);el('p','',m).textContent='Pick a game. They’ll get your challenge next time they open Friends.';
+ Object.entries(MGAMES).forEach(([k,g])=>{const b=el('button','btn',m);b.textContent=`${g.icon} ${g.name}`;b.addEventListener('click',async()=>{b.disabled=true;try{closeModal();await challenge(f,k)}catch(e){toast('Couldn’t send the challenge — the database rules may need updating.')}})})}
+async function mAnswer(m,yes){const ref=fbDb.collection('matches').doc(m.id);
+ if(yes){await ref.set({status:'active',turn:m.players[Math.random()<.5?0:1],t:Date.now()},{merge:true});openMatch(m.id)}else await ref.set({status:'declined',t:Date.now()},{merge:true});await loadMatches()}
+function openMatch(id){if(mUnsub){mUnsub();mUnsub=null}closeModal();document.querySelectorAll('.mview').forEach(x=>x.remove());
+ const v=el('div','mview',document.body);v.innerHTML='<div class="mtop"><button class="back mclose2">‹</button><h2 class="mtitle">…</h2></div><div class="mstat">Loading…</div><div class="mboard"></div><div class="mtbtns"></div>';
+ const close=()=>{if(mUnsub){mUnsub();mUnsub=null}v.remove();loadMatches().catch(()=>{});renderMenu()};v.querySelector('.mclose2').addEventListener('click',close);
+ const ref=fbDb.collection('matches').doc(id);let cur=null,busyMove=false,lastMoves=-1;
+ mUnsub=ref.onSnapshot(s=>{if(!s.exists)return;cur=Object.assign({id},s.data());if(cur.moves!==lastMoves&&lastMoves>=0&&cur.turn===fbUser.uid)sfx('tap'),buzz(15);lastMoves=cur.moves;draw()},()=>{v.querySelector('.mstat').textContent='Couldn’t load this game.'});
+ function draw(){const m=cur,me=meIdx(m),G=MGAMES[m.game],op=otherName(m),mine=me+1;v.querySelector('.mtitle').textContent=`${G.icon} ${G.name} vs ${op}`;
+  const st=v.querySelector('.mstat'),bd=v.querySelector('.mboard'),bt=v.querySelector('.mtbtns');bt.innerHTML='';
+  const w=m.status==='done'?mWinner(m.game,m.board):null;
+  st.className='mstat'+(m.status==='active'&&m.turn===fbUser.uid?' myturn':'');
+  st.textContent=m.status==='invited'?(m.players[0]===fbUser.uid?`Waiting for ${op} to accept…`:`${op} challenged you!`):m.status==='declined'?`${op} said no thanks.`:
+   m.status==='active'?(m.turn===fbUser.uid?'Your turn!':`${op}’s turn…`):m.winner==='draw'?'It’s a draw!':m.winner===fbUser.uid?(m.resign?`${op} gave up — you win! 🎉`:'You win! 🎉'):(m.resign?'You gave up.':`${op} wins!`);
+  bd.className='mboard '+m.game;bd.innerHTML='';const can=m.status==='active'&&m.turn===fbUser.uid&&!busyMove;
+  if(m.game==='ttt'){m.board.forEach((x,i)=>{const c=el('button','mcell'+(x?(x===mine?' me':' them'):'')+(w&&w.cells&&w.cells.includes(i)?' win':''),bd);c.textContent=x===1?'✕':x===2?'◯':'';if(can&&!x)c.addEventListener('click',()=>move(i))})}
+  else{for(let i=0;i<42;i++){const x=m.board[i],c=el('div','mhole'+(w&&w.cells&&w.cells.includes(i)?' win':''),bd);if(x)el('i',x===mine?'me':'them',c);if(can)c.addEventListener('click',()=>move(i%7))}}
+  if(m.status==='invited'&&m.players[1]===fbUser.uid){const a=el('button','btn alt',bt);a.textContent='Accept';a.addEventListener('click',()=>mAnswer(m,true));const d=el('button','btn ghost',bt);d.textContent='Decline';d.addEventListener('click',async()=>{await mAnswer(m,false);close()})}
+  if(m.status==='invited'&&m.players[0]===fbUser.uid){const c=el('button','btn ghost',bt);c.textContent='Cancel challenge';c.addEventListener('click',async()=>{await ref.set({status:'declined',t:Date.now()},{merge:true});close()})}
+  if(m.status==='active'){const r=el('button','btn ghost',bt);r.textContent='Give up';r.addEventListener('click',async()=>{if(!confirm('Give up this game?'))return;await ref.set({status:'done',winner:m.players[1-me],resign:true,turn:null,t:Date.now()},{merge:true})})}
+  if(m.status==='done'||m.status==='declined'){const r=el('button','btn alt',bt);r.textContent='Rematch';r.addEventListener('click',()=>challenge({uid:m.players[1-me],name:op},m.game).catch(()=>toast('Couldn’t send the rematch')));
+   if(m.status==='done'&&!S.vsSeen[m.id]){S.vsSeen[m.id]=1;if(m.winner===fbUser.uid){sfx('win');buzz([40,60,40])}save()}}
+  const c=el('button','btn ghost',bt);c.textContent='Close';c.addEventListener('click',close)}
+ async function move(i){const m=cur;if(!m||m.status!=='active'||m.turn!==fbUser.uid||busyMove)return;const mine=meIdx(m)+1,b=m.board.slice();
+  if(m.game==='ttt'){if(b[i])return;b[i]=mine}else{let r=5;while(r>=0&&b[r*7+i])r--;if(r<0)return;b[r*7+i]=mine}
+  busyMove=true;sfx('tap');const w=mWinner(m.game,b),upd={board:b,moves:(m.moves||0)+1,t:Date.now(),turn:w?null:m.players[1-meIdx(m)]};
+  if(w){upd.status='done';upd.winner=w.p?m.players[w.p-1]:'draw'}cur=Object.assign({},m,upd);draw();
+  try{await ref.set(upd,{merge:true})}catch(e){toast('Move didn’t go through — check your internet')}busyMove=false}}
+window.openMatch=openMatch;
 
 /* ---------- save panel: status, save now, save codes ---------- */
 function encodeSave(){return 'PA1:'+btoa(unescape(encodeURIComponent(JSON.stringify(S))))}
@@ -1997,13 +2069,14 @@ function fmtTime(t){const h=Math.floor(t/3600),mi=Math.floor(t%3600/60);return h
 setInterval(()=>{if(cur&&document.visibilityState==='visible'&&$('#game').classList.contains('on'))S.stats.time=(S.stats.time||0)+5},5000);
 
 /* ---------- packs & collection ---------- */
-const RAR=[{n:'Common',c:'#9aa0c3',dup:10},{n:'Rare',c:'#4ea8ff',dup:30},{n:'Epic',c:'#b46bff',dup:80},{n:'Legendary',c:'#ffc23d',dup:250},{n:'Mythic',c:'#ff4d6d',dup:600},{n:'Exclusive',c:'#00e5ff',dup:0}];
+const RAR=[{n:'Common',c:'#9aa0c3',dup:10},{n:'Rare',c:'#4ea8ff',dup:30},{n:'Epic',c:'#b46bff',dup:80},{n:'Legendary',c:'#ffc23d',dup:250},{n:'Mythic',c:'#ff4d6d',dup:600},{n:'Exclusive',c:'#00e5ff',dup:0},{n:'Cosmic',c:'#c4a6ff',dup:2000}];
 const CBK={stripes:'repeating-linear-gradient(45deg,#6aa8ff 0 6px,#4f86e0 6px 12px)',
  red:'repeating-linear-gradient(45deg,#ff6b6b 0 6px,#d94848 6px 12px)',dots:'radial-gradient(circle,#c6f26b 22%,transparent 24%) 0 0/10px 10px,#2f8f55',
  waves:'repeating-radial-gradient(circle at 0 100%,#b38cff 0 5px,#7a4fe0 5px 10px)',check:'conic-gradient(#222 25%,#eee 0 50%,#222 0 75%,#eee 0) 0 0/12px 12px',
  galaxy:'radial-gradient(circle at 30% 30%,#fff 1px,transparent 2px) 0 0/13px 13px,radial-gradient(circle at 70% 60%,#ffe6a0 1px,transparent 2px) 0 0/17px 17px,linear-gradient(135deg,#1b1060,#5a1d8c 55%,#0b2a6b)',
  fire:'radial-gradient(ellipse at 50% 110%,#ffe14d,#ff7b1c 40%,#c41d1d 75%,#4a0a0a)',
  prism:'conic-gradient(from 0deg,#ff4d6d,#ffd34d,#5fe3a1,#4ea8ff,#b46bff,#ff4d6d)',void:'radial-gradient(circle at 50% 50%,#000 0 30%,#3b0a5c 55%,#ff4d6d 70%,#000 72%)',
+ nebula:'radial-gradient(circle at 30% 35%,#ff7ad9 0 8%,transparent 30%),radial-gradient(circle at 70% 65%,#5fd8ff 0 6%,transparent 32%),radial-gradient(circle,#fff 1px,transparent 1.6px) 0 0/8px 8px,linear-gradient(135deg,#120a2e,#3b1a6e 50%,#0a1a3e)',
  champ:'radial-gradient(circle at 50% 40%,#fff6c2,#ffd34d 30%,#c98a10 70%,#6b4200)',star:'radial-gradient(circle,#fff 1px,transparent 2px) 0 0/9px 9px,linear-gradient(135deg,#0e3a5c,#2b8fd9,#a0e9ff)',
  cobweb:'radial-gradient(circle at 50% 50%,#ff8a1c 0 16%,transparent 17%),repeating-conic-gradient(from 0deg at 50% 50%,#151515 0 14deg,#3a3a3a 14deg 16deg)',
  candycane:'repeating-linear-gradient(45deg,#fff 0 6px,#e2232b 6px 12px)',pastel:'repeating-linear-gradient(0deg,#ffd1e8 0 8px,#d1f0ff 8px 16px,#fff6c2 16px 24px,#d8ffd1 24px 32px)',
@@ -2026,6 +2099,8 @@ const ITEMS=[];
  add('th',2,[['lava','🌋','Lava'],['arctic','❄️','Arctic']]);
  add('th',3,[['cosmic','🌠','Cosmic'],['rainbow','🌈','Rainbow']]);
  add('av',4,[['invader','👾','Space Invader'],['genie','🧞','Genie']]);add('ti',4,[['mythical','🏷️','Mythical'],['untouch','🏷️','Untouchable']]);add('cb',4,[['prism','🂠','Prism'],['void','🂠','The Void']]);add('th',4,[['aurora','🌌','Aurora']]);
+ const co=(type,list)=>list.forEach(([id,icon,name])=>ITEMS.push({id:type+':'+id,type,r:6,icon,name,cosmic:1}));
+ co('av',[['saturn','🪐','Saturn'],['comet','☄️','Comet'],['ufo','🛸','Mothership']]);co('ti',[['stardust','🏷️','Stardust'],['cosmicbeing','🏷️','Cosmic Being']]);co('cb',[['nebula','🂠','Nebula']]);co('th',[['supernova','💫','Supernova']]);
  const ex=(type,list)=>list.forEach(([id,icon,name,rk])=>ITEMS.push({id:type+':'+id,type,r:5,icon,name,ex:rk}));
  ex('av',[['champ','🏆','Champion',1],['star','🌟','Season Star',3]]);ex('ti',[['champ','🏷️','Season Champion',1],['top3','🏷️','Top 3 Finisher',3]]);ex('cb',[['champ','🂠','Champion Gold',1],['star','🂠','Starlight',3]]);ex('th',[['champ','👑','Champion',1],['star','✨','Starlight',3]]);
  const sz=(season,type,r,list)=>list.forEach(([id,icon,name])=>ITEMS.push({id:type+':'+id,type,r,icon,name,season}));
@@ -2044,7 +2119,8 @@ Object.assign(THEMES,{lava:{name:'Lava',icon:'🌋',pack:1,v:['#1a0806','#2e120c
  star:{name:'Starlight',icon:'✨',pack:1,v:['#06182a','#0f2c47','#a0e9ff','#ffffff','#ffd34d']},spooky:{name:'Spooky',icon:'🦇',pack:1,v:['#120a1a','#24142e','#ff8a1c','#b46bff','#5fe3a1']},
  winter:{name:'Winter Wonderland',icon:'❄️',pack:1,v:['#0b1724','#152a3f','#ffffff','#5fe3a1','#ff4d5e']},spring:{name:'Springtime',icon:'🌷',pack:1,v:['#1a1726','#2a2540','#ffd1e8','#a6f0c6','#fff3a0']},
  love:{name:'Lovebirds',icon:'💝',pack:1,v:['#1f0a14','#33121f','#ff4d6d','#ffb3c6','#ffd34d']},beach:{name:'Beach Day',icon:'🏖️',pack:1,v:['#06222e','#0d3a4a','#ffd166','#38bdf8','#ff8a65']},
- harvest:{name:'Harvest',icon:'🍁',pack:1,v:['#1c0f06','#2e1a0c','#f59e0b','#ea580c','#fde68a']}});
+ harvest:{name:'Harvest',icon:'🍁',pack:1,v:['#1c0f06','#2e1a0c','#f59e0b','#ea580c','#fde68a']},
+ supernova:{name:'Supernova',icon:'💫',pack:1,v:['#0c0620','#1d1240','#c4a6ff','#7df9ff','#ff7ad9']}});
 const PACKS={basic:{name:'Basic Pack',icon:'🎁',price:120,n:3,odds:[70,24,5.3,.6,.1],min:0,col:['#4ea8ff','#2b5fd9']},
  super:{name:'Super Pack',icon:'💠',price:300,n:4,odds:[55,32,10.5,2,.5],min:1,col:['#b46bff','#6a2bd9']},
  mega:{name:'Mega Pack',icon:'🌟',price:700,n:5,odds:[35,40,19.5,4,1.5],min:2,col:['#ffc23d','#e0661b']},
@@ -2063,16 +2139,17 @@ function packOnSale(k,now=new Date()){const P=PACKS[k];if(!P.season)return true;
 function daysLeft(k){const w=seasonWindow(PACKS[k].season);return Math.max(1,Math.ceil((w[1]-new Date())/864e5))}
 function nextSeasonal(){const now=new Date();let best=null;Object.keys(PACKS).filter(k=>PACKS[k].season).forEach(k=>[now,new Date(now.getFullYear()+1,1,1)].forEach(ref=>{const w=seasonWindow(PACKS[k].season,ref);if(w[0]>now&&(!best||w[0]<best[1]))best=[k,w[0]]}));return best}
 const onSale=()=>Object.keys(PACKS).filter(k=>PACKS[k].season&&packOnSale(k));
-const colItems=()=>ITEMS.filter(i=>!i.ex);
+const colItems=()=>ITEMS.filter(i=>!i.ex&&!i.cosmic);
 const TYPES={av:['🙂','Avatars','Shows next to your level'],ti:['🏷️','Titles','Shows under Pocket Arcade'],cb:['🂠','Card backs','Blackjack, Hold’em & Solitaire'],th:['🎨','Themes','Pack-only arcade colors']};
 const itemById=id=>ITEMS.find(i=>i.id===id);
 function rollRar(odds){let r=Math.random()*100;for(let i=0;i<odds.length;i++){if(r<odds[i])return i;r-=odds[i]}return 0}
 const packPool=(k,r)=>{const se=PACKS[k].season;let pool=ITEMS.filter(x=>x.r===r&&!x.ex&&(se?x.season===se:!x.season));while(!pool.length&&r>0){r--;pool=ITEMS.filter(x=>x.r===r&&!x.ex&&(se?x.season===se:!x.season))}return pool}
 function openPackRoll(k){const P=PACKS[k],out=[];for(let i=0;i<P.n;i++){let r=rollRar(P.odds);if(i===P.n-1&&P.min&&out.every(o=>o.r<P.min))r=Math.max(r,P.min);
+  if(Math.random()<(PACKS[k].season?.002:{basic:.0005,super:.001,mega:.003}[k]||.001)){const cp=ITEMS.filter(x=>x.cosmic);out.push(cp[Math.random()*cp.length|0]);continue}
   const pool=packPool(k,r);out.push(pool[Math.random()*pool.length|0])}
  return out.map(it=>{const had=(S.col[it.id]||0)>0;S.col[it.id]=(S.col[it.id]||0)+1;let dup=0;if(had){dup=RAR[it.r].dup;S.coins+=dup}
   if(!had&&it.type==='th')S.owned['theme:'+it.id.slice(3)]=true;return{it,dup,isNew:!had}})}
-function colCheck(){Object.keys(TYPES).forEach(t=>{if(S.colBonus[t])return;if(ITEMS.filter(i=>i.type===t&&!i.ex&&!i.season).every(i=>S.col[i.id])){S.colBonus[t]=true;S.coins+=300;setTimeout(()=>{toast(`🏅 Full set: ${TYPES[t][1]}! +300 🪙`);sfx('level')},900)}})}
+function colCheck(){Object.keys(TYPES).forEach(t=>{if(S.colBonus[t])return;if(ITEMS.filter(i=>i.type===t&&!i.ex&&!i.season&&!i.cosmic).every(i=>S.col[i.id])){S.colBonus[t]=true;S.coins+=300;setTimeout(()=>{toast(`🏅 Full set: ${TYPES[t][1]}! +300 🪙`);sfx('level')},900)}})}
 function givePack(k,n=1,why){S.packs[k]=(S.packs[k]||0)+n;save();renderPackBar();if(why)setTimeout(()=>toast(`${PACKS[k].icon} ${why}: free ${PACKS[k].name}!`),1500)}
 function packTotal(){return Object.keys(PACKS).reduce((a,k)=>a+Math.max(0,S.packs[k]||0),0)}
 function packsChanged(){wallet();renderPackBar();try{if($('#shop').classList.contains('on'))renderShop();else if($('#menu').classList.contains('on'))renderMenu()}catch(e){}}
@@ -2116,13 +2193,13 @@ function packOpen(k,n=1){n=Math.max(1,Math.min(n,S.packs[k]||0));if(!(S.packs[k]
    const c=el('button','btn',btns);c.textContent='🎴 Collection';c.addEventListener('click',()=>{close();openCollection()});
    const d=el('button','btn ghost',btns);d.textContent='Done';d.addEventListener('click',close)};
   res.forEach((r,i)=>{const c=el('div','pcd rar'+r.it.r,cards);c.style.setProperty('--rc',RAR[r.it.r].c);c.style.animationDelay=Math.min(i,20)*.05+'s';
-   c.innerHTML=`<div class="pcf pback"><span>?</span>${r.n>1?`<em class="stk">×${r.n}</em>`:''}</div><div class="pcf pfront">${r.isNew?'<em class="nw">NEW!</em>':''}${r.n>1?`<em class="stk">×${r.n}</em>`:''}${itemArt(r.it,1)}<b>${r.it.name}</b><small>${RAR[r.it.r].n} · ${TYPES[r.it.type][1].replace(/s$/,'')}${r.it.season?' · '+SEAS_INFO[r.it.season][0]:''}</small>${r.dup?`<em class="dp">${r.isNew?'Extra':'Duplicate'} +${fmt(r.dup)} 🪙</em>`:''}</div>`;
-   const flip=()=>{if(c.classList.contains('on'))return;c.classList.add('on');sfx(r.it.r>=2?'win':'tap');buzz(r.it.r>=4?[60,40,60,40,120]:r.it.r>=2?50:10);if(r.it.r>=4){sfx('level');const f=el('div','mythflash',ov);f.textContent='✨ MYTHIC! ✨';setTimeout(()=>f.remove(),1600)}if(--left===0)setTimeout(finish,300)};c.addEventListener('click',flip)});
+   c.innerHTML=`<div class="pcf pback"><span>?</span>${r.n>1?`<em class="stk">×${r.n}</em>`:''}</div><div class="pcf pfront">${r.isNew?'<em class="nw">NEW!</em>':''}${r.n>1?`<em class="stk">×${r.n}</em>`:''}${itemArt(r.it,1)}<b>${r.it.name}</b><small>${RAR[r.it.r].n} · ${TYPES[r.it.type][1].replace(/s$/,'')}${r.it.season?' · '+SEAS_INFO[r.it.season][0]:''}</small>${r.dup?`<em class="dp"><span class="dpw">${r.isNew?'Extra':'Dupe'} </span>+${fmt(r.dup)} 🪙</em>`:''}</div>`;
+   const flip=()=>{if(c.classList.contains('on'))return;c.classList.add('on');sfx(r.it.r>=2?'win':'tap');buzz(r.it.r>=4?[60,40,60,40,120]:r.it.r>=2?50:10);if(r.it.r>=4){sfx('level');const f=el('div','mythflash'+(r.it.cosmic?' cosmicflash':''),ov);f.textContent=r.it.cosmic?'✦ COSMIC ✦':'✨ MYTHIC! ✨';setTimeout(()=>f.remove(),r.it.cosmic?2600:1600);if(r.it.cosmic){buzz([100,60,100,60,100,60,300]);setTimeout(()=>sfx('win'),400)}}if(--left===0)setTimeout(finish,300)};c.addEventListener('click',flip)});
   const all=el('button','btn ghost',btns);all.textContent='Flip all';all.addEventListener('click',()=>{const L=[...cards.querySelectorAll('.pcd:not(.on)')],gap=L.length>12?90:200;L.forEach((c,i)=>setTimeout(()=>c.click(),i*gap))})}}
 let colTab='av';
 function openCollection(tab){if(tab)colTab=tab;const m=modal('🎴 Collection');const CI=colItems(),got=CI.filter(i=>S.col[i.id]).length;
  el('p','',m).innerHTML=`<b>${got}</b> of ${CI.length} collected. Duplicates turn into coins. Finish a whole set of the regular pack items for +300 🪙.`;
- const tb=el('div','ctabs',m);Object.entries(TYPES).forEach(([t,[ic,nm]])=>{const all=ITEMS.filter(i=>i.type===t&&!i.ex),h=all.filter(i=>S.col[i.id]).length;const b=el('button','tab'+(t===colTab?' on':''),tb);b.innerHTML=`${ic} ${nm}<br><small>${h}/${all.length}${S.colBonus[t]?' ✅':''}</small>`;b.addEventListener('click',()=>openCollection(t))});
+ const tb=el('div','ctabs',m);Object.entries(TYPES).forEach(([t,[ic,nm]])=>{const all=ITEMS.filter(i=>i.type===t&&!i.ex&&!i.cosmic),h=all.filter(i=>S.col[i.id]).length;const b=el('button','tab'+(t===colTab?' on':''),tb);b.innerHTML=`${ic} ${nm}<br><small>${h}/${all.length}${S.colBonus[t]?' ✅':''}</small>`;b.addEventListener('click',()=>openCollection(t))});
  el('small','dim',m).textContent=TYPES[colTab][2];
  const g=el('div','cgrid',m),slot={av:'av',ti:'title',cb:'back'}[colTab];
  if(colTab!=='th'){const on=!S[slot];const d=el('button','citem got'+(on?' eq':''),g);d.innerHTML=`${colTab==='av'?'<span class="avart">🙂</span>':colTab==='cb'?`<span class="cbk" style="background:${CBK.stripes}"></span>`:'<span class="tiart">None</span>'}<b>Default</b><small>${on?'Equipped':'Tap to use'}</small>`;
@@ -2133,7 +2210,8 @@ function openCollection(tab){if(tab)colTab=tab;const m=modal('🎴 Collection');
   d.innerHTML=n?`${itemArt(it)}<b>${it.name}</b><small>${eq?'Equipped':RAR[it.r].n+(n>1?` ×${n}`:'')}</small>`:`<span class="avart q">?</span><b>???</b><small>${hint}</small>`;
   if(n)d.addEventListener('click',()=>{if(colTab==='th'){S.theme=eq?'classic':it.id.slice(3);applyTheme()}else S[slot]=eq?null:it.id;save();applyLook();sfx('tap');openCollection()})};
  const head=t=>{el('div','cgh',g).textContent=t};
- ITEMS.filter(i=>i.type===colTab&&!i.ex&&!i.season).sort((a,b)=>a.r-b.r).forEach(show);
+ ITEMS.filter(i=>i.type===colTab&&!i.ex&&!i.season&&!i.cosmic).sort((a,b)=>a.r-b.r).forEach(show);
+ {const C=ITEMS.filter(i=>i.type===colTab&&i.cosmic&&S.col[i.id]);if(C.length){head('✦ Cosmic');C.forEach(show)}}
  Object.keys(SEAS_INFO).forEach(se=>{const L=ITEMS.filter(i=>i.type===colTab&&i.season===se);if(!L.length)return;head(`${SEAS_INFO[se][0]} ${SEAS_INFO[se][1]}${onSale().includes(se)?' · on sale now!':''}`);L.forEach(show)});
  head('🏆 Exclusive — season rewards');ITEMS.filter(i=>i.type===colTab&&i.ex).forEach(show);
  const od=el('details','dlhelp',m);od.innerHTML='<summary>Pack odds</summary>'+Object.entries(PACKS).map(([k,P])=>`<p><b>${P.icon} ${P.name}</b> (${P.n} cards${P.season?`, ${P.when}`:''}): ${P.odds.map((o,i)=>`${RAR[i].n} ${o}%`).join(' · ')}${P.min?` — at least one ${RAR[P.min].n}+`:''}</p>`).join('')+'<p class="dim">Exclusive items can’t come from packs — only the top 3 players of each monthly season get them. Packs only cost coins you win in the arcade — never real money.</p>'}
