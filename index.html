@@ -667,7 +667,8 @@ function loop(now){if(!alive)return;const dt=clamp((now-last)/1000,.001,.033);la
  // CPU
  const lvl=Math.min(A.level(),8),spd=W*(.38+lvl*.035);let cx,cy;
  if((errT-=dt)<=0){newCErr();errT=.7}
- if(p.y<H/2+rP){const sp=Math.hypot(p.vx,p.vy),slow=sp<W*.35,e=slow?0:cErr*Math.min(1,(sp-W*.35)/(W*.6));
+ if(pause>0||(ghost&&ghost.m===cpu)){cx=W/2+(p.x-W/2)*.35;cy=Math.min(H*.12,p.y-rP-rM*1.6)}
+ else if(p.y<H/2+rP){const sp=Math.hypot(p.vx,p.vy),slow=sp<W*.35,e=slow?0:cErr*Math.min(1,(sp-W*.35)/(W*.6));
   const nearWall=p.y<rP*2.2||p.x<rP*2.2||p.x>W-rP*2.2;
   if(slow&&p.y<rP*2.2&&Math.abs(p.x-W/2)<goalW*.75){const sd=p.x<W/2?1:-1,sy=Math.max(rM,p.y),stx=p.x+sd*(rP+rM)*1.05,ready=Math.abs(cpu.y-sy)<rP*.45&&(cpu.x-p.x)*sd>0;
    if(ready){cx=p.x-sd*rP;cy=sy}else{cx=stx;cy=sy}}
@@ -677,6 +678,8 @@ function loop(now){if(!alive)return;const dt=clamp((now-last)/1000,.001,.033);la
  else{cx=W/2+(p.x-W/2)*.35;cy=H*.12}
  cx=clamp(cx,rM,W-rM);cy=clamp(cy,rM,H/2-rM);let ex=cx-cpu.x,ey=cy-cpu.y,ed=Math.hypot(ex,ey),cm=spd*dt*(p.y<H/2&&Math.hypot(p.vx,p.vy)<W*.35?1.5:1);
  if(ed>cm){ex*=cm/ed;ey*=cm/ed}cpu.x+=ex;cpu.y+=ey;cpu.vx=ex/dt;cpu.vy=ey/dt;
+ if(pause>0||(ghost&&ghost.m===cpu)){const ox=cpu.x-p.x,oy=cpu.y-p.y,od=Math.hypot(ox,oy),R2=rP+rM+2;if(od<R2){const k=od<.01?1:R2/od;cpu.x=clamp(p.x+(od<.01?0:ox*k),rM,W-rM);cpu.y=clamp(p.y+(od<.01?-R2:oy*k),rM,H/2-rM);
+  const dy2=cpu.y-p.y;if(Math.hypot(cpu.x-p.x,dy2)<R2){const sd=cpu.x>=p.x?1:-1,dx2=Math.sqrt(Math.max(0,R2*R2-dy2*dy2));cpu.x=p.x+sd*dx2;if(cpu.x<rM||cpu.x>W-rM)cpu.x=p.x-sd*dx2}}}
  if(pause>0){pause-=dt}else{
   p.x+=p.vx*dt;p.y+=p.vy*dt;const f=Math.pow(FR,dt);p.vx*=f;p.vy*=f;
   if(p.x<rP){p.x=rP;p.vx=Math.abs(p.vx)}if(p.x>W-rP){p.x=W-rP;p.vx=-Math.abs(p.vx)}
@@ -1274,9 +1277,9 @@ function evalB(b){let s=0;for(let i=0;i<64;i++){const p=b[i];if(!p)continue;cons
 function nm(b,side,d,a,be){const ms=moves(b,side);if(!ms.length)return -9e4-d;if(d<=0)return side*evalB(b);
  let best=-1e9;for(const m of ms){const v=-nm(apply(b,m),-side,d-1,-be,-a);if(v>best)best=v;if(v>a)a=v;if(a>=be)break}return best}
 function cpuMove(){const ms=moves(bd,-1);if(!ms.length)return null;const l=clamp(A.level(),-3,6);
- if(l<0&&Math.random()<.35)return ms[Math.random()*ms.length|0];
- const depth=l<0?1:l<2?3:l<4?4:5;let best=-1e9,pick=[];
- for(const m of ms){const v=-nm(apply(bd,m),1,depth-1,-1e9,1e9)+Math.random()*(l<2?18:4);if(v>best){best=v;pick=m}}return pick}
+ if(Math.random()<clamp(.4-l*.04,.12,.55))return ms[Math.random()*ms.length|0];
+ const depth=l<2?1:l<4?2:l<6?3:4;let best=-1e9,pick=[];
+ for(const m of ms){const v=-nm(apply(bd,m),1,depth-1,-1e9,1e9)+Math.random()*(l<2?45:l<4?25:10);if(v>best){best=v;pick=m}}return pick}
 function paint(){for(let i=0;i<64;i++){const c=cells[i],p=bd[i];c.innerHTML='';c.classList.remove('sel','tg','mv');
   if(p){const z=el('div','pz '+(p>0?'r':'b')+(Math.abs(p)===2?' k':''),c);if(Math.abs(p)===2)z.textContent='♛'}}
  if(sel!=null){cells[sel].classList.add('sel');legal.filter(m=>m.path[0]===sel).forEach(m=>cells[m.path[m.path.length-1]].classList.add('tg'))}}
@@ -1940,7 +1943,7 @@ function renderEvents(){const box=$('#events');box.innerHTML='';
  ev('🎰','Casino',`Blackjack and Hold’em played with your real coins.`,3,openCasino,'#2fc9a5')}
 function openCasino(){const m=modal('🎰 Casino tables');el('p','',m).innerHTML='Bet your <b>real coins</b>. Winnings go straight to your wallet, and so do losses. Play smart!';
  [[blackjack,'Bet 25–250 coins a hand.'],[holdem,'Buy in for 300 coins and take the CPU’s 300.']].forEach(([g,d])=>{const b=el('button','btn',m);b.innerHTML=`${g.icon} ${g.name}`;el('small','dim',m).textContent=d;
-  b.addEventListener('click',()=>{closeModal();S.mode[g.id]='casino';save();openGame(g)})})}
+  b.addEventListener('click',()=>{closeModal();openGame(g,{mode:'casino'})})})}
 function openTourMenu(){const m=modal('🏟️ Tournament');el('p','',m).innerHTML='Each match is a random vs-CPU game. Win every match to take the trophy. Lose once and you’re out (finalists still get a share).';
  [[4,40,220],[8,90,600]].forEach(([n,fee,prize])=>{const b=el('button','btn'+(n===8?' alt':''),m);b.innerHTML=`${n} players · entry ${fee} 🪙 · prize ${prize} 🪙`;b.disabled=S.coins<fee;
   b.addEventListener('click',()=>{if(S.coins<fee)return toast('Not enough coins');closeModal();startTour(n,fee,prize)})});
@@ -2162,6 +2165,7 @@ function openSettings(){const m=modal('⚙️ Settings');
 
 /* ---------- update log ---------- */
 const UPDATES=[
+ ['2.7','Nov 20, 2026',['Made the Connect 4, Tic-Tac-Toe, Dots & Boxes and Color Cards CPUs easier','Color Clash is now called Color Cards']],
  ['2.6','Nov 20, 2026',['Fixed Pong serves. The ball goes straight down the middle now and the CPU resets to the center, so you can’t get cheap points off the serve anymore','Fixed the Air Hockey CPU sometimes just giving up on the puck']],
  ['2.5','Nov 19, 2026',['Added friends. You can add people by username and see how you stack up against them. If you don’t want requests you can turn them off','Seasons are here. Each one lasts a month and the top 3 on the leaderboard get exclusive stuff you can’t get from packs','New holiday packs (Halloween, Harvest, Christmas, Valentine’s, Easter and Summer) that only show up during their season','Added Mythic cards, which are super rare','You can buy a bunch of packs at once now, and duplicates stack instead of showing up separately','Games are now split into Solo and Vs CPU','CPUs level up as you beat them, so they get harder over time','Added a supporters list','Moved some buttons around at the top','Fixed pack cards being tiny before you flipped them','Fixed the pack count not updating after opening packs']],
  ['2.4','Nov 18, 2026',['Online leaderboards for coins, playtime and every game','Usernames! You pick one and can change it whenever. Sign in is Google only now','Your progress syncs between devices way better now and always keeps the newest save','Added packs with avatars, titles, card backs and themes to collect','Announcements and coin events','You can minimize daily missions and the daily challenge now','Fixed some menus not fitting on phones']],
@@ -2242,7 +2246,7 @@ function startOv(opt={}){const g=cur;stage.innerHTML='';api.score(g.versus?pot:0
  const btns=[{t:'Play',fn:()=>startGame()}];if(dOK)btns.push({t:'📅 Daily run · 2× coins',cls:'alt',fn:()=>startGame({daily:true})});
  overlay({start:true,big:g.icon,h:g.name,p:how+(g.versus&&!(sel&&sel.id==='casino')?' <br><b>Each win adds coins to a pot.</b> Cash out any time, or risk it for more.':''),extra:ex,btns});
  if(opt.daily&&dOK){stage.innerHTML='';startGame({daily:true})}}
-function openGame(g,opt={}){retList=opt.from||null;if(!unlocked(g))return openShop('games');if(cur)leave();RUN=null;cur=g;streak=0;pot=0;pend=0;show('game');$('#title').textContent=g.name;startOv(opt)}
+function openGame(g,opt={}){retList=opt.from||null;if(opt.mode)S.mode[g.id]=opt.mode;else delete S.mode[g.id];if(!unlocked(g))return openShop('games');if(cur)leave();RUN=null;cur=g;streak=0;pot=0;pend=0;show('game');$('#title').textContent=g.name;startOv(opt)}
 function leave(){unseed();DAILY=false;if(!cur)return;cur.stop();if(RUN){if(RUN.type==='boss'&&RUN.earned>0)bank(RUN.earned);RUN=null}if(cur.versus&&pot>0)cashPot();bankPend();cur=null;stage.innerHTML=''}
 function back(){leave();if(retList){LIST=retList;show('list');renderList()}else{show('menu');renderMenu()}}
 function renderMenu(){wallet();lvlBar();renderPackBar();applyLook();const d=$('#daily'),td=today();d.innerHTML='';
@@ -2277,7 +2281,7 @@ function renderShop(){wallet();const T=[['packs','🎁 Packs'],['games','🎮 Ga
   ALL.filter(g=>g.modes).forEach(g=>{el('div','grp',L).textContent=g.icon+' '+g.name;
    g.modes.forEach(m=>{const k=`mode:${g.id}:${m.id}`,o=modeOK(g,m),sel=S.mode[g.id]===m.id;
     if(!unlocked(g))item(m.icon,m.name,m.desc,'Unlock game first','own',null,true);
-    else if(o)item(m.icon,m.name,m.desc,sel?'Selected':'Use',sel?'own':'eq',()=>{if(sel)delete S.mode[g.id];else S.mode[g.id]=m.id;save();renderShop()});
+    else if(o)item(m.icon,m.name,m.desc,'Owned','own',()=>toast('Pick this mode on the game’s start screen'));
     else if(m.lvl&&!m.price)item(m.icon,m.name,m.desc+' · free at level '+m.lvl,lockL(m),'own',null,true);
     else item(m.icon,m.name,m.desc,`${m.price} 🪙`,'',buy(m.price,()=>{S.owned[k]=true;S.mode[g.id]=m.id;toast(`${m.icon} ${m.name} unlocked!`)}),S.coins<m.price)})})}
  if(shopTab==='boosts'){intro.textContent='One-time power-ups. They kick in automatically when they apply.';
