@@ -2391,7 +2391,7 @@ $('#recbtn').addEventListener('click',openRecords);$('#setbtn').addEventListener
 addEventListener('keydown',e=>{if(!cur||!cur.key||document.querySelector('.modal'))return;const m={ArrowUp:'u',ArrowDown:'d',ArrowLeft:'l',ArrowRight:'r',' ':'u',w:'u',s:'d',a:'l',d:'r'}[e.key];if(m){e.preventDefault();cur.key(m)}});
 $('#syncbtn').addEventListener('click',openSavePanel);
 let rzT;addEventListener('resize',()=>{clearTimeout(rzT);rzT=setTimeout(()=>{if(cur&&!RUN&&stage.querySelector('.ov.startov'))startOv()},200)});
-(()=>{let app=/PocketArcadeApp/.test(navigator.userAgent);try{if(/[?&]app=/.test(location.search))sessionStorage.setItem('pa_app','1');if(sessionStorage.getItem('pa_app'))app=true}catch(e){}
+(()=>{let app=/PocketArcadeApp/.test(navigator.userAgent);try{if(navigator.standalone||['standalone','fullscreen','minimal-ui','window-controls-overlay'].some(m=>matchMedia('(display-mode: '+m+')').matches))app=true}catch(e){}try{if(/[?&]app=/.test(location.search))sessionStorage.setItem('pa_app','1');if(sessionStorage.getItem('pa_app'))app=true}catch(e){}
  if(app){const g=$('#getapp');g&&g.remove();const q=$('#apppop');q&&q.remove();return}
  let bip=null;const ib=[...document.querySelectorAll('.pwainst')];addEventListener('beforeinstallprompt',e=>{e.preventDefault();bip=e;ib.forEach(b=>b.style.display='')});
  ib.forEach(b=>b.addEventListener('click',async()=>{if(!bip)return;bip.prompt();try{const r=await bip.userChoice;if(r.outcome==='accepted'){toast('📲 Installed! Look for Pocket Arcade on your home screen or desktop.');ib.forEach(x=>x.style.display='none')}}catch(e){}bip=null}));
