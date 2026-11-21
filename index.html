@@ -379,6 +379,8 @@ canvas{display:block;border-radius:14px;background:#15172b}
 .mboard.c4{display:grid;grid-template-columns:repeat(7,1fr);gap:5px;width:min(94vw,440px);background:#2b5fd9;padding:8px;border-radius:16px}
 .mhole{aspect-ratio:1;border-radius:50%;background:#0f1020;position:relative;cursor:pointer}.mhole i{position:absolute;inset:6%;border-radius:50%}.mhole i.me{background:var(--b)}.mhole i.them{background:#ff5d8f}.mhole.win{box-shadow:0 0 0 3px #fff}
 .mtbtns{display:flex;flex-direction:row;flex-wrap:wrap;gap:8px;justify-content:center;width:100%;max-width:440px;flex:none}.mtbtns .btn{flex:1 1 40%;width:auto;margin:0;height:auto;min-height:50px;padding:12px}.mboard{flex:none}
+.dlsub{font-size:13px;font-weight:800;color:var(--dim);margin-top:4px}
+.dlhow>span{display:block;flex:1;min-width:0}.dlhow small{display:block;margin-top:3px;color:var(--dim);font-size:12.5px;line-height:1.45;font-weight:500}.dlhow small b{color:var(--ink)}
 .avsm{font-size:22px;line-height:1;margin-right:-2px}.ptitle{font-size:13px;font-weight:800;color:var(--b);margin:-2px 0 2px}
 .packbar{flex-direction:row;align-items:center;gap:8px;margin-top:10px;background:linear-gradient(120deg,var(--panel),#2a1f4f)}.packbar .pbx{flex:1;min-width:0;display:flex;flex-direction:column;gap:2px}.packbar .pbx b{font-size:16px}.packbar .pbx small{color:var(--dim);font-size:12.5px}
 .packbar .btn{margin:0;padding:10px 12px;font-size:14px;width:auto;white-space:nowrap}
@@ -452,13 +454,16 @@ canvas{display:block;border-radius:14px;background:#15172b}
    <div class="dlrow"><span>🍎 Download the app for <b>Mac</b> here:</span><span class="dls"><a class="dl" href="https://raw.githubusercontent.com/NotSussy/Pocket-Arcade/main/downloads/Pocket-Arcade-Mac-AppleSilicon.zip" download>⬇ Apple chip (M1–M4)</a><a class="dl alt2" href="https://raw.githubusercontent.com/NotSussy/Pocket-Arcade/main/downloads/Pocket-Arcade-Mac-Intel.zip" download>⬇ Intel</a></span></div>
    <div class="dlrow"><span>🤖 Download the app for <b>Android</b> here:</span><a class="dl" href="https://raw.githubusercontent.com/NotSussy/Pocket-Arcade/main/downloads/Pocket-Arcade-Android.apk" download>⬇ Download</a></div>
    <div class="dlrow"><span>📱 Download the app for <b>Google Pixel</b> here:</span><a class="dl" href="https://raw.githubusercontent.com/NotSussy/Pocket-Arcade/main/downloads/Pocket-Arcade-Android.apk" download>⬇ Download</a></div>
+   <div class="dlsub">No download needed:</div>
+   <div class="dlrow dlhow"><span>📱 Install on <b>iPhone / iPad</b>:<small>Open this page in <b>Safari</b>, tap the <b>Share</b> button (the square with the arrow), scroll down, tap <b>Add to Home Screen</b>, then <b>Add</b>.</small></span></div>
+   <div class="dlrow dlhow"><span>🌐 Install from <b>Chrome</b>:<small><b>Computer:</b> click the install icon at the right end of the address bar, or ⋮ menu → <b>Cast, save, and share</b> → <b>Install page as app</b>. <b>Phone:</b> ⋮ menu → <b>Add to Home screen</b> → <b>Install</b>.</small></span><button class="dl pwainst" style="display:none">Install</button></div>
+   <div class="dlrow dlhow"><span>🌐 Install from <b>Edge</b>:<small><b>Computer:</b> ··· menu → <b>Apps</b> → <b>Install this site as an app</b>. <b>Phone:</b> ··· menu → <b>Add to phone</b>.</small></span><button class="dl pwainst" style="display:none">Install</button></div>
    <details class="dlhelp"><summary>Help installing</summary>
     <p><b>Windows:</b> open the file. If it says “Windows protected your PC,” click <b>More info</b>, then <b>Run anyway</b>.</p>
     <p><b>Mac:</b> unzip it, drag <b>Pocket Arcade</b> to Applications, then <b>right-click → Open</b> the first time. If it says it’s damaged, open Terminal and run <code>xattr -cr "/Applications/Pocket Arcade.app"</code>.</p>
     <p><b>Android / Pixel:</b> open the downloaded .apk. When Android asks, allow installing from your browser, then tap Install. (Pixels use the same file as other Android phones.)</p>
-    <p><b>No download needed:</b> in Chrome or Edge, open the website’s menu and choose <b>Install app</b> (or <b>Add to Home screen</b>). On iPhone, use Safari’s Share button → <b>Add to Home Screen</b>.</p>
     <p class="dim">The apps open the arcade website, so they update themselves. They’re not from an app store, so your device may show a warning first.</p></details></div>
-  <div id="apppop" class="apppop" style="display:none"><span class="api">📲</span><span class="apt"><b>Get the app</b><small>Windows · Mac · Android · Pixel</small></span><button class="apgo">Downloads ↓</button><button class="apx" aria-label="Close">✕</button></div>
+  <div id="apppop" class="apppop" style="display:none"><span class="api">📲</span><span class="apt"><b>Get the app</b><small>Windows · Mac · Android · iPhone · Chrome · Edge</small></span><button class="apgo">Downloads ↓</button><button class="apx" aria-label="Close">✕</button></div>
   <p class="note">Tap the save button at the top to check cloud save or make a backup save code. ⚙️ has sound and vibration settings.</p>
 </section>
 <section id="game" class="view">
@@ -2387,6 +2392,9 @@ $('#syncbtn').addEventListener('click',openSavePanel);
 let rzT;addEventListener('resize',()=>{clearTimeout(rzT);rzT=setTimeout(()=>{if(cur&&!RUN&&stage.querySelector('.ov.startov'))startOv()},200)});
 (()=>{let app=/PocketArcadeApp/.test(navigator.userAgent);try{if(/[?&]app=/.test(location.search))sessionStorage.setItem('pa_app','1');if(sessionStorage.getItem('pa_app'))app=true}catch(e){}
  if(app){const g=$('#getapp');g&&g.remove();const q=$('#apppop');q&&q.remove();return}
+ let bip=null;const ib=[...document.querySelectorAll('.pwainst')];addEventListener('beforeinstallprompt',e=>{e.preventDefault();bip=e;ib.forEach(b=>b.style.display='')});
+ ib.forEach(b=>b.addEventListener('click',async()=>{if(!bip)return;bip.prompt();try{const r=await bip.userChoice;if(r.outcome==='accepted'){toast('📲 Installed! Look for Pocket Arcade on your home screen or desktop.');ib.forEach(x=>x.style.display='none')}}catch(e){}bip=null}));
+ addEventListener('appinstalled',()=>ib.forEach(x=>x.style.display='none'));
  const pop=$('#apppop'),ga=$('#getapp');if(!pop||!ga)return;let seen=false;try{seen=sessionStorage.getItem('pa_pop')==='x'}catch(e){}
  const hide=()=>{pop.classList.remove('on');setTimeout(()=>pop.style.display='none',300)},dismiss=()=>{hide();try{sessionStorage.setItem('pa_pop','x')}catch(e){}};
  pop.querySelector('.apx').addEventListener('click',e=>{e.stopPropagation();dismiss()});
