@@ -355,6 +355,11 @@ canvas{display:block;border-radius:14px;background:#15172b}
 .profbtns{margin-top:0}.profbtns .syncbtn{flex:1;justify-content:center;text-align:center}
 .qtyrow{display:flex;align-items:center;justify-content:center;gap:18px}.qbtn{width:52px;height:52px;border-radius:14px;border:0;background:#22254a;color:var(--ink);font-size:28px;font-weight:800;cursor:pointer}.qbtn:disabled{opacity:.35}.qnum{font-size:38px;min-width:60px;text-align:center}
 .qquick{display:flex;gap:6px;justify-content:center;flex-wrap:wrap}.qcost{text-align:center;margin:0}
+.oddt{font-weight:900;font-size:16px;margin-top:6px}.oddbox{display:flex;flex-direction:column;gap:4px;background:#ffffff08;border:1px solid #ffffff14;border-radius:14px;padding:10px;max-height:46vh;overflow-y:auto;overscroll-behavior:contain}
+.oddh{display:flex;justify-content:space-between;align-items:baseline;gap:8px;margin-top:8px;padding-bottom:2px;border-bottom:1px solid currentColor}.oddh:first-of-type{margin-top:0}.oddh b{font-size:14px}.oddh span{font-size:11.5px;opacity:.9}
+.oddr{display:flex;align-items:center;gap:10px;padding:3px 2px;font-size:14px}.oddr>b{margin-left:auto;font-variant-numeric:tabular-nums;white-space:nowrap}
+.oda{width:38px;min-width:38px;height:38px;display:flex;align-items:center;justify-content:center;overflow:hidden}.oda .avart{font-size:28px;line-height:1}.oda .cbk{width:22px;height:31px;border-width:1.5px}.oda .sw{display:flex!important;flex-wrap:nowrap!important;gap:1px!important}.oda .sw i{width:6px!important;height:24px!important;margin:0!important;border-radius:3px!important;flex:none}.oda .tiart{font-size:18px;padding:0;color:var(--a)}.oda .tiart{display:block;max-width:38px;overflow:hidden;white-space:nowrap;text-overflow:clip}
+.odn{display:flex;flex-direction:column;line-height:1.2;min-width:0}.odn small{color:var(--dim);font-size:11.5px}.odn i{color:#7dffb0;font-style:normal}
 .pk .pkn{color:#fff;font-size:15px}.pkcards.many{max-height:62vh;overflow-y:auto;padding:6px}.pkcards.many .pcd{width:min(96px,22vw)}
 .pcf .stk{position:absolute;top:5px;left:5px;background:#ffd34d;color:#1a1300;font-style:normal;font-weight:900;font-size:12px;border-radius:7px;padding:2px 6px}
 .updbox{max-width:520px!important}.updh{font-weight:800;color:var(--a);margin-top:6px}.updl{margin:2px 0 6px;padding-left:20px;display:flex;flex-direction:column;gap:5px;font-size:14px;line-height:1.45;color:var(--ink)}
@@ -2251,6 +2256,21 @@ const TYPES={av:['🙂','Avatars','Shows next to your level'],ti:['🏷️','Tit
 const itemById=id=>ITEMS.find(i=>i.id===id);
 function rollRar(odds){let r=Math.random()*100;for(let i=0;i<odds.length;i++){if(r<odds[i])return i;r-=odds[i]}return 0}
 const packPool=(k,r)=>{const P=PACKS[k],ok=x=>!x.ex&&!x.cosmic&&(P.season?x.season===P.season:P.theme?x.pack===P.theme:!x.season);let pool=ITEMS.filter(x=>x.r===r&&ok(x));while(!pool.length&&r>0){r--;pool=ITEMS.filter(x=>x.r===r&&ok(x))}return pool}
+function cosmicChance(k){const P=PACKS[k];return P.season?.002:{basic:.0005,super:.001,mega:.003}[k]||.0012}
+function packChances(k){const P=PACKS[k],c=cosmicChance(k),R=P.odds.length,pool=[],eff=Array(R).fill(0),boo=Array(R).fill(0);
+ for(let r=0;r<R;r++)pool[r]=packPool(k,r).filter(x=>x.r===r);
+ const land=r=>{while(r>0&&!pool[r].length)r--;return r};
+ for(let r=0;r<R;r++){eff[land(r)]+=P.odds[r]/100;boo[land(Math.max(r,P.min||0))]+=P.odds[r]/100}
+ const items=[];for(let r=0;r<R;r++)pool[r].forEach(it=>{const pN=(1-c)*eff[r]/pool[r].length,pB=(1-c)*boo[r]/pool[r].length;
+  let a=0;if(P.min){for(let q=0;q<P.min;q++)a+=(1-c)*eff[q];if(r<P.min)a-=pN}
+  const n=P.n,none=P.min?Math.pow(a,n-1)*(1-pB)+(Math.pow(1-pN,n-1)-Math.pow(a,n-1))*(1-pN):Math.pow(1-pN,n);
+  items.push({it,p:1-none})});
+ return{eff:eff.map(e=>e*(1-c)),pool,items}}
+function pctTxt(p){p*=100;if(p<.001)return '<0.001%';const d=p>=10?1:p>=1?1:p>=.1?2:3;return (+p.toFixed(d))+'%'}
+function packOddsList(k,box){const{eff,pool,items}=packChances(k);el('p','dim',box).textContent='% = your chance of getting that card from one pack';
+ for(let r=eff.length-1;r>=0;r--){if(!pool[r].length)continue;const h=el('div','oddh',box);h.style.color=RAR[r].c;h.innerHTML=`<b>${RAR[r].n}</b><span>${pctTxt(eff[r])} per card · ${pool[r].length} card${pool[r].length>1?'s':''}</span>`;
+  items.filter(x=>x.it.r===r).sort((a,b)=>b.p-a.p||a.it.name.localeCompare(b.it.name)).forEach(({it,p})=>{const row=el('div','oddr',box);
+   row.innerHTML=`<span class="oda">${it.type==='ti'?'<span class="avart">🏷️</span>':itemArt(it)}</span><span class="odn">${it.name}<small>${TYPES[it.type][1].replace(/s$/,'')}${S.col[it.id]?' · <i>owned</i>':''}</small></span><b>${pctTxt(p)}</b>`})}}
 function openPackRoll(k){const P=PACKS[k],out=[];for(let i=0;i<P.n;i++){let r=rollRar(P.odds);if(i===P.n-1&&P.min&&out.every(o=>o.r<P.min))r=Math.max(r,P.min);
   if(Math.random()<(PACKS[k].season?.002:{basic:.0005,super:.001,mega:.003}[k]||.0012)){const P=PACKS[k];let cp=ITEMS.filter(x=>x.cosmic&&(P.theme?x.pack===P.theme:P.season?x.season===P.season:true));if(!cp.length)cp=ITEMS.filter(x=>x.cosmic);out.push(cp[Math.random()*cp.length|0]);continue}
   const pool=packPool(k,r);out.push(pool[Math.random()*pool.length|0])}
@@ -2279,6 +2299,7 @@ function buyPacks(k){const P=PACKS[k],max=Math.min(25,Math.floor(S.coins/P.price
  const row=el('div','qtyrow',m),mi=el('button','qbtn',row),num=el('b','qnum',row),pl=el('button','qbtn',row);mi.textContent='−';pl.textContent='+';
  const quick=el('div','qquick',m);[1,3,5,10].filter(x=>x<=max).forEach(x=>{const b=el('button','syncbtn',quick);b.textContent='×'+x;b.addEventListener('click',()=>{q=x;upd()})});if(max>1&&![1,3,5,10].includes(max)){const b=el('button','syncbtn',quick);b.textContent=`Max ×${max}`;b.addEventListener('click',()=>{q=max;upd()})}
  const cost=el('p','qcost',m),go=el('button','btn alt',m),later=el('button','btn ghost',m);
+ el('div','oddt',m).textContent="What's inside";packOddsList(k,el('div','oddbox',m));
  const upd=()=>{num.textContent=q;mi.disabled=q<=1;pl.disabled=q>=max;cost.innerHTML=`Total: <b>${fmt(q*P.price)} 🪙</b> · you have ${fmt(S.coins)} 🪙`;go.textContent=`Buy & open ${q} pack${q>1?'s':''}`;later.textContent=`Buy ${q} and save for later`};
  mi.addEventListener('click',()=>{q=Math.max(1,q-1);upd()});pl.addEventListener('click',()=>{q=Math.min(max,q+1);upd()});
  const buy=open=>{if(S.coins<q*P.price)return toast('Not enough coins');S.coins-=q*P.price;S.packs[k]=(S.packs[k]||0)+q;save();sfx('coin');buzz(25);closeModal();packsChanged();if(open)packOpen(k,q);else toast(`${P.icon} Bought ${q} ${P.name}${q>1?'s':''}`)};
