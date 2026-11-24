@@ -2277,14 +2277,17 @@ function packChances(k){const P=PACKS[k],c=cosmicChance(k),R=P.odds.length,pool=
   let a=0;if(P.min){for(let q=0;q<P.min;q++)a+=(1-c)*eff[q];if(r<P.min)a-=pN}
   const n=P.n,none=P.min?Math.pow(a,n-1)*(1-pB)+(Math.pow(1-pN,n-1)-Math.pow(a,n-1))*(1-pN):Math.pow(1-pN,n);
   items.push({it,p:1-none})});
- return{eff:eff.map(e=>e*(1-c)),pool,items}}
+ const cp=cosmicPool(k),E=eff.map(e=>e*(1-c));while(E.length<6){E.push(0);pool.push([])}E[6]=c;pool[6]=cp;
+ cp.forEach(it=>items.push({it,p:1-Math.pow(1-c/cp.length,P.n)}));
+ return{eff:E,pool,items}}
+function cosmicPool(k){const P=PACKS[k];let cp=ITEMS.filter(x=>x.cosmic&&(P.theme?x.pack===P.theme:P.season?x.season===P.season:true));if(!cp.length)cp=ITEMS.filter(x=>x.cosmic);return cp}
 function pctTxt(p){p*=100;if(p<.001)return '<0.001%';const d=p>=10?1:p>=1?1:p>=.1?2:3;return (+p.toFixed(d))+'%'}
 function packOddsList(k,box){const{eff,pool,items}=packChances(k);el('p','dim',box).textContent='% = your chance of getting that card from one pack';
  for(let r=eff.length-1;r>=0;r--){if(!pool[r].length)continue;const h=el('div','oddh',box);h.style.color=RAR[r].c;h.innerHTML=`<b>${RAR[r].n}</b><span>${pctTxt(eff[r])} per card · ${pool[r].length} card${pool[r].length>1?'s':''}</span>`;
   items.filter(x=>x.it.r===r).sort((a,b)=>b.p-a.p||a.it.name.localeCompare(b.it.name)).forEach(({it,p})=>{const row=el('div','oddr',box);
    row.innerHTML=`<span class="oda">${it.type==='ti'?'<span class="avart">🏷️</span>':itemArt(it)}</span><span class="odn">${it.name}<small>${TYPES[it.type][1].replace(/s$/,'')}${S.col[it.id]?' · <i>owned</i>':''}</small></span><b>${pctTxt(p)}</b>`})}}
 function openPackRoll(k){const P=PACKS[k],out=[];for(let i=0;i<P.n;i++){let r=rollRar(P.odds);if(i===P.n-1&&P.min&&out.every(o=>o.r<P.min))r=Math.max(r,P.min);
-  if(Math.random()<(PACKS[k].season?.002:{basic:.0005,super:.001,mega:.003}[k]||.0012)){const P=PACKS[k];let cp=ITEMS.filter(x=>x.cosmic&&(P.theme?x.pack===P.theme:P.season?x.season===P.season:true));if(!cp.length)cp=ITEMS.filter(x=>x.cosmic);out.push(cp[Math.random()*cp.length|0]);continue}
+  if(Math.random()<cosmicChance(k)){const cp=cosmicPool(k);out.push(cp[Math.random()*cp.length|0]);continue}
   const pool=packPool(k,r);out.push(pool[Math.random()*pool.length|0])}
  return out.map(it=>{const had=(S.col[it.id]||0)>0;S.col[it.id]=(S.col[it.id]||0)+1;let dup=0;if(had){dup=RAR[it.r].dup;S.coins+=dup}
   if(!had&&it.type==='th')S.owned['theme:'+it.id.slice(3)]=true;return{it,dup,isNew:!had}})}
@@ -2346,13 +2349,13 @@ function openCollection(tab){if(tab)colTab=tab;const m=modal('🎴 Collection');
   d.addEventListener('click',()=>{S[slot]=null;save();applyLook();openCollection()})}
  const show=it=>{const n=S.col[it.id]||0,d=el('button','citem rar'+it.r+(n?' got':''),g);d.style.setProperty('--rc',RAR[it.r].c);
   const eq=colTab==='th'?S.theme===it.id.slice(3):S[slot]===it.id;if(eq)d.classList.add('eq');
-  const hint=it.ex?(it.ex===1?'🏆 #1 in a season':'🏆 Top 3 in a season'):it.season?`${SEAS_INFO[it.season][0]} ${SEAS_INFO[it.season][1]} pack`:RAR[it.r].n;
+  const hint=it.cosmic?'Cosmic':it.ex?(it.ex===1?'🏆 #1 in a season':'🏆 Top 3 in a season'):it.season?`${SEAS_INFO[it.season][0]} ${SEAS_INFO[it.season][1]} pack`:RAR[it.r].n;
   d.innerHTML=n?`${itemArt(it)}<b>${it.name}</b><small>${eq?'Equipped':RAR[it.r].n+(n>1?` ×${n}`:'')}</small>`:`<span class="avart q">?</span><b>???</b><small>${hint}</small>`;
   if(n)d.addEventListener('click',()=>{if(colTab==='th'){S.theme=eq?'classic':it.id.slice(3);applyTheme()}else S[slot]=eq?null:it.id;save();applyLook();sfx('tap');openCollection()})};
  const head=t=>{el('div','cgh',g).textContent=t};
- Object.keys(THEMEPK).forEach(pk=>{const L=ITEMS.filter(i=>i.type===colTab&&i.pack===pk&&(!i.cosmic||S.col[i.id])).sort((a,b)=>a.r-b.r);if(!L.length)return;head(`${THEMEPK[pk][0]} ${THEMEPK[pk][1]} pack`);L.forEach(show)});
+ Object.keys(THEMEPK).forEach(pk=>{const L=ITEMS.filter(i=>i.type===colTab&&i.pack===pk).sort((a,b)=>a.r-b.r);if(!L.length)return;head(`${THEMEPK[pk][0]} ${THEMEPK[pk][1]} pack`);L.forEach(show)});
  {const L=ITEMS.filter(i=>i.type===colTab&&!i.pack&&!i.ex&&!i.season&&!i.cosmic);if(L.length){head('Other');L.forEach(show)}}
- Object.keys(SEAS_INFO).forEach(se=>{const L=ITEMS.filter(i=>i.type===colTab&&i.season===se&&(!i.cosmic||S.col[i.id])).sort((a,b)=>a.r-b.r);if(!L.length)return;head(`${SEAS_INFO[se][0]} ${SEAS_INFO[se][1]}${onSale().includes(se)?' · on sale now!':''}`);L.forEach(show)});
+ Object.keys(SEAS_INFO).forEach(se=>{const L=ITEMS.filter(i=>i.type===colTab&&i.season===se).sort((a,b)=>a.r-b.r);if(!L.length)return;head(`${SEAS_INFO[se][0]} ${SEAS_INFO[se][1]}${onSale().includes(se)?' · on sale now!':''}`);L.forEach(show)});
  head('🏆 Exclusive — season rewards');ITEMS.filter(i=>i.type===colTab&&i.ex).forEach(show);
  const od=el('details','dlhelp',m);od.innerHTML='<summary>Pack odds</summary>'+Object.entries(PACKS).map(([k,P])=>`<p><b>${P.icon} ${P.name}</b> (${P.n} cards${P.season?`, ${P.when}`:''}): ${P.odds.map((o,i)=>`${RAR[i].n} ${o}%`).join(' · ')}${P.min?` — at least one ${RAR[P.min].n}+`:''}</p>`).join('')+'<p class="dim">Exclusive items can’t come from packs — only the top 3 players of each monthly season get them. Packs only cost coins you win in the arcade — never real money.</p>'}
 
