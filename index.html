@@ -1617,9 +1617,17 @@ const progressOf=s=>(s.coins||0)+(s.lvl||1)*200+Object.keys(s.owned||{}).length*
 function getLast(uid){try{return +localStorage.getItem('pa_synct_'+uid)||0}catch(e){return 0}}
 function setLast(t){lastSync=t;try{fbUser&&localStorage.setItem('pa_synct_'+fbUser.uid,String(t))}catch(e){}}
 function busy(){return !!(cur||RUN||document.querySelector('.packov'))}
-function adopt(remote,quiet){S=normalize(remote);S.sid=fbUser.uid;saveLocal();setLast(S.t||0);applyTheme();refreshView();
+// keep things that only ever grow (cards, owned stuff) and the newest look choice when two devices save around the same time
+function mergeIn(r){if(!r||typeof r!=='object')return false;let ch=false;const bad=id=>typeof RETIRED!=='undefined'&&RETIRED.includes(id);
+ Object.entries(r.col||{}).forEach(([id,n])=>{if(bad(id)||typeof n!=='number')return;if(n>(S.col[id]||0)){S.col[id]=n;ch=true}});
+ Object.keys(r.owned||{}).forEach(k=>{if(r.owned[k]&&!S.owned[k]&&!(k.startsWith('theme:')&&bad('th:'+k.slice(6)))){S.owned[k]=true;ch=true}});
+ Object.keys(r.colBonus||{}).forEach(k=>{if(r.colBonus[k]&&!S.colBonus[k]){S.colBonus[k]=true;ch=true}});
+ if((r.lookT||0)>(S.lookT||0)){['av','title','back'].forEach(k=>{S[k]=r[k]&&!bad(r[k])?r[k]:null});if(r.theme&&!bad('th:'+r.theme))S.theme=r.theme;S.lookT=r.lookT;ch=true}
+ return ch}
+function mergeSave(r){if(mergeIn(r)){S.t=Date.now();saveLocal();applyTheme();refreshView();dirty=true;queueCloud()}}
+function adopt(remote,quiet,fresh){const old=S;S=normalize(remote);if(!fresh&&old&&old.sid===fbUser.uid&&mergeIn(old)){S.t=Date.now();setTimeout(()=>{dirty=true;queueCloud()},0)}S.sid=fbUser.uid;saveLocal();setLast(Math.min(S.t||0,(remote.t||0)));applyTheme();refreshView();
  if(!quiet)toast('☁️ Loaded your newest progress')}
-function tryPending(){if(pendingRemote&&!busy()){const r=pendingRemote;pendingRemote=null;if((r.t||0)>(S.t||0))adopt(r)}}
+function tryPending(){if(pendingRemote&&!busy()){const r=pendingRemote;pendingRemote=null;if((r.t||0)>(S.t||0))adopt(r);else mergeSave(r)}}
 setInterval(tryPending,1000);
 function readDoc(d){let remote=null;try{remote=d&&typeof d.save==='string'?JSON.parse(d.save):null}catch(e){}if(remote&&d.t)remote.t=Math.max(remote.t||0,d.t);return remote}
 function setName(n){const ch=(n||null)!==myName;myName=n||null;applyLook&&applyLook();if(ch&&myName&&cloudReady)queueLB(true)}
@@ -1635,11 +1643,11 @@ async function onUser(u){fbUser=u;BANNED=false;ADMIN=false;FR={list:[],inc:[],ou
   if(S.sid===u.uid){
    const remoteNew=rt>lastSync,localNew=lt>lastSync;
    if(remoteNew&&(!localNew||rt>=lt))adopt(remote,rt<=lt);
-   else if(localNew){await pushLocal()}
+   else if(localNew){mergeIn(remote);await pushLocal()}
    setSync('cloud');finish();return}
   if(progressOf(S)<=progressOf(normalize({}))+1){adopt(remote);setSync('cloud');finish();return}
   const m=modal('☁️ Which progress do you want?');el('p','',m).textContent='Your account already has a save, and this device has its own progress too. Pick one to keep. The other one will be replaced.';
-  const a=el('button','btn',m);a.innerHTML=`Use my account’s save<br><small>⭐ Level ${remote.lvl||1} · 🪙 ${fmt(remote.coins||0)}</small>`;a.addEventListener('click',()=>{closeModal();adopt(remote);setSync('cloud');finish()});
+  const a=el('button','btn',m);a.innerHTML=`Use my account’s save<br><small>⭐ Level ${remote.lvl||1} · 🪙 ${fmt(remote.coins||0)}</small>`;a.addEventListener('click',()=>{closeModal();adopt(remote,false,true);setSync('cloud');finish()});
   const b=el('button','btn ghost',m);b.innerHTML=`Use this device’s progress<br><small>⭐ Level ${S.lvl} · 🪙 ${fmt(S.coins)}</small>`;b.addEventListener('click',async()=>{closeModal();await pushLocal();toast('☁️ This device’s progress is now saved to your account');finish()});
   setSync('connecting')}
  catch(e){done=true;clearTimeout(to);holdT=false;cloudRef=null;setSync('offline')}}
@@ -1647,12 +1655,12 @@ function listen(){if(!cloudRef||unsub)return;const me=fbUser&&fbUser.uid;
  unsub=cloudRef.onSnapshot(snap=>{if(!fbUser||fbUser.uid!==me||snap.metadata.hasPendingWrites||!snap.exists)return;const d=snap.data();setName(d.name);
   if(d.dev===DEV)return;const r=readDoc(d);if(!r)return;const rt=r.t||0;
   if(rt>(S.t||0)){if(busy()){pendingRemote=r;toast('☁️ Newer progress from another device will load after this game')}else adopt(r)}
-  else if((S.t||0)>rt&&(S.t||0)>lastSync){dirty=true;queueCloud()}},()=>{})}
+  else{if(mergeIn(r)){S.t=Date.now();saveLocal();applyTheme();refreshView();dirty=true}if((S.t||0)>rt&&(S.t||0)>lastSync){dirty=true;queueCloud()}}},()=>{})}
 async function initCloud(){setSync('connecting');
  if(!(await loadFirebase())){holdT=false;return setSync('device')}
  watchConfig();watchSupport();fbAuth.onAuthStateChanged(onUser,()=>{holdT=false;setSync('device')});
 }
-addEventListener('visibilitychange',()=>{if(document.visibilityState==='hidden'){saveLocal();if(dirty)pushCloud()}else if(cloudRef&&cloudReady){cloudRef.get({source:'server'}).then(s=>{const r=s.exists&&readDoc(s.data());if(r&&s.data().dev!==DEV&&(r.t||0)>(S.t||0)){if(busy())pendingRemote=r;else adopt(r)}}).catch(()=>{})}});
+addEventListener('visibilitychange',()=>{if(document.visibilityState==='hidden'){saveLocal();if(dirty)pushCloud()}else if(cloudRef&&cloudReady){cloudRef.get({source:'server'}).then(s=>{const r=s.exists&&readDoc(s.data());if(r&&s.data().dev!==DEV){if((r.t||0)>(S.t||0)){if(busy())pendingRemote=r;else adopt(r)}else mergeSave(r)}}).catch(()=>{})}});
 addEventListener('pagehide',()=>{saveLocal();if(dirty)pushCloud()});
 function authMsg(e){const c=(e&&e.code)||'';
  return({'auth/network-request-failed':'Couldn’t connect. Check your internet.','auth/popup-closed-by-user':'The Google window was closed before sign-in finished. Try again.','auth/cancelled-popup-request':'Sign-in was cancelled.',
@@ -2346,12 +2354,12 @@ function openCollection(tab){if(tab)colTab=tab;const m=modal('🎴 Collection');
  el('small','dim',m).textContent=TYPES[colTab][2];
  const g=el('div','cgrid',m),slot={av:'av',ti:'title',cb:'back'}[colTab];
  if(colTab!=='th'){const on=!S[slot];const d=el('button','citem got'+(on?' eq':''),g);d.innerHTML=`${colTab==='av'?'<span class="avart">🙂</span>':colTab==='cb'?`<span class="cbk" style="background:${CBK.stripes}"></span>`:'<span class="tiart">None</span>'}<b>Default</b><small>${on?'Equipped':'Tap to use'}</small>`;
-  d.addEventListener('click',()=>{S[slot]=null;save();applyLook();openCollection()})}
+  d.addEventListener('click',()=>{S[slot]=null;S.lookT=Date.now();save();applyLook();openCollection()})}
  const show=it=>{const n=S.col[it.id]||0,d=el('button','citem rar'+it.r+(n?' got':''),g);d.style.setProperty('--rc',RAR[it.r].c);
   const eq=colTab==='th'?S.theme===it.id.slice(3):S[slot]===it.id;if(eq)d.classList.add('eq');
   const hint=it.cosmic?'Cosmic':it.ex?(it.ex===1?'🏆 #1 in a season':'🏆 Top 3 in a season'):it.season?`${SEAS_INFO[it.season][0]} ${SEAS_INFO[it.season][1]} pack`:RAR[it.r].n;
   d.innerHTML=n?`${itemArt(it)}<b>${it.name}</b><small>${eq?'Equipped':RAR[it.r].n+(n>1?` ×${n}`:'')}</small>`:`<span class="avart q">?</span><b>???</b><small>${hint}</small>`;
-  if(n)d.addEventListener('click',()=>{if(colTab==='th'){S.theme=eq?'classic':it.id.slice(3);applyTheme()}else S[slot]=eq?null:it.id;save();applyLook();sfx('tap');openCollection()})};
+  if(n)d.addEventListener('click',()=>{if(colTab==='th'){S.theme=eq?'classic':it.id.slice(3);applyTheme()}else S[slot]=eq?null:it.id;S.lookT=Date.now();save();applyLook();sfx('tap');openCollection()})};
  const head=t=>{el('div','cgh',g).textContent=t};
  Object.keys(THEMEPK).forEach(pk=>{const L=ITEMS.filter(i=>i.type===colTab&&i.pack===pk).sort((a,b)=>a.r-b.r);if(!L.length)return;head(`${THEMEPK[pk][0]} ${THEMEPK[pk][1]} pack`);L.forEach(show)});
  {const L=ITEMS.filter(i=>i.type===colTab&&!i.pack&&!i.ex&&!i.season&&!i.cosmic);if(L.length){head('Other');L.forEach(show)}}
@@ -2522,7 +2530,7 @@ function renderShop(){wallet();const T=[['packs','🎁 Packs'],['games','🎮 Ga
   const c=el('button','btn ghost',L);c.textContent='🎴 My collection';c.addEventListener('click',()=>openCollection())}
  if(shopTab==='themes'){intro.textContent='Change the colors of the whole arcade. Some themes only come from packs.';
   Object.entries(THEMES).forEach(([k,t])=>{if(t.pack&&!owned('theme:'+k))return;const o=k==='classic'||owned('theme:'+k),on=(S.theme||'classic')===k,lv=lvlOK(t),sw=`<span class="sw">${t.v.map(c=>`<i style="background:${c}"></i>`).join('')}</span>`;
-   item(t.icon,t.name,sw,on?'Equipped':o?'Equip':lv?`${t.price} 🪙`:lockL(t),on||(!o&&!lv)?'own':o?'eq':'',on?null:o?()=>{S.theme=k;save();applyTheme();renderShop()}:buy(t.price,()=>{S.owned['theme:'+k]=true;S.theme=k;applyTheme()}),on||(!o&&(!lv||S.coins<t.price)))})}}
+   item(t.icon,t.name,sw,on?'Equipped':o?'Equip':lv?`${t.price} 🪙`:lockL(t),on||(!o&&!lv)?'own':o?'eq':'',on?null:o?()=>{S.theme=k;S.lookT=Date.now();save();applyTheme();renderShop()}:buy(t.price,()=>{S.owned['theme:'+k]=true;S.theme=k;S.lookT=Date.now();applyTheme()}),on||(!o&&(!lv||S.coins<t.price)))})}}
 $('#back').addEventListener('click',back);$('#shopbtn').addEventListener('click',()=>openShop());$('#sback').addEventListener('click',()=>{if(retList){show('list');renderList()}else{show('menu');renderMenu()}});$('#lback').addEventListener('click',()=>{LIST=null;retList=null;show('menu');renderMenu()});
 $('#recbtn').addEventListener('click',openRecords);$('#setbtn').addEventListener('click',openSettings);$('#lvlbtn').addEventListener('click',openLevels);
 (()=>{let sx,sy,act=false;
